@@ -148,6 +148,9 @@ def check_search():
     recs = {r["path"]: r for r in build.pages()}
     sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8") if (ROOT / "sitemap.xml").exists() else ""
     if not sitemap: fails.append("sitemap.xml missing")
+    locs = re.findall(r"<loc>(.*?)</loc>", sitemap)
+    for u in sorted({u for u in locs if locs.count(u) > 1}):
+        fails.append(f"sitemap lists a URL more than once: {u}")
     for path, head in heads.items():
         r = recs[path]; t = path.read_text(encoding="utf-8")
         m = re.search(r"<!-- sam:head -->\n(.*?)\n<!-- /sam:head -->", t, flags=re.S)

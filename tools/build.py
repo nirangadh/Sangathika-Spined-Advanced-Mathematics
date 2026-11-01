@@ -452,11 +452,7 @@ def sitemap(recs):
         if r["noindex"]:
             continue
         urls.append(f"<url><loc>{r['url']}</loc><lastmod>{lastmod(r['path'])}</lastmod></url>")
-    for L in LEAVES.values():
-        for p in L.get("pages", []):
-            if p.get("status") == "built":
-                path = ROOT / L["slug"] / p["slug"] / "index.html"
-                urls.append(f"<url><loc>{ORIGIN}/{L['slug']}/{p['slug']}/</loc><lastmod>{lastmod(path)}</lastmod></url>")
+    # built lessons arrive through pages() as lesson records, so they are listed once above
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(urls) + "\n</urlset>\n"
 
 ROBOTS = f"""User-agent: *
