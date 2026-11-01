@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en-GB" data-leaf="linear-algebra">
+<!-- සංගතික · Sangathika · SAM. © 2026 Niranga Dharmaratna.
+     Text and illustrations in this file: CC BY-SA 4.0 (see LICENSE-CONTENT).
+     JavaScript and CSS in this file: MIT (see LICENSE).
+     The name සංගතික, the wordmark and the tree mark are reserved (see NOTICES.md). -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- sam:head -->
+<title>Span: what two arrows can reach, visually | Sangathika</title>
+<meta name="description" content="The span of some arrows is every point you can reach by adding and scaling them. Paint it with two sliders, then predict what it covers.">
+<link rel="canonical" href="https://www.sangathika.com/linear-algebra/span/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sangathika">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Span: what two arrows can reach, visually">
+<meta property="og:description" content="The span of some arrows is every point you can reach by adding and scaling them. Paint it with two sliders, then predict what it covers.">
+<meta property="og:url" content="https://www.sangathika.com/linear-algebra/span/">
+<meta property="og:image" content="https://www.sangathika.com/assets/cards/linear-algebra-span.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The opening plate of the Span lesson">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LearningResource","name":"Span","description":"The span of some arrows is every point you can reach by adding and scaling them. Paint it with two sliders, then predict what it covers.","url":"https://www.sangathika.com/linear-algebra/span/","inLanguage":"en-GB","learningResourceType":"interactive lesson","educationalLevel":"first-year undergraduate","teaches":[{"@type":"DefinedTerm","name":"span","url":"https://www.sangathika.com/linear-algebra/#term-span"}],"isPartOf":{"@type":"Course","name":"Linear algebra","url":"https://www.sangathika.com/linear-algebra/"},"position":2,"author":{"@id":"https://www.sangathika.com/about/#author"},"license":"https://creativecommons.org/licenses/by-sa/4.0/","isAccessibleForFree":true,"datePublished":"2026-11-01","dateModified":"2026-11-01","image":"https://www.sangathika.com/assets/cards/linear-algebra-span.png","competencyRequired":[{"@type":"DefinedTerm","name":"vectors"}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Sangathika","item":"https://www.sangathika.com/"},{"@type":"ListItem","position":2,"name":"Linear algebra","item":"https://www.sangathika.com/linear-algebra/"},{"@type":"ListItem","position":3,"name":"Span","item":"https://www.sangathika.com/linear-algebra/span/"}]}]}</script>
+<!-- /sam:head -->
+<link rel="preload" href="../../assets/fonts/opensans/OpenSans[wdth,wght].ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="../../assets/fonts/stixtwotext/STIXTwoText[wght].ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="../../assets/sam.css">
+<link rel="stylesheet" href="../../assets/lesson.css">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-180.png">
+<script>try{var t=localStorage.getItem('sam-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script src="../../assets/lesson.js" defer></script>
+<script src="../../assets/plane.js" defer></script>
+<script src="../sam.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<header class="bar">
+  <a class="mark" href="../../"><span class="si" lang="si">සංගතික</span><span class="latin">Sangathika</span></a>
+  <nav aria-label="Site"><a href="../">Linear algebra</a><a href="#check">Check</a><a href="#challenges">Challenges</a><a href="../../about/">About</a><button class="theme" type="button" id="themeBtn" aria-pressed="false">Dark</button></nav>
+</header>
+<main class="lesson">
+<header class="lhero">
+  <div class="hero-text">
+    <p class="eyebrow"><b>SAM</b> · <span class="si" lang="si">සංගතික</span> · Linear algebra · page 2</p>
+    <h1>Span</h1>
+    <p class="idea">The <strong>span</strong> of some arrows is every point you can reach by adding and scaling them.</p>
+    <p class="lede">Page 1 ended with a question. Take two arrows and allow any amount of each, forwards or backwards. Which points of the plane can you reach? Here are the two arrows: <span class="vec cv">v</span> = (3, 4), the arrow of the 3, 4, 5 triangle, and <span class="vec ca">w</span> = (−1, 1), the second ingredient from Plate 1.7. Every point you land on leaves a dot.</p>
+    <p style="margin:0;max-width:34rem">Start with <span class="vec ca">w</span> held at zero and use <span class="vec cv">v</span> alone. Guess the shape the dots will make before you move the slider. Then release <span class="vec ca">w</span> and guess again.</p>
+    <p class="prereq">Before you start: <a href="../vectors/">page 1, vectors</a>: adding arrows tip to tail, scaling them, and building an arrow as a recipe of two ingredients.</p>
+  </div>
+  <figure class="hero-fig plate-anchor" id="plate-2-1">
+    <p class="plate-title"><b>Plate 2.1</b> · Paint the span</p>
+    <canvas id="heroCv" class="plane" aria-label="A grid with two faint arrows from the origin, v equals 3, 4 and w equals minus 1, 1. The amount of v is drawn from the origin, the amount of w is added tip to tail, and the slate result arrow ends at a point. Every point reached leaves a dot."></canvas>
+    <div class="ctl">
+      <label for="heroA">Amount of <span class="vec cv">v</span>: <output id="heroAOut">1</output></label>
+      <input type="range" id="heroA" min="-2" max="2" step="0.1" value="1">
+    </div>
+    <div class="ctl">
+      <label for="heroB">Amount of <span class="vec ca">w</span>: <output id="heroBOut">0</output></label>
+      <input type="range" id="heroB" min="-7" max="7" step="0.1" value="0">
+    </div>
+    <div class="row">
+      <button class="tog" id="heroHold" type="button" aria-pressed="true">Hold w at 0</button>
+      <button class="btn" id="heroPaint" type="button">Paint for me</button>
+      <button class="btn" id="heroClear" type="button">Clear the dots</button>
+    </div>
+    <p class="status" id="heroStatus" aria-live="polite"></p>
+    <figcaption class="small hero-cap">Plate 2.1: an amount of <span class="vec">v</span>, then an amount of <span class="vec">w</span>, tip to tail. The slate arrow is the result, and every result leaves a dot.</figcaption>
+  </figure>
+</header>
+<!-- sam:midrib -->
+<ol class="midrib" aria-label="Lessons in this leaf"><li class="built"><a href="../vectors/" title="Page 1: Vectors" aria-label="Page 1: Vectors">01</a></li><li class="built current"><a href="../span/" title="Page 2: Span" aria-label="Page 2: Span" aria-current="page">02</a></li><li><span title="Page 3: Linear independence" aria-label="Page 3: Linear independence">03</span></li><li><span title="Page 4: Basis and coordinates" aria-label="Page 4: Basis and coordinates">04</span></li><li><span title="Page 5: Dot product" aria-label="Page 5: Dot product">05</span></li><li><span title="Page 6: Matrices as machines" aria-label="Page 6: Matrices as machines">06</span></li><li><span title="Page 7: Matrix times vector" aria-label="Page 7: Matrix times vector">07</span></li><li><span title="Page 8: Composition" aria-label="Page 8: Composition">08</span></li><li><span title="Page 9: Determinant" aria-label="Page 9: Determinant">09</span></li><li><span title="Page 10: Systems Ax = b" aria-label="Page 10: Systems Ax = b">10</span></li><li><span title="Page 11: Inverse" aria-label="Page 11: Inverse">11</span></li><li><span title="Page 12: Elimination" aria-label="Page 12: Elimination">12</span></li><li><span title="Page 13: Column space, null space, rank" aria-label="Page 13: Column space, null space, rank">13</span></li><li><span title="Page 14: Projection onto a subspace" aria-label="Page 14: Projection onto a subspace">14</span></li><li><span title="Page 15: Least squares" aria-label="Page 15: Least squares">15</span></li><li><span title="Page 16: Orthonormal bases and Gram–Schmidt" aria-label="Page 16: Orthonormal bases and Gram–Schmidt">16</span></li><li class="built"><a href="../eigenvectors/" title="Page 17: Eigenvectors" aria-label="Page 17: Eigenvectors">17</a></li><li><span title="Page 18: Change of basis and diagonalisation" aria-label="Page 18: Change of basis and diagonalisation">18</span></li><li><span title="Page 19: Symmetric matrices" aria-label="Page 19: Symmetric matrices">19</span></li><li><span title="Page 20: SVD" aria-label="Page 20: SVD">20</span></li></ol>
+<!-- /sam:midrib -->
+
+<section class="warmup" id="warm-up" aria-labelledby="wu-h" data-group data-labels="Right.|Not quite." data-show-right>
+  <p class="eyebrow">Warm-up · <b>from page 1, vectors</b></p>
+  <h2 id="wu-h" style="font-size:1.4rem">Two questions before you start</h2>
+  <div class="quiz">
+<div class="q"><span class="qnum">WARM-UP 1 OF 2</span><p>What is (3, 4) + (−1, 1)?</p><div class="opts"><button class="opt" type="button">(4, 3)</button><button class="opt" type="button" data-correct>(2, 5)</button><button class="opt" type="button">(−3, 4)</button><button class="opt" type="button">(2, 3)</button></div><p class="fb" hidden aria-live="polite">Add the easts and add the norths: (3 − 1, 4 + 1) = (2, 5). Drawn tip to tail, that is one move of <span class="vec">v</span> and then one move of <span class="vec">w</span>, as in <a href="../vectors/#plate-1-5">Plate 1.5 on page 1, vectors</a>. This page uses exactly these two arrows.</p></div>
+<div class="q"><span class="qnum">WARM-UP 2 OF 2</span><p>Which arrow is −2(−1, 1)?</p><div class="opts"><button class="opt" type="button" data-correct>(2, −2)</button><button class="opt" type="button">(−2, 2)</button><button class="opt" type="button">(−2, −2)</button><button class="opt" type="button">(1, −1)</button></div><p class="fb" hidden aria-live="polite">Multiply each component by −2: (2, −2). The arrow is twice as long and points the opposite way, on the same line, as in <a href="../vectors/#plate-1-6">Plate 1.6 on page 1, vectors</a>. A negative amount means walking an arrow backwards. You will need that today.</p></div>
+  </div>
+  <p class="score" data-score data-empty="Answer both; each takes a few seconds."></p>
+</section>
+
+<nav aria-label="Page layers">
+  <ul class="route">
+    <li><a href="#l1"><span>1</span>What two arrows reach</a></li>
+    <li><a href="#l2"><span>2</span>Span, written down</a></li>
+    <li><a href="#l3"><span>3</span>Street plans</a></li>
+    <li><a href="#l4"><span>4</span>Solve for the recipe</a></li>
+    <li><a href="#l5"><span>5</span>Point, line or plane</a></li>
+    <li><a href="#check"><span>✓</span>Check yourself</a></li>
+    <li><a href="#challenges"><span>↗</span>Challenges</a></li>
+  </ul>
+</nav>
+
+<!-- ============ LAYER 1 ============ -->
+<section class="layer" aria-labelledby="l1">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 1 · <b>Principle</b></p>
+    <h2 id="l1">What two arrows can reach</h2>
+  </div>
+  <div class="prose">
+    <p>With <span class="vec ca">w</span> held at zero, every dot in Plate 2.1 falls on one straight line through the origin. That is all one arrow can do: scaling never knocks an arrow off its own line. Release <span class="vec ca">w</span> and the dots leave the line. Press "Paint for me" and they cover the whole picture. No point of the plane is out of reach.</p>
+    <p>The set of every point you can reach this way is the <strong>span</strong> of the arrows, written span{<span class="vec">v</span>, <span class="vec">w</span>}. Books also call it the linear span, or the set of all linear combinations. A linear combination is the name page 1 gave to a recipe such as 2<span class="vec">v</span> − 3<span class="vec">w</span>.</p>
+  </div>
+
+  <div class="sub" style="padding-top:0">
+    <h3>The span is not the arrows</h3>
+    <div class="prose">
+      <p>The commonest mistake is to think the span is the two arrows themselves, or the narrow wedge between them. The arrows are only the ingredients. The span is everything the ingredients can make.</p>
+    </div>
+    <div class="pair">
+      <div class="side">
+        <p class="tag">The ingredients</p>
+        <h3>Two tins on a shelf</h3>
+        <p>A paint shop keeps one tin of blue and one tin of yellow. That is two colours, standing on a shelf.</p>
+      </div>
+      <div class="hinge" aria-hidden="true">vs</div>
+      <div class="side">
+        <p class="tag cv">The span</p>
+        <h3>Every colour on the mixing card</h3>
+        <p>Every green the shop can mix from those two tins, in any amounts. Far more than two colours, and almost none of them is on the shelf.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>The paint shop breaks down at one point, and the break matters. Nobody can pour a negative amount of paint, so mixed colours always sit between the two tins. Arrows have no such limit. A negative amount of <span class="vec ca">w</span> is <span class="vec ca">w</span> reversed, so a recipe can walk backwards along either arrow, and reach points that are not between them at all.</p>
+    </div>
+  </div>
+
+  <div class="plate" id="plate-2-2" data-group data-labels="Right.|Not quite." data-show-right>
+    <p class="plate-title"><b>Plate 2.2</b> · Reach (−2, −5)?</p>
+    <div class="q"><span class="qnum">PREDICT FIRST</span><p>The ring sits at (−2, −5), below and behind both arrows. Can some recipe <span class="m">a</span><span class="vec">v</span> + <span class="m">b</span><span class="vec">w</span> land on it?</p><div class="opts"><button class="opt" type="button">No: both arrows point upwards, so you can never get below the origin</button><button class="opt" type="button">No: the ring is outside the wedge between the arrows</button><button class="opt" type="button" data-correct>Yes</button></div><p class="fb" hidden aria-live="polite">Yes. A negative amount reverses an arrow, so a recipe can walk backwards along <span class="vec">v</span> and along <span class="vec">w</span>. Now find the two amounts with the sliders.</p></div>
+    <div class="pgrid">
+      <div class="side-col">
+        <canvas id="huCv" class="plane" aria-label="A grid with a ring marking the target point. An amount of v from the origin, then an amount of w tip to tail, and a slate result arrow. Use the two sliders to land the result on the ring."></canvas>
+      </div>
+      <div class="side-col">
+        <p style="margin:0">Set the two amounts so that the slate arrow ends on the ring. When you find one recipe, choose another ring. Each one has a recipe, and some need a negative amount.</p>
+        <div class="ctl">
+          <label for="huA">Amount of <span class="vec cv">v</span>: <output id="huAOut">1</output></label>
+          <input type="range" id="huA" min="-3" max="3" step="0.5" value="1">
+        </div>
+        <div class="ctl">
+          <label for="huB">Amount of <span class="vec ca">w</span>: <output id="huBOut">1</output></label>
+          <input type="range" id="huB" min="-4" max="4" step="0.5" value="1">
+        </div>
+        <div class="row" role="group" aria-label="Choose a ring">
+          <button class="tog" type="button" data-tx="-2" data-ty="-5" aria-pressed="true">Ring (−2, −5)</button>
+          <button class="tog" type="button" data-tx="5" data-ty="2" aria-pressed="false">Ring (5, 2)</button>
+          <button class="tog" type="button" data-tx="0" data-ty="7" aria-pressed="false">Ring (0, 7)</button>
+          <button class="tog" type="button" data-tx="-5" data-ty="-2" aria-pressed="false">Ring (−5, −2)</button>
+        </div>
+        <dl class="ro">
+          <dt>Recipe</dt><dd id="huRec"></dd>
+          <dt>Lands on</dt><dd id="huTip"></dd>
+          <dt>Rings reached</dt><dd id="huCount">0 of 4</dd>
+        </dl>
+        <p class="status" id="huStatus" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>Every ring has a recipe, and none of the four needs more than a few whole steps. The ring at (−2, −5) walks backwards along both arrows. The ring at (5, 2) goes forwards along <span class="vec cv">v</span> and backwards along <span class="vec ca">w</span>. A point does not have to lie between the arrows to be in their span.</p>
+  </div>
+</section>
+
+<!-- ============ LAYER 2 ============ -->
+<section class="layer" aria-labelledby="l2">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 2 · <b>Statement</b></p>
+    <h2 id="l2">Span, written down</h2>
+  </div>
+  <div class="eq big" aria-label="The span of v and w is the set of all a v plus b w, where a and b are any numbers"><span style="white-space:nowrap">span{<span class="vec cv">v</span>, <span class="vec ca">w</span>} =</span> <span style="white-space:nowrap">{ <span class="m">a</span><span class="vec cv">v</span> + <span class="m">b</span><span class="vec ca">w</span> :</span> <span style="white-space:nowrap"><span class="m">a</span>, <span class="m">b</span> any numbers }</span></div>
+  <div class="prose">
+    <p>Read the curly brackets as "the set of all", and the colon as "where". So the span of <span class="vec">v</span> and <span class="vec">w</span> is the set of all points <span class="m">a</span><span class="vec">v</span> + <span class="m">b</span><span class="vec">w</span>, where <span class="m">a</span> and <span class="m">b</span> can be any numbers at all: positive, negative, zero or fractions. The same definition works for one arrow, or for three or more: one amount for each arrow.</p>
+    <p>Two facts follow at once. First, the origin is in every span, because the recipe with every amount zero lands there. Second, the span of one arrow that is not zero is the whole line through it, in both directions, and not just the arrow. That line is what Plate 2.1 drew while <span class="vec ca">w</span> was held at zero.</p>
+  </div>
+  <div class="tbl-wrap">
+    <table class="wide">
+      <thead><tr><th>The arrows you start with</th><th>Their span</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>Only the zero arrow</td><td>A single point: the origin</td><td>span{(0, 0)}</td></tr>
+        <tr><td>Arrows that all lie on one line through the origin, not all zero</td><td>That whole line</td><td>span{<span class="vec">v</span>}</td></tr>
+        <tr><td>Two arrows that point along different lines</td><td>The whole plane</td><td>span{<span class="vec">v</span>, <span class="vec">w</span>}</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="incode">
+    <p>The same idea, as code. This leaf's library, <a href="../sam.js">sam.js</a>, gains one function on this page, <code>combine</code>, built from page 1's <code>add</code> and <code>scale</code>. Every point of the span is one call of it:</p>
+<pre><code>combine(1, vec(3, 4), -2, vec(-1, 1))     // [5, 2]: forwards along v, backwards along w
+combine(-1, vec(3, 4), -1, vec(-1, 1))    // [-2, -5]: backwards along both
+combine(2, vec(3, 4), 4, vec(-1.5, -2))   // [0, 0]: two arrows that cancel out</code></pre>
+    <p>The last line uses a new partner, <span class="vec">p</span> = (−1.5, −2). Keep it in mind while you try the next plate.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Two arrows do not always fill the plane</h3>
+    <div class="prose">
+      <p>Swap <span class="vec ca">w</span> for that new partner, <span class="vec ca">p</span> = (−1.5, −2). It is a real arrow, and it is not zero. The ring is back at (−2, −5).</p>
+    </div>
+    <details class="predict">
+      <summary>Predict first: with <span class="vec cv">v</span> and <span class="vec ca">p</span>, will "Paint for me" fill the plane and reach the ring?</summary>
+      <p>No. Paint and see: every dot lands on one line, and the ring stays 1.4 units away from it. Two arrows went in, and only a line came out. Before you read on, look hard at the direction <span class="vec ca">p</span> points. The next lesson is built on what you see.</p>
+    </details>
+
+    <div class="plate" id="plate-2-3">
+      <p class="plate-title"><b>Plate 2.3</b> · Parallel partner</p>
+      <div class="pgrid">
+        <div class="side-col">
+          <canvas id="paCv" class="plane" aria-label="A grid with v equals 3, 4 and a partner p equals minus 1.5, minus 2, and a ring at minus 2, minus 5. Recipes of v and p leave dots."></canvas>
+        </div>
+        <div class="side-col">
+          <div class="ctl">
+            <label for="paA">Amount of <span class="vec cv">v</span>: <output id="paAOut">1</output></label>
+            <input type="range" id="paA" min="-2" max="2" step="0.1" value="1">
+          </div>
+          <div class="ctl">
+            <label for="paB">Amount of <span class="vec ca">p</span>: <output id="paBOut">0</output></label>
+            <input type="range" id="paB" min="-6" max="6" step="0.1" value="0">
+          </div>
+          <div class="row">
+            <button class="btn" id="paPaint" type="button">Paint for me</button>
+            <button class="btn" id="paClear" type="button">Clear the dots</button>
+          </div>
+          <dl class="ro">
+            <dt>Recipe</dt><dd id="paRec"></dd>
+            <dt>Lands on</dt><dd id="paTip"></dd>
+            <dt>Gap to the ring</dt><dd id="paGap"></dd>
+            <dt>Closest so far</dt><dd id="paBest"></dd>
+          </dl>
+          <p class="status" id="paStatus" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAYER 3 ============ -->
+<section class="layer" aria-labelledby="l3">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 3 · <b>Application</b></p>
+    <h2 id="l3">Where span shows up: what your moves can reach</h2>
+  </div>
+  <div class="prose">
+    <p>Span is the plain answer to a practical question: given the moves you are allowed, where can you get to? Two street plans show the two answers you met in Plates 2.2 and 2.3.</p>
+  </div>
+  <div class="pair">
+    <div class="side">
+      <p class="tag cv">Two directions</p>
+      <h3>A town with two kinds of street</h3>
+      <p>Picture a town whose streets run in just two directions, like <span class="vec">v</span> and <span class="vec">w</span>. A driver may go forwards or backwards along any street, as far as she likes. She can reach every corner of the town: the span of the two street directions is the whole plane.</p>
+    </div>
+    <div class="hinge" aria-hidden="true">vs</div>
+    <div class="side">
+      <p class="tag cr">One direction</p>
+      <h3>The coast road</h3>
+      <p>Galle Road runs along the coast. Drive it forwards or backwards as far as you like, and you are still on Galle Road. A second road that runs the same way as the first adds nothing new: the span is still one line.</p>
+    </div>
+  </div>
+  <div class="prose">
+    <p>The same question appears wherever something moves by combining a few fixed moves. A crane that runs on two rails, a robot arm with two sliding joints, and a game character that can only step along two directions each reach exactly the span of their moves. An engineer who wants a machine to reach every point of a flat table needs two moves that point along different lines. A second motor that pushes along the same line as the first is wasted money.</p>
+    <p>In three dimensions the same question has a new answer. Two arrows that point along different lines span a flat sheet through the origin, like a sheet of paper held at an angle in a room, and not the whole of space. Page 4, basis and coordinates, lifts the picture into three dimensions.</p>
+  </div>
+</section>
+
+<!-- ============ LAYER 4 ============ -->
+<section class="layer" aria-labelledby="l4">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 4 · <b>Specifics</b></p>
+    <h2 id="l4">Is a point in the span? Solve for the recipe</h2>
+  </div>
+  <div class="prose">
+    <p>The sliders find recipes by trial. Algebra finds them directly. For a point (<span class="m">x</span>, <span class="m">y</span>) to be in the span of <span class="vec cv">v</span> = (3, 4) and <span class="vec ca">w</span> = (−1, 1), there must be amounts <span class="m">a</span> and <span class="m">b</span> with <span class="m">a</span>(3, 4) + <span class="m">b</span>(−1, 1) = (<span class="m">x</span>, <span class="m">y</span>). Compare the two components and you have two equations.</p>
+  </div>
+  <ol class="steps">
+    <li><div>
+      <p><strong>One equation per component.</strong> The east parts must agree, and so must the north parts:</p>
+      <div class="eq">3<span class="m">a</span> − <span class="m">b</span> = <span class="m">x</span> &nbsp;&nbsp; and &nbsp;&nbsp; 4<span class="m">a</span> + <span class="m">b</span> = <span class="m">y</span></div>
+    </div></li>
+    <li><div>
+      <p><strong>Add the two equations.</strong> The <span class="m">b</span> terms cancel:</p>
+      <div class="eq">7<span class="m">a</span> = <span class="m">x</span> + <span class="m">y</span>, &nbsp; so &nbsp; <span class="m">a</span> = (<span class="m">x</span> + <span class="m">y</span>) ÷ 7</div>
+    </div></li>
+    <li><div>
+      <p><strong>Put <span class="m">a</span> back.</strong> The second equation gives <span class="m">b</span> = <span class="m">y</span> − 4<span class="m">a</span>, which simplifies to</p>
+      <div class="eq"><span class="m">b</span> = (3<span class="m">y</span> − 4<span class="m">x</span>) ÷ 7</div>
+    </div></li>
+  </ol>
+  <div class="worked">
+    <p class="plate-title"><b>Worked example</b> · the ring at (−2, −5)</p>
+    <p><span class="m">a</span> = (−2 − 5) ÷ 7 = −1 and <span class="m">b</span> = (3 × (−5) − 4 × (−2)) ÷ 7 = (−15 + 8) ÷ 7 = −1.</p>
+    <p><span class="check">Check:</span> −1(3, 4) − 1(−1, 1) = (−3 + 1, −4 − 1) = (−2, −5). The recipe is −<span class="vec">v</span> − <span class="vec">w</span>, the one you found in Plate 2.2.</p>
+    <p>For the ring at (0, 7): <span class="m">a</span> = 7 ÷ 7 = 1 and <span class="m">b</span> = 21 ÷ 7 = 3. <span class="check">Check:</span> (3, 4) + 3(−1, 1) = (0, 7).</p>
+  </div>
+  <div class="prose">
+    <p>The two formulas give an answer for every point (<span class="m">x</span>, <span class="m">y</span>), whatever its values. That is the algebra's way of saying the span is the whole plane. The answers need not be whole numbers: the point (1, 2) needs <span class="m">a</span> = 3/7 and <span class="m">b</span> = 2/7.</p>
+    <p>Notice the 7 that every recipe divides by. It comes from <span class="vec">v</span> and <span class="vec">w</span> alone: 3 × 1 − (−1) × 4 = 7. Page 9, the determinant, shows what that 7 measures in the picture.</p>
+    <p>Now try the same steps with <span class="vec cv">v</span> and the partner <span class="vec ca">p</span> = (−1.5, −2). The equations are 3<span class="m">a</span> − 1.5<span class="m">b</span> = <span class="m">x</span> and 4<span class="m">a</span> − 2<span class="m">b</span> = <span class="m">y</span>. Multiply the first by 4/3 and it becomes 4<span class="m">a</span> − 2<span class="m">b</span> = 4<span class="m">x</span>/3. Its left side is exactly the left side of the second equation, so a recipe exists only when <span class="m">y</span> = 4<span class="m">x</span>/3: only for points on the line through <span class="vec">v</span>. For the ring at (−2, −5), 4<span class="m">x</span>/3 = −8/3, which is not −5. The equations contradict each other, and no recipe exists. The number that was 7 for <span class="vec">v</span> and <span class="vec">w</span> is 3 × (−2) − (−1.5) × 4 = 0 here: there is nothing to divide by.</p>
+  </div>
+</section>
+
+<!-- ============ LAYER 5 ============ -->
+<section class="layer" aria-labelledby="l5">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 5 · <b>Exploration</b></p>
+    <h2 id="l5">Point, line or plane</h2>
+  </div>
+  <div class="prose">
+    <p>Now you choose the arrows. Drag the tips of <span class="vec cv">v</span> and <span class="vec ca">w</span> anywhere. The shading shows their span, and the faint slanted grid shows the whole-number recipes. Try to make the span a line, and then a single point. How many different shapes can the span of two arrows in the plane take?</p>
+  </div>
+  <div class="plate" id="plate-2-4">
+    <p class="plate-title"><b>Plate 2.4</b> · Point, line or plane</p>
+    <div class="pgrid">
+      <div class="side-col">
+        <canvas id="exCv" class="plane drag" tabindex="0" aria-label="Two arrows from the origin with round tips. Drag either tip to change that arrow. The shaded region is their span. Arrow keys move the tip of w; Shift with arrow keys moves the tip of v."></canvas>
+        <p class="small" style="margin:0">Keyboard: arrow keys move the tip of <span class="vec">w</span>, Shift + arrow keys move the tip of <span class="vec">v</span>. Tips snap to half steps.</p>
+      </div>
+      <div class="side-col">
+        <ul class="key">
+          <li><span class="sw v"></span><span class="vec">v</span></li>
+          <li><span class="sw a"></span><span class="vec">w</span></li>
+          <li><span class="sw r"></span>the span</li>
+        </ul>
+        <dl class="ro">
+          <dt><span class="vec">v</span></dt><dd id="exV"></dd>
+          <dt><span class="vec">w</span></dt><dd id="exW"></dd>
+          <dt>Span</dt><dd id="exKind"></dd>
+        </dl>
+        <p class="status" id="exStatus" aria-live="polite"></p>
+        <div class="row" role="group" aria-label="Preset pairs of arrows">
+          <button class="tog" type="button" data-pv="3,4" data-pw="-1,1">This page's v and w</button>
+          <button class="tog" type="button" data-pv="3,4" data-pw="-1.5,-2">w on v's line</button>
+          <button class="tog" type="button" data-pv="3,4" data-pw="0,0">w is zero</button>
+          <button class="tog" type="button" data-pv="0,0" data-pw="0,0">Both are zero</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="oneline">The span of some arrows is everything their recipes can reach. In the plane it is always one of three shapes: the origin alone, a line through the origin, or the whole plane.</p>
+</section>
+
+<section class="layer" id="check" aria-labelledby="check-h" data-group data-labels="Correct.|Not this one.">
+  <div class="layer-head">
+    <p class="eyebrow">Retrieval · <b>Check yourself</b></p>
+    <h2 id="check-h">Check your understanding: six questions, one per idea</h2>
+    <p class="score" data-score data-empty="Answer each one; the explanation appears after your choice."></p>
+  </div>
+  <div class="quiz">
+<div class="q"><span class="qnum">QUESTION 1 OF 6</span><p>What is the span of <span class="vec">v</span> = (3, 4) and <span class="vec">w</span> = (−1, 1)?</p><div class="opts"><button class="opt" type="button">The two arrows themselves</button><button class="opt" type="button">The wedge between the two arrows</button><button class="opt" type="button" data-correct>The whole plane</button><button class="opt" type="button">The line through their tips</button></div><p class="fb" hidden aria-live="polite">The arrows are only the ingredients. With negative amounts allowed, their recipes reach every point, as the painted dots in Plate 2.1 and the formulas in Layer 4 both show.</p></div>
+<div class="q"><span class="qnum">QUESTION 2 OF 6</span><p>What is the span of the single arrow (2, 1)?</p><div class="opts"><button class="opt" type="button">The arrow from the origin to (2, 1)</button><button class="opt" type="button">The half line that starts at the origin and passes through (2, 1)</button><button class="opt" type="button" data-correct>The whole line through the origin and (2, 1)</button><button class="opt" type="button">The whole plane</button></div><p class="fb" hidden aria-live="polite">Every amount is allowed, so the line runs on in both directions: large amounts go far out, and negative amounts go out the other way. One arrow spans a whole line, never the plane.</p></div>
+<div class="q"><span class="qnum">QUESTION 3 OF 6</span><p>Which point is in the span of every set of arrows, whatever they are?</p><div class="opts"><button class="opt" type="button" data-correct>The origin (0, 0)</button><button class="opt" type="button">The point (1, 1)</button><button class="opt" type="button">The tip of the first arrow</button><button class="opt" type="button">No point is in every span</button></div><p class="fb" hidden aria-live="polite">Take every amount to be zero. That recipe always lands on the origin, so every span passes through it. A span never sits off to one side of the origin.</p></div>
+<div class="q"><span class="qnum">QUESTION 4 OF 6</span><p>What is the span of (2, 1) and (−4, −2)?</p><div class="opts"><button class="opt" type="button">The whole plane, because there are two arrows</button><button class="opt" type="button" data-correct>A line through the origin</button><button class="opt" type="button">Two different lines</button><button class="opt" type="button">The single point (0, 0)</button></div><p class="fb" hidden aria-live="polite">(−4, −2) is −2 times (2, 1), so it lies on the same line. Every recipe stays on that line, as the dots did in Plate 2.3. Two arrows fill the plane only when they point along different lines.</p></div>
+<div class="q"><span class="qnum">QUESTION 5 OF 6</span><p>Which recipe of <span class="vec">v</span> = (3, 4) and <span class="vec">w</span> = (−1, 1) lands on (4, 3)?</p><div class="opts"><button class="opt" type="button" data-correct><span class="vec">v</span> − <span class="vec">w</span></button><button class="opt" type="button"><span class="vec">v</span> + <span class="vec">w</span></button><button class="opt" type="button">2<span class="vec">v</span> − <span class="vec">w</span></button><button class="opt" type="button"><span class="vec">w</span> − <span class="vec">v</span></button></div><p class="fb" hidden aria-live="polite">(3, 4) − (−1, 1) = (3 + 1, 4 − 1) = (4, 3). The formulas of Layer 4 agree: <span class="m">a</span> = (4 + 3) ÷ 7 = 1 and <span class="m">b</span> = (9 − 16) ÷ 7 = −1.</p></div>
+<div class="q"><span class="qnum">QUESTION 6 OF 6</span><p>A learner says (1, 2) is not in the span of <span class="vec">v</span> and <span class="vec">w</span>, because no recipe with whole-number amounts lands on it. Is the learner right?</p><div class="opts"><button class="opt" type="button">Yes: the amounts in a recipe must be whole numbers</button><button class="opt" type="button" data-correct>No: the amounts can be fractions, and 3/7 of <span class="vec">v</span> plus 2/7 of <span class="vec">w</span> lands exactly on (1, 2)</button><button class="opt" type="button">Yes: (1, 2) is too close to <span class="vec">v</span> to reach</button></div><p class="fb" hidden aria-live="polite">The amounts can be any numbers. (3/7)(3, 4) + (2/7)(−1, 1) = (9/7 − 2/7, 12/7 + 2/7) = (1, 2). The faint grid in Plate 2.4 shows only the whole-number recipes; the span also fills every gap between its lines.</p></div>
+  </div>
+</section>
+
+<section class="layer challenges" id="challenges" aria-labelledby="ch-h">
+  <div class="layer-head">
+    <p class="eyebrow">Challenges · <b>Seed and Branch</b></p>
+    <h2 id="ch-h">Two challenges</h2>
+    <p class="small" style="margin:0">Each challenge declares its level. Commit an answer before the solution opens. Hints open one at a time.</p>
+  </div>
+<article class="challenge" id="challenge-2-1" data-level="seed" data-mode="number" data-answer="-4">
+  <div class="chead"><span class="chip seed">Seed</span><h3>Two recipes, one point</h3></div>
+  <p class="needs">Needs: this page (recipes, and Plate 2.3).</p>
+  <p>Take <span class="vec">v</span> = (3, 4) and the partner <span class="vec">p</span> = (−1.5, −2) from Plate 2.3. The recipe 2<span class="vec">v</span> + 0<span class="vec">p</span> lands on (6, 8). Find a different recipe for the same point that uses no <span class="vec">v</span> at all: 0<span class="vec">v</span> + <span class="m">b</span><span class="vec">p</span>. What is <span class="m">b</span>? Then think about why two recipes are possible here, when <span class="vec">v</span> and <span class="vec">w</span> give only one recipe for each point.</p>
+  <form class="commit"><label>The amount <span class="m">b</span><input name="a" type="text" inputmode="decimal" autocomplete="off"></label><button class="btn primary" type="submit">Commit my answer</button></form>
+  <p class="result" hidden aria-live="polite"></p>
+  <div class="hints"><details class="hint"><summary>Hint 1</summary><p>You need <span class="m">b</span>(−1.5, −2) = (6, 8). One component is enough to find <span class="m">b</span>; the other checks it.</p></details><details class="hint"><summary>Hint 2</summary><p>The east components say −1.5 × <span class="m">b</span> = 6.</p></details><details class="hint"><summary>Hint 3</summary><p>Compare <span class="vec">p</span> with <span class="vec">v</span>. What number times (3, 4) gives (−1.5, −2)?</p></details></div>
+  <p class="hint-count">Hints used: 0 of 3</p>
+  <details class="solution" hidden><summary>Solution</summary><p>−1.5 × <span class="m">b</span> = 6 gives <span class="m">b</span> = <strong>−4</strong>, and the north parts agree: −2 × (−4) = 8. So −4<span class="vec">p</span> = (6, 8), the same point as 2<span class="vec">v</span>.</p><p>Two recipes are possible because <span class="vec">p</span> = −0.5<span class="vec">v</span>: every <span class="vec">v</span> in a recipe can be swapped for −2 copies of <span class="vec">p</span> without moving the tip. So there are endless recipes for (6, 8), such as <span class="vec">v</span> − 2<span class="vec">p</span> = (3 + 3, 4 + 4). The in-code line 2<span class="vec">v</span> + 4<span class="vec">p</span> = (0, 0) says the same thing: a recipe that is not all zeros can still land on the origin. For <span class="vec">v</span> and <span class="vec">w</span>, the formulas of Layer 4 give exactly one recipe for each point. Page 3 is built on the difference.</p></details>
+</article>
+<article class="challenge" id="challenge-2-2" data-level="branch" data-mode="number" data-answer="81.87" data-tolerance="0.05">
+  <div class="chead"><span class="chip branch">Branch</span><h3>Forwards only</h3></div>
+  <p class="needs">Needs: this page (span) and page 1 (direction as an angle).</p>
+  <p>Allow only amounts that are zero or positive: <span class="m">a</span> ≥ 0 and <span class="m">b</span> ≥ 0, with <span class="vec">v</span> = (3, 4) and <span class="vec">w</span> = (−1, 1). The points you can reach no longer fill the plane. Describe the region they fill, and give the angle at its corner, in degrees, to one decimal place.</p>
+  <form class="commit"><label>Angle at the corner, in degrees<input name="a" type="text" inputmode="decimal" autocomplete="off"></label><button class="btn primary" type="submit">Commit my answer</button></form>
+  <p class="result" hidden aria-live="polite"></p>
+  <div class="hints"><details class="hint"><summary>Hint 1</summary><p>Start with <span class="m">b</span> = 0. Where can <span class="m">a</span> ≥ 0 take you? Then do the same with <span class="m">a</span> = 0.</p></details><details class="hint"><summary>Hint 2</summary><p>Those two half lines are the edges of the region. A recipe with both amounts positive adds a bit of each edge, tip to tail, so it lands between them.</p></details><details class="hint"><summary>Hint 3</summary><p>Measure both edges from east. The angle of <span class="vec">v</span> is the angle whose tangent is 4/3. The arrow <span class="vec">w</span> = (−1, 1) points exactly north-west.</p></details></div>
+  <p class="hint-count">Hints used: 0 of 3</p>
+  <details class="solution" hidden><summary>Solution</summary><p>With <span class="m">b</span> = 0 you reach the half line from the origin along <span class="vec">v</span>; with <span class="m">a</span> = 0, the half line along <span class="vec">w</span>. Any recipe with both amounts positive lands between them, and every point between them has such a recipe. So the region is a wedge with its corner at the origin, bounded by those two half lines and running out without end.</p><p><span class="vec">v</span> makes 53.13° with east (its tangent is 4/3), and <span class="vec">w</span> makes 135°. The corner angle is 135° − 53.13° = <strong>81.87°</strong>, or 81.9° to one decimal place.</p><p>This wedge is exactly what the commonest mistake about span takes to be the whole answer. Negative amounts are what open it out to the plane.</p></details>
+</article>
+</section>
+
+<section class="next" id="next" aria-label="Next lesson">
+  <p class="eyebrow">Next · <b>page 3, linear independence</b></p>
+  <p>Two arrows went into Plate 2.3 and only a line came out. The next lesson asks when an arrow adds something new to a span, and when it is already reachable from the others.</p>
+  <p class="exit">Why did the trail in Plate 2.3 refuse to leave the line?</p>
+  <p class="small">Page 3, linear independence, is the next lesson to be written.</p>
+</section>
+
+<section aria-label="For the teacher">
+  <details class="notes" id="teacher">
+    <summary>For the teacher: how this page is sequenced</summary>
+    <p>The page answers the exit question of page 1 and uses page 1's own objects: <span class="vec">v</span> = (3, 4) from the 3, 4, 5 triangle, and <span class="vec">w</span> = (−1, 1), the second ingredient of Plate 1.7. No new arrow is needed to make the span idea land, and the learner meets two familiar arrows with a new question.</p>
+    <ol>
+      <li><strong>Need before name, act before read.</strong> Plate 2.1 opens with the sliders. With <span class="vec">w</span> held at zero the learner sees one arrow paint a line; releasing <span class="vec">w</span> fills the plane. The word "span" arrives only after the dots have shown what it means.</li>
+      <li><strong>Misconception first.</strong> The span is not the arrows, and not the wedge between them. The paint analogy is chosen because it works for the first half and breaks at the second: paint has no negative amounts. The page names the break before Plate 2.2, the plate the misconception would sabotage.</li>
+      <li><strong>Predict before reveal.</strong> Plate 2.2 asks for a committed yes or no about a point behind both arrows before the hunt. Plate 2.3 asks for a second prediction, about a partner that turns out to be useless.</li>
+      <li><strong>See, then name on the next page.</strong> Plate 2.3 shows a pair of arrows whose span is only a line, and the in-code block shows 2<span class="vec">v</span> + 4<span class="vec">p</span> = (0, 0). The page deliberately does not use the words "parallel" or "dependent". Page 3 names the idea and asks for a test that does not mention parallel lines.</li>
+      <li><strong>Specifics as a solution of two equations.</strong> Layer 4 solves for the recipe by elimination, without matrices, and leaves two seeds: the number 7 that every recipe divides by (page 9, the determinant) and the equations that contradict each other when the span is a line (page 10, systems).</li>
+      <li><strong>Exploration.</strong> Plate 2.4 lets the learner build all three shapes of span: point, line and plane.</li>
+      <li><strong>Misconceptions targeted by the check.</strong> Q1: the span is the arrows or the wedge. Q2: one arrow spans only itself or a half line. Q3: a span need not pass through the origin. Q4: two arrows always fill the plane. Q5: recipes must use positive amounts. Q6: recipes must use whole numbers.</li>
+      <li><strong>Challenges.</strong> Seed 2.1 is hard because the page's formulas give one recipe for each point, and the challenge asks for a second recipe; the learner has to notice that <span class="vec">p</span> is a multiple of <span class="vec">v</span> and trade one for the other. Branch 2.2 is hard because it removes negative amounts, the very thing the page relied on, and asks the learner to describe the region that is left and measure it with an angle from page 1.</li>
+      <li><strong>Plate purposes.</strong> Plate 2.1: one arrow paints a line, two arrows paint the plane. Plate 2.2: points behind or beside both arrows are reachable, because amounts can be negative. Plate 2.3: two arrows can still span only a line. Plate 2.4: the span of two arrows in the plane is a point, a line or the plane, and nothing else.</li>
+      <li><strong>Choices recorded.</strong> The predict point is (−2, −5), behind both arrows. With <span class="vec">w</span> = (−1, 1), the point (−2, 5) would need 3/7 of <span class="vec">v</span>, which no slider hunt can find, and a point behind both arrows attacks the wedge misconception directly.</li>
+    </ol>
+  </details>
+</section>
+</main>
+<footer class="site">
+  <p>© 2026 Niranga Dharmaratna. Text and illustrations CC BY-SA 4.0; code MIT. <span class="si" lang="si">සංගතික</span> and its marks are reserved. <a href="../../about/">About Sangathika</a>.</p>
+</footer>
+</div>
+<script>
+/* Plates 2.1 to 2.4. Interaction and drawing only: every teaching sentence is in the HTML above.
+   The mathematics comes from ../sam.js (vec, add, scale, sub, len, combine); drawing from PL in assets/plane.js. */
+document.addEventListener('DOMContentLoaded', function(){
+'use strict';
+var P = window.PL, C = P.C, fmt = P.fmt, pair = P.pair, clamp = P.clamp;
+function $(id){ return document.getElementById(id); }
+var V = vec(3, 4), W = vec(-1, 1), Q = vec(-1.5, -2);
+var EPS = 1e-9;
+
+/* "2 v − 3 w", written for people */
+function recipeText(a, A, b, B){
+  return fmt(a) + ' ' + A + (b < 0 ? ' − ' : ' + ') + fmt(Math.abs(b)) + ' ' + B;
+}
+/* a dots layer: each dot is a point of the span already reached */
+function Dots(){ this.list = []; this.seen = {}; }
+Dots.prototype.add = function(a, u, b, w){
+  var k = a.toFixed(2) + ',' + b.toFixed(2);
+  if (this.seen[k]) return; this.seen[k] = 1; this.list.push(combine(a, u, b, w));
+};
+Dots.prototype.clear = function(){ this.list = []; this.seen = {}; };
+Dots.prototype.draw = function(p){
+  var c = p.ctx; c.save(); c.fillStyle = C.res; c.globalAlpha = 0.5;
+  this.list.forEach(function(d){ c.beginPath(); c.arc(p.X(d[0]), p.Y(d[1]), 2.2, 0, Math.PI * 2); c.fill(); });
+  c.restore();
+};
+/* a copies of u from the origin, then b copies of w tip to tail, then the result */
+function drawRecipe(p, a, u, b, w){
+  var au = scale(a, u), tip = combine(a, u, b, w);
+  p.arrow(0, 0, tip[0], tip[1], C.res, { w: 5, alpha: 0.45 });
+  if (Math.abs(a) > EPS) p.arrow(0, 0, au[0], au[1], C.v);
+  if (Math.abs(b) > EPS) p.arrow(au[0], au[1], tip[0], tip[1], C.av);
+  p.dot(tip[0], tip[1], 4.5, C.res);
+  return tip;
+}
+function ghost(p, u, name, col, sign, alpha){
+  p.arrow(0, 0, u[0], u[1], col, { alpha: alpha || 0.3, w: 2 });
+  P.sideLabel(p, name, [0, 0], u, col, sign, 0.6);
+}
+/* sweep a list of recipes into a Dots layer, a batch per frame (all at once if motion is reduced) */
+function painter(dots, recipes, redraw, done){
+  var i = 0, per = P.reduceMotion ? recipes.length : 60;
+  function step(){
+    for (var k = 0; k < per && i < recipes.length; k++, i++) dots.add(recipes[i][0], recipes[i][1], recipes[i][2], recipes[i][3]);
+    redraw();
+    if (i < recipes.length) requestAnimationFrame(step); else if (done) done();
+  }
+  step();
+}
+function grid(a0, a1, da, b0, b1, db, u, w){
+  var out = [];
+  for (var a = a0; a <= a1 + EPS; a += da) for (var b = b0; b <= b1 + EPS; b += db) out.push([Math.round(a * 100) / 100, u, Math.round(b * 100) / 100, w]);
+  return out;
+}
+
+/* ========== Plate 2.1: paint the span ========== */
+(function(){
+  var p = new P.Plane($('heroCv'), { x0: -7, x1: 7, y0: -7, y1: 7 });
+  var sa = $('heroA'), sb = $('heroB'), hold = $('heroHold'), paint = $('heroPaint'), st = $('heroStatus');
+  var dots = new Dots(), busy = false;
+  function held(){ return hold.getAttribute('aria-pressed') === 'true'; }
+  function onLine(){ return dots.list.every(function(d){ return Math.abs(d[0] * V[1] - d[1] * V[0]) < 1e-6; }); }
+  function draw(){
+    p.fit(); p.grid({ every: 2 });
+    if (held()) p.fullLine(V[0], V[1], C.muted, { dash: [5, 5], alpha: 0.5, w: 1 });
+    dots.draw(p);
+    ghost(p, V, 'v', C.v, 1); ghost(p, W, 'w', C.av, -1);
+    drawRecipe(p, +sa.value, V, +sb.value, W);
+  }
+  function status(){
+    var n = dots.list.length;
+    if (n < 2) st.textContent = 'Move a slider. Each new point you land on leaves a dot.';
+    else if (onLine()) st.textContent = n + ' dots so far, and every one lies on the same line through the origin.';
+    else if (n > 1500) st.textContent = n + ' dots, and they cover the whole picture.';
+    else st.textContent = n + ' dots so far, and they have left the line.';
+  }
+  function update(){
+    $('heroAOut').textContent = fmt(+sa.value); $('heroBOut').textContent = fmt(+sb.value);
+    dots.add(+sa.value, V, +sb.value, W); draw(); status();
+  }
+  sa.addEventListener('input', update); sb.addEventListener('input', update);
+  hold.addEventListener('click', function(){
+    var on = !held(); hold.setAttribute('aria-pressed', String(on));
+    if (on){ sb.value = 0; } sb.disabled = on; update();
+  });
+  paint.addEventListener('click', function(){
+    if (busy) return; busy = true; paint.disabled = true;
+    var recipes = held() ? grid(-2, 2, 0.05, 0, 0, 1, V, W) : grid(-2, 2, 0.1, -7, 7, 0.25, V, W);
+    painter(dots, recipes, function(){ draw(); status(); }, function(){ busy = false; paint.disabled = false; });
+  });
+  $('heroClear').addEventListener('click', function(){ dots.clear(); update(); });
+  sb.disabled = held();
+  P.watch(p.cv, draw); update();
+})();
+
+/* ========== Plate 2.2: reach the ring ========== */
+(function(){
+  var p = new P.Plane($('huCv'), { x0: -8, x1: 8, y0: -8, y1: 8 });
+  var sa = $('huA'), sb = $('huB'), st = $('huStatus');
+  var btns = Array.prototype.slice.call(document.querySelectorAll('#plate-2-2 [data-tx]'));
+  var target = vec(-2, -5), found = {};
+  function hit(tip){ return len(sub(tip, target)) < 1e-9; }
+  function draw(){
+    p.fit(); p.grid({ every: 2 });
+    var a = +sa.value, b = +sb.value, tip = combine(a, V, b, W), ok = hit(tip);
+    p.dot(target[0], target[1], 11, ok ? C.eig : C.muted, { ring: true, lw: 2.5 });
+    ghost(p, V, 'v', C.v, 1); ghost(p, W, 'w', C.av, -1);
+    drawRecipe(p, a, V, b, W);
+    return tip;
+  }
+  function update(){
+    var a = +sa.value, b = +sb.value;
+    $('huAOut').textContent = fmt(a); $('huBOut').textContent = fmt(b);
+    var tip = draw();
+    $('huRec').textContent = recipeText(a, 'v', b, 'w');
+    $('huTip').textContent = pair(tip[0], tip[1]);
+    if (hit(tip)){
+      found[target.join(',')] = true;
+      st.className = 'status on';
+      st.textContent = 'Found it: ' + recipeText(a, 'v', b, 'w') + ' lands on ' + pair(target[0], target[1]) + '. Choose another ring.';
+    } else {
+      st.className = 'status';
+      st.textContent = 'The tip is ' + fmt(len(sub(tip, target)), 1) + ' away from the ring.';
+    }
+    $('huCount').textContent = Object.keys(found).length + ' of 4';
+  }
+  btns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btns.forEach(function(x){ x.setAttribute('aria-pressed', String(x === btn)); });
+      target = vec(+btn.getAttribute('data-tx'), +btn.getAttribute('data-ty')); update();
+    });
+  });
+  sa.addEventListener('input', update); sb.addEventListener('input', update);
+  P.watch(p.cv, draw); update();
+})();
+
+/* ========== Plate 2.3: the parallel partner ========== */
+(function(){
+  var p = new P.Plane($('paCv'), { x0: -8, x1: 8, y0: -8, y1: 8 });
+  var sa = $('paA'), sb = $('paB'), paint = $('paPaint'), st = $('paStatus');
+  var target = vec(-2, -5), dots = new Dots(), best = Infinity, busy = false;
+  function draw(){
+    p.fit(); p.grid({ every: 2 });
+    dots.draw(p);
+    p.dot(target[0], target[1], 11, C.muted, { ring: true, lw: 2.5 });
+    ghost(p, V, 'v', C.v, 1, 0.9); ghost(p, Q, 'p', C.av, -1, 0.9);
+    drawRecipe(p, +sa.value, V, +sb.value, Q);
+  }
+  function note(){
+    dots.list.forEach(function(d){ best = Math.min(best, len(sub(d, target))); });
+    $('paBest').textContent = isFinite(best) ? fmt(best, 1) : '';
+    var n = dots.list.length;
+    st.textContent = n < 2 ? 'Move a slider, or press Paint for me.' :
+      n + ' dots so far. The ring has not been reached, and the dots have not left the line.';
+  }
+  function update(){
+    var a = +sa.value, b = +sb.value, tip = combine(a, V, b, Q);
+    $('paAOut').textContent = fmt(a); $('paBOut').textContent = fmt(b);
+    dots.add(a, V, b, Q); draw();
+    $('paRec').textContent = recipeText(a, 'v', b, 'p');
+    $('paTip').textContent = pair(tip[0], tip[1]);
+    $('paGap').textContent = fmt(len(sub(tip, target)), 1);
+    note();
+  }
+  sa.addEventListener('input', update); sb.addEventListener('input', update);
+  paint.addEventListener('click', function(){
+    if (busy) return; busy = true; paint.disabled = true;
+    painter(dots, grid(-2, 2, 0.1, -6, 6, 0.25, V, Q), function(){ draw(); note(); }, function(){ busy = false; paint.disabled = false; });
+  });
+  $('paClear').addEventListener('click', function(){ dots.clear(); best = Infinity; update(); });
+  P.watch(p.cv, draw); update();
+})();
+
+/* ========== Plate 2.4: point, line or plane ========== */
+(function(){
+  var cv = $('exCv'), p = new P.Plane(cv, { x0: -6, x1: 6, y0: -6, y1: 6 });
+  var v = vec(3, 4), w = vec(-1, 1), st = $('exStatus');
+  var presets = Array.prototype.slice.call(document.querySelectorAll('#plate-2-4 [data-pv]'));
+  function snap(x){ return clamp(Math.round(x * 2) / 2, -5.5, 5.5); }
+  function kind(){
+    var zv = len(v) < EPS, zw = len(w) < EPS;
+    if (zv && zw) return 'point';
+    if (Math.abs(v[0] * w[1] - v[1] * w[0]) < EPS) return 'line';
+    return 'plane';
+  }
+  function draw(){
+    p.fit();
+    var k = kind(), c = p.ctx;
+    if (k === 'plane'){
+      c.save(); c.fillStyle = C['res-soft']; c.fillRect(0, 0, p.W, p.H); c.restore();
+    }
+    p.grid({ every: 2 });
+    if (k === 'plane'){
+      for (var i = -14; i <= 14; i++){
+        var s = scale(i, v), t = scale(i, w);
+        p.fullLine(w[0], w[1], C.tgrid, { ox: s[0], oy: s[1], w: 1 });
+        p.fullLine(v[0], v[1], C.tgrid, { ox: t[0], oy: t[1], w: 1 });
+      }
+    } else if (k === 'line'){
+      var d = len(v) > EPS ? v : w;
+      p.fullLine(d[0], d[1], C.res, { w: 7, alpha: 0.3 });
+    } else {
+      p.dot(0, 0, 12, C.res, { ring: true, lw: 3 });
+    }
+    p.arrow(0, 0, v[0], v[1], C.v); p.arrow(0, 0, w[0], w[1], C.av);
+    p.dot(v[0], v[1], 6, C.v); p.dot(w[0], w[1], 6, C.av);
+    if (len(v) > EPS) P.sideLabel(p, 'v', [0, 0], v, C.v, 1, 0.6);
+    if (len(w) > EPS) P.sideLabel(p, 'w', [0, 0], w, C.av, -1, 0.6);
+  }
+  var TEXT = {
+    plane: ['the whole plane', 'The arrows point along different lines, so their recipes reach every point.'],
+    line: ['a line through the origin', 'Every recipe stays on one line. The second arrow adds nothing new.'],
+    point: ['the origin alone', 'Both arrows are zero, so every recipe lands on the origin.']
+  };
+  function update(){
+    draw();
+    $('exV').textContent = pair(v[0], v[1]); $('exW').textContent = pair(w[0], w[1]);
+    var k = kind(); $('exKind').textContent = TEXT[k][0]; st.textContent = TEXT[k][1];
+    presets.forEach(function(b){
+      var pv = b.getAttribute('data-pv').split(',').map(Number), pw = b.getAttribute('data-pw').split(',').map(Number);
+      b.setAttribute('aria-pressed', String(pv[0] === v[0] && pv[1] === v[1] && pw[0] === w[0] && pw[1] === w[1]));
+    });
+  }
+  P.draggable(p, function(){ return [{ id: 'w', x: w[0], y: w[1] }, { id: 'v', x: v[0], y: v[1] }]; }, function(id, x, y){
+    var q = vec(snap(x), snap(y)); if (id === 'v') v = q; else w = q; update();
+  });
+  cv.addEventListener('keydown', function(e){
+    var d = { ArrowLeft: [-0.5, 0], ArrowRight: [0.5, 0], ArrowUp: [0, 0.5], ArrowDown: [0, -0.5] }[e.key];
+    if (!d) return; e.preventDefault();
+    var q = add(e.shiftKey ? v : w, d); q = vec(snap(q[0]), snap(q[1]));
+    if (e.shiftKey) v = q; else w = q; update();
+  });
+  presets.forEach(function(b){
+    b.addEventListener('click', function(){
+      v = b.getAttribute('data-pv').split(',').map(Number); w = b.getAttribute('data-pw').split(',').map(Number); update();
+    });
+  });
+  P.watch(cv, draw); update();
+})();
+});
+</script>
+</body>
+</html>

@@ -189,7 +189,7 @@ def check_search():
 
 # ------------------------------------------------------------ lessons (page contract)
 
-LIBRARY = ("vec", "add", "sub", "scale", "len", "bearing", "apply", "det", "eigen", "dot", "inverse", "compose")
+LIBRARY = ("vec", "add", "sub", "scale", "len", "bearing", "combine", "apply", "det", "eigen", "dot", "inverse", "compose")
 
 def check_lessons():
     strips = build.expected_midribs()

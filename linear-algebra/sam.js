@@ -23,6 +23,10 @@ function len(v){ return Math.hypot(v[0], v[1]); }
 // page 01: bearing. Degrees clockwise from north, the way a ship's officer reads direction.
 function bearing(v){ return ((90 - Math.atan2(v[1], v[0]) * 180 / Math.PI) % 360 + 360) % 360; }
 
+// page 02: combine. A recipe: a copies of u plus b copies of v. The span of u and v
+// is every point this can return, for every pair of numbers a and b.
+function combine(a, u, b, v){ return add(scale(a, u), scale(b, v)); }
+
 // page 06: apply. A matrix moves a vector: x copies of the first column plus y copies of the second.
 // (Used early by page 17, which comes before page 06 is written; page 06 introduces it properly.)
 function apply(A, v){ return [A[0] * v[0] + A[1] * v[1], A[2] * v[0] + A[3] * v[1]]; }
