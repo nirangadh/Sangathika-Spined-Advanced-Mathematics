@@ -238,6 +238,18 @@ def check_lessons():
                 if call not in defined and not re.search(r"\.\s*" + call + r"\(", t):
                     fails.append(f"page calls {call}() which sam.js does not define: {where}")
 
+# ------------------------------------------------------------ the sunflower mark
+
+def check_marks():
+    for need in ("assets/mark.svg", "favicon.ico"):
+        if not (ROOT / need).exists(): fails.append(f"missing: {need}")
+    for p in html_pages():
+        t = p.read_text(encoding="utf-8")
+        if not re.search(r'<a class="mark" href="[^"]*"><svg class="logo"[^>]*><use href="[^"]*assets/mark\.svg#m21">', t):
+            fails.append(f"top bar without the 21-seed mark (run tools/build.py): {rel(p)}")
+        if not re.search(r'<footer class="site">\s*<svg class="logo"[^>]*><use href="[^"]*assets/mark\.svg#m13">', t):
+            fails.append(f"footer without the 13-seed mark (run tools/build.py): {rel(p)}")
+
 # ------------------------------------------------------------ render
 
 def check_render():
@@ -271,7 +283,7 @@ def check_render():
     srv.shutdown()
 
 if __name__ == "__main__":
-    check_emdash(); check_headers(); check_boundary(); check_links(); check_css_urls(); check_search(); check_lessons()
+    check_emdash(); check_headers(); check_boundary(); check_links(); check_css_urls(); check_search(); check_lessons(); check_marks()
     if "--render" in sys.argv: check_render()
     if fails:
         print("\n".join(fails)); print(f"{len(fails)} problem(s)"); sys.exit(1)
