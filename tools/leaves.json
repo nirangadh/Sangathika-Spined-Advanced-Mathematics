@@ -1,0 +1,877 @@
+{
+ "site": {
+  "origin": "https://www.sangathika.com",
+  "name": "Sangathika",
+  "alternate_names": [
+   "සංගතික",
+   "Spined Advanced Mathematics"
+  ],
+  "language": "en-GB",
+  "licence": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "author": {
+   "name": "Niranga Dharmaratna",
+   "url": "https://www.sangathika.com/about/",
+   "same_as": [
+    "https://github.com/nirangadh"
+   ]
+  },
+  "repository": "https://github.com/nirangadh/Sangathika-Spined-Advanced-Mathematics"
+ },
+ "order": [
+  "linear-algebra",
+  "modular-arithmetic",
+  "functions",
+  "probability",
+  "trigonometry",
+  "graphs",
+  "statistics",
+  "counting",
+  "logic-sets",
+  "exponentials-logarithms",
+  "sequences-limits",
+  "differentiation",
+  "integration"
+ ],
+ "redirects": [],
+ "leaves": [
+  {
+   "slug": "linear-algebra",
+   "name": "Linear Algebra",
+   "group": "The machine",
+   "status": "building",
+   "brief": "A matrix is a machine that moves vectors, and linear algebra is learning to read it.",
+   "sentence": "A matrix is a machine that moves vectors. Linear algebra is learning to read that machine: first by what it does to the grid, then by what it reaches and what it crushes, then by the directions it leaves alone.",
+   "prereq": [],
+   "feeds": [
+    "statistics",
+    "differentiation"
+   ],
+   "cast": [
+    "triangle",
+    "towns",
+    "dial",
+    "fifteen"
+   ],
+   "teacher": "Four parts. Part I builds with vectors (span, independence, basis, dot product) so that Part II can read a matrix as a machine described by its columns. Part II runs machine, product, composition, determinant, systems, inverse, elimination, and the four subspaces, in the order need before tool: systems are asked before the inverse answers them. Part III brings length and angle back for projection, least squares and orthonormal bases. Part IV reads the machine on its own axes and ends with SVD, where the shear that defeated eigenvectors gives in. Two house matrices, S and the shear H, recur from page 6 to page 20.",
+   "pages": [
+    {
+     "number": 1,
+     "title": "Vectors",
+     "standard_term": "vectors",
+     "slug": "vectors",
+     "status": "porting",
+     "brief": "A vector is a size and a direction given together.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Walk 5 km"
+      },
+      {
+       "k": 2,
+       "name": "Tip to tail"
+      },
+      {
+       "k": 3,
+       "name": "Scale and reverse"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch"
+     ],
+     "forward": "v = (3, 4) and the 3-4-5 triangle"
+    },
+    {
+     "number": 2,
+     "title": "Span",
+     "standard_term": "span",
+     "slug": "span",
+     "status": "planned",
+     "brief": "The <b>span</b> is every point you can reach by adding and scaling some arrows.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Paint the span"
+      },
+      {
+       "k": 2,
+       "name": "Reach (−2, 5)?"
+      },
+      {
+       "k": 3,
+       "name": "Parallel partner"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch"
+     ],
+     "forward": "a second arrow w, and a trail that refused to leave the line"
+    },
+    {
+     "number": 3,
+     "title": "Linear independence",
+     "standard_term": "linear independence",
+     "slug": "linear-independence",
+     "status": "planned",
+     "brief": "An arrow is <b>independent</b> when the others cannot reach it.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Drop one arrow"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch"
+     ],
+     "forward": "a test for redundancy without the word parallel"
+    },
+    {
+     "number": 4,
+     "title": "Basis and coordinates",
+     "standard_term": "basis and coordinates",
+     "slug": "basis-and-coordinates",
+     "status": "planned",
+     "brief": "A <b>basis</b> is the smallest set of arrows that reaches everything.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Same arrow, two grids"
+      },
+      {
+       "k": 2,
+       "name": "Two arrows in 3D"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch"
+     ],
+     "forward": "same object, different numbers"
+    },
+    {
+     "number": 5,
+     "title": "Dot product",
+     "standard_term": "dot product",
+     "slug": "dot-product",
+     "status": "planned",
+     "brief": "The <b>dot product</b> is one number that says how much two arrows agree.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Shadow on v"
+      },
+      {
+       "k": 2,
+       "name": "Push the car"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "perpendicular means dot product zero"
+    },
+    {
+     "number": 6,
+     "title": "Matrices as machines",
+     "standard_term": "linear transformations",
+     "slug": "linear-transformations",
+     "status": "planned",
+     "brief": "A <b>matrix</b> is a machine that moves every arrow and keeps the grid straight.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "The blend"
+      },
+      {
+       "k": 2,
+       "name": "Where does (3, 4) land?"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "the house matrices S and H"
+    },
+    {
+     "number": 7,
+     "title": "Matrix times vector",
+     "standard_term": "matrix-vector multiplication",
+     "slug": "matrix-vector-multiplication",
+     "status": "planned",
+     "brief": "Ax can be read as a recipe of columns or as dot products with rows.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Two readings of Sv"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch"
+     ],
+     "forward": "the transpose, lightly, with a promise"
+    },
+    {
+     "number": 8,
+     "title": "Composition",
+     "standard_term": "matrix multiplication",
+     "slug": "matrix-multiplication",
+     "status": "planned",
+     "brief": "Two machines one after another make one machine, and the order matters.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Rotate then shear"
+      },
+      {
+       "k": 2,
+       "name": "Shear then rotate"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "matrix multiplication, derived not memorised"
+    },
+    {
+     "number": 9,
+     "title": "Determinant",
+     "standard_term": "determinant",
+     "slug": "determinant",
+     "status": "planned",
+     "brief": "The <b>determinant</b> is how much the machine stretches area.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Square to parallelogram"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "det = 0 collapses the plane"
+    },
+    {
+     "number": 10,
+     "title": "Systems Ax = b",
+     "standard_term": "systems of linear equations",
+     "slug": "systems-of-linear-equations",
+     "status": "planned",
+     "brief": "A <b>system</b> asks which input the machine sends to b.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Drag b, column picture"
+      },
+      {
+       "k": 2,
+       "name": "Drag b, row picture"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch"
+     ],
+     "forward": "one, none or infinitely many, and why"
+    },
+    {
+     "number": 11,
+     "title": "Inverse",
+     "standard_term": "inverse matrix",
+     "slug": "inverse-matrix",
+     "status": "planned",
+     "brief": "The <b>inverse</b> is the machine that undoes A, when undoing is possible.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Run A then A⁻¹"
+      },
+      {
+       "k": 2,
+       "name": "Try to undo P"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "a crushed plane cannot be uncrushed"
+    },
+    {
+     "number": 12,
+     "title": "Elimination",
+     "standard_term": "Gaussian elimination",
+     "slug": "gaussian-elimination",
+     "status": "planned",
+     "brief": "<b>Elimination</b> changes the equations without changing the answer.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Step the rows"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch"
+     ],
+     "forward": "pivots count what survives"
+    },
+    {
+     "number": 13,
+     "title": "Column space, null space, rank",
+     "standard_term": "column space and null space",
+     "slug": "column-space-and-null-space",
+     "status": "planned",
+     "brief": "<b>Rank</b> counts what the machine reaches; the rest it crushes to zero.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Squash space onto a plane"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "eigenvectors live in a null space"
+    },
+    {
+     "number": 14,
+     "title": "Projection onto a subspace",
+     "standard_term": "projection",
+     "slug": "projection",
+     "status": "planned",
+     "brief": "A <b>projection</b> is the closest point, and its error is perpendicular.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Drop b onto a plane"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch"
+     ],
+     "forward": "the transpose earns its meaning"
+    },
+    {
+     "number": 15,
+     "title": "Least squares",
+     "standard_term": "least squares",
+     "slug": "least-squares",
+     "status": "planned",
+     "brief": "When no exact answer exists, <b>least squares</b> finds the nearest one.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Fit the line"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "regression, for the Statistics leaf"
+    },
+    {
+     "number": 16,
+     "title": "Orthonormal bases and Gram–Schmidt",
+     "standard_term": "Gram–Schmidt",
+     "slug": "gram-schmidt",
+     "status": "planned",
+     "brief": "<b>Orthonormal</b> arrows are perpendicular and of length 1, so coordinates become dot products.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Straighten a basis"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch"
+     ],
+     "forward": "the inverse of a rotation is its transpose"
+    },
+    {
+     "number": 17,
+     "title": "Eigenvectors",
+     "standard_term": "eigenvectors and eigenvalues",
+     "slug": "eigenvectors",
+     "status": "porting",
+     "brief": "An <b>eigenvector</b> keeps its direction when the machine moves it.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Hunt the direction"
+      },
+      {
+       "k": 2,
+       "name": "Two towns"
+      },
+      {
+       "k": 3,
+       "name": "Matrix lab"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "the two towns and their 0.700"
+    },
+    {
+     "number": 18,
+     "title": "Change of basis and diagonalisation",
+     "standard_term": "diagonalisation",
+     "slug": "diagonalisation",
+     "status": "planned",
+     "brief": "Read the machine in its eigen-basis and it only stretches.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Switch to the eigen-grid"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "powers of A become easy"
+    },
+    {
+     "number": 19,
+     "title": "Symmetric matrices",
+     "standard_term": "symmetric matrices",
+     "slug": "symmetric-matrices",
+     "status": "planned",
+     "brief": "A <b>symmetric</b> machine stretches along perpendicular axes.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "Dial to ellipse"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "perpendicular eigenvectors"
+    },
+    {
+     "number": 20,
+     "title": "SVD",
+     "standard_term": "singular value decomposition",
+     "slug": "singular-value-decomposition",
+     "status": "planned",
+     "brief": "Every machine is a rotation, a stretch and a rotation.",
+     "demos": [
+      {
+       "k": 1,
+       "name": "The shear gives in"
+      },
+      {
+       "k": 2,
+       "name": "Compress an image"
+      }
+     ],
+     "levels": [
+      "Seed",
+      "Branch",
+      "Canopy"
+     ],
+     "forward": "the capstone"
+    }
+   ],
+   "branches": [
+    {
+     "title": "Homogeneous coordinates",
+     "brief": "Translation is not a linear machine, so graphics adds one coordinate to make it one.",
+     "needs": "page 8"
+    },
+    {
+     "title": "Hill cipher",
+     "brief": "A cipher is a matrix that can be undone mod 26.",
+     "needs": "page 11; Modular arithmetic leaf"
+    },
+    {
+     "title": "Regression",
+     "brief": "Least squares on the fifteen is a regression line.",
+     "needs": "page 15; Statistics leaf"
+    },
+    {
+     "title": "PageRank",
+     "brief": "A search ranking is the eigenvector of a web graph.",
+     "needs": "page 18; Graphs and Probability leaves"
+    },
+    {
+     "title": "PCA",
+     "brief": "The covariance matrix of the fifteen is symmetric, and its eigenvectors point along the data.",
+     "needs": "pages 19 and 20; Statistics leaf"
+    }
+   ],
+   "glossary": [
+    {
+     "term": "span",
+     "page": 2,
+     "def": "Every point you can reach by adding and scaling some arrows."
+    },
+    {
+     "term": "independent",
+     "page": 3,
+     "def": "An arrow the others cannot reach; only the zero recipe makes zero."
+    },
+    {
+     "term": "basis",
+     "page": 4,
+     "def": "The smallest set of arrows that reaches everything."
+    },
+    {
+     "term": "dot product",
+     "page": 5,
+     "def": "One number that says how much two arrows agree; zero when they are perpendicular."
+    },
+    {
+     "term": "matrix",
+     "page": 6,
+     "def": "A machine that moves every arrow and keeps the grid straight; its columns say where the basis arrows land."
+    },
+    {
+     "term": "determinant",
+     "page": 9,
+     "def": "How much the machine stretches area; negative means a flip, zero means the plane collapses."
+    },
+    {
+     "term": "system",
+     "page": 10,
+     "def": "The question: which input does the machine send to b?"
+    },
+    {
+     "term": "inverse",
+     "page": 11,
+     "def": "The machine that undoes A; it exists only when the determinant is not zero."
+    },
+    {
+     "term": "elimination",
+     "page": 12,
+     "def": "Row moves that change the equations without changing the answer."
+    },
+    {
+     "term": "rank",
+     "page": 13,
+     "def": "The dimension of what the machine reaches."
+    },
+    {
+     "term": "projection",
+     "page": 14,
+     "def": "The closest point in a subspace; its error is perpendicular."
+    },
+    {
+     "term": "least squares",
+     "page": 15,
+     "def": "The nearest reachable answer when no exact one exists."
+    },
+    {
+     "term": "orthonormal",
+     "page": 16,
+     "def": "Perpendicular arrows of length 1."
+    },
+    {
+     "term": "eigenvector",
+     "page": 17,
+     "def": "An arrow that keeps its direction when the machine moves it."
+    },
+    {
+     "term": "symmetric",
+     "page": 19,
+     "def": "A matrix equal to its transpose; it stretches along perpendicular axes."
+    }
+   ],
+   "seo_name": "Linear algebra",
+   "target": 20,
+   "card": "leaf"
+  },
+  {
+   "slug": "functions",
+   "name": "Functions",
+   "group": "Roots",
+   "status": "planned",
+   "target": 16,
+   "brief": "A function is a machine: one input goes in, one output comes out.",
+   "sentence": "A function is a machine that takes an input and returns one output; composition chains machines and an inverse runs one backwards.",
+   "prereq": [],
+   "feeds": [
+    "linear-algebra",
+    "trigonometry",
+    "exponentials-logarithms",
+    "differentiation"
+   ],
+   "cast": [
+    "triangle"
+   ],
+   "why": "The machine idea of the whole Linear Algebra leaf is born here, one leaf earlier, so composition and inverse become returns.",
+   "seo_name": "Functions",
+   "card": "leaf"
+  },
+  {
+   "slug": "trigonometry",
+   "name": "Trigonometry and the unit circle",
+   "group": "Roots",
+   "status": "planned",
+   "target": 16,
+   "brief": "An angle is a place on the dial, and sine and cosine are its two shadows.",
+   "sentence": "An angle is a position on the dial, and sine and cosine are its shadows on the two axes.",
+   "prereq": [
+    "functions"
+   ],
+   "feeds": [
+    "linear-algebra",
+    "integration"
+   ],
+   "cast": [
+    "dial",
+    "triangle"
+   ],
+   "why": "Linear Algebra already uses a bearing and a rotation matrix borrowed from here; the dial is the most draggable object in the tree.",
+   "seo_name": "Trigonometry and the unit circle",
+   "card": "leaf"
+  },
+  {
+   "slug": "exponentials-logarithms",
+   "name": "Exponentials and logarithms",
+   "group": "Roots",
+   "status": "planned",
+   "target": 14,
+   "brief": "Repeated multiplication grows fast, and the logarithm counts the steps.",
+   "sentence": "Repeated multiplication grows or shrinks at a rate set by the base, and the logarithm asks how many steps it took.",
+   "prereq": [
+    "functions"
+   ],
+   "feeds": [
+    "sequences-limits",
+    "probability",
+    "statistics",
+    "modular-arithmetic"
+   ],
+   "cast": [
+    "towns"
+   ],
+   "why": "Big-O, growth, entropy in bits, and the two towns' 0.7ⁿ decay all live here.",
+   "seo_name": "Exponentials and logarithms",
+   "card": "leaf"
+  },
+  {
+   "slug": "logic-sets",
+   "name": "Logic and sets",
+   "group": "Discrete trunk",
+   "status": "planned",
+   "target": 14,
+   "brief": "A statement is true or false, and a set is a collection with a membership test.",
+   "sentence": "A statement is true or false, a set is a collection with a membership test, and the two are the same idea written two ways.",
+   "prereq": [],
+   "feeds": [
+    "counting",
+    "probability",
+    "graphs"
+   ],
+   "cast": [],
+   "why": "The vocabulary of every proof and every query; plates are toggles, truth tables and Venn regions. Reading and using logic only.",
+   "seo_name": "Logic and sets",
+   "card": "leaf"
+  },
+  {
+   "slug": "counting",
+   "name": "Counting",
+   "group": "Discrete trunk",
+   "status": "planned",
+   "target": 12,
+   "brief": "Counting is choosing: does order matter, and are repeats allowed?",
+   "sentence": "Counting is choosing, and the two questions are whether order matters and whether repeats are allowed.",
+   "prereq": [
+    "logic-sets"
+   ],
+   "feeds": [
+    "probability"
+   ],
+   "cast": [
+    "dial"
+   ],
+   "why": "Probability cannot start without it; keyspace sizes and the birthday bound are counting arguments with immediate bite for security students.",
+   "seo_name": "Counting",
+   "card": "leaf"
+  },
+  {
+   "slug": "modular-arithmetic",
+   "name": "Modular arithmetic",
+   "group": "Discrete trunk",
+   "status": "planned",
+   "target": 16,
+   "brief": "Arithmetic on the dial wraps round, and every question becomes where the dial lands.",
+   "sentence": "Arithmetic on the dial wraps round, and the questions of inverses, primes and powers all become questions about where the dial lands.",
+   "prereq": [],
+   "feeds": [
+    "linear-algebra",
+    "counting"
+   ],
+   "cast": [
+    "dial",
+    "triangle"
+   ],
+   "why": "The missing half of the Hill cipher branch; the floor for RSA and Diffie-Hellman; self-contained, so it is the second leaf to build.",
+   "seo_name": "Modular arithmetic",
+   "card": "leaf"
+  },
+  {
+   "slug": "graphs",
+   "name": "Graphs",
+   "group": "Discrete trunk",
+   "status": "planned",
+   "target": 14,
+   "brief": "A graph is dots joined by lines, and most questions ask which dots you can reach.",
+   "sentence": "A graph is dots joined by lines, and almost every question about it is a question about which dots you can reach from which.",
+   "prereq": [
+    "logic-sets"
+   ],
+   "feeds": [
+    "linear-algebra",
+    "probability"
+   ],
+   "cast": [
+    "towns"
+   ],
+   "why": "The adjacency matrix meets Linear Algebra page 6, and PageRank needs a graph before it needs an eigenvector.",
+   "seo_name": "Graphs",
+   "card": "leaf"
+  },
+  {
+   "slug": "probability",
+   "name": "Probability",
+   "group": "Chance and data",
+   "status": "planned",
+   "target": 18,
+   "brief": "Probability is the share of the outcomes that count.",
+   "sentence": "Probability is the share of the outcomes that count, and conditioning means changing which outcomes are in the room.",
+   "prereq": [
+    "counting",
+    "exponentials-logarithms"
+   ],
+   "feeds": [
+    "statistics",
+    "linear-algebra"
+   ],
+   "cast": [
+    "dial",
+    "towns",
+    "fifteen"
+   ],
+   "why": "The two towns are a Markov chain, so this leaf and Linear Algebra page 18 describe one object from two sides.",
+   "seo_name": "Probability",
+   "card": "leaf"
+  },
+  {
+   "slug": "statistics",
+   "name": "Statistics and data",
+   "group": "Chance and data",
+   "status": "planned",
+   "target": 16,
+   "brief": "A dataset is a cloud of points, and statistics are the few numbers that describe its shape.",
+   "sentence": "A dataset is a cloud of points, and statistics are the few numbers that describe its shape.",
+   "prereq": [
+    "probability",
+    "linear-algebra"
+   ],
+   "feeds": [
+    "linear-algebra"
+   ],
+   "cast": [
+    "fifteen"
+   ],
+   "why": "Regression is the anchor Linear Algebra page 15 promises, and the covariance matrix is symmetric, so PCA becomes a branch off pages 19 and 20. This leaf's hatch fixes the fifteen's values.",
+   "seo_name": "Statistics and data",
+   "card": "leaf"
+  },
+  {
+   "slug": "sequences-limits",
+   "name": "Sequences, limits and series",
+   "group": "Change and accumulation",
+   "status": "planned",
+   "target": 14,
+   "brief": "A sequence keeps going, and a limit is where it is heading.",
+   "sentence": "A sequence is a rule that keeps going, and a limit is where it is heading even if it never arrives.",
+   "prereq": [
+    "exponentials-logarithms"
+   ],
+   "feeds": [
+    "differentiation",
+    "integration",
+    "probability"
+   ],
+   "cast": [
+    "towns"
+   ],
+   "why": "0.7ⁿ settling, power iteration converging, the geometric series, and the floating-point moment where a limit computed in JS goes wrong.",
+   "seo_name": "Sequences, limits and series",
+   "card": "leaf"
+  },
+  {
+   "slug": "differentiation",
+   "name": "Differentiation",
+   "group": "Change and accumulation",
+   "status": "planned",
+   "target": 18,
+   "brief": "The derivative is the slope of the curve when you zoom in until it looks straight.",
+   "sentence": "The derivative is the slope of the curve if you zoom in far enough for it to look straight.",
+   "prereq": [
+    "functions",
+    "sequences-limits",
+    "trigonometry"
+   ],
+   "feeds": [
+    "integration"
+   ],
+   "cast": [
+    "triangle",
+    "fifteen"
+   ],
+   "why": "The derivative is the best local linear machine, so this leaf and Linear Algebra page 6 are one thought at two scales.",
+   "seo_name": "Differentiation",
+   "card": "leaf"
+  },
+  {
+   "slug": "integration",
+   "name": "Integration",
+   "group": "Change and accumulation",
+   "status": "planned",
+   "target": 16,
+   "brief": "Integration adds up thin slices, and adding slices undoes taking slopes.",
+   "sentence": "Integration adds up infinitely many thin slices, and the fundamental theorem says that adding slices undoes taking slopes.",
+   "prereq": [
+    "differentiation"
+   ],
+   "feeds": [
+    "probability"
+   ],
+   "cast": [
+    "dial"
+   ],
+   "why": "Accumulation, area, and probability densities as areas, which closes a loop back to Probability.",
+   "seo_name": "Integration",
+   "card": "leaf"
+  }
+ ]
+}
