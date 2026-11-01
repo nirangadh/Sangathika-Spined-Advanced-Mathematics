@@ -2,7 +2,9 @@
 
 ## Reserved name and marks
 
-The name සංගතික, its romanisations (Sangathika, Saṅgatika), the Sinhala wordmark and the tree mark identify this project and its author. They are not covered by the content licence or the code licence. Forks, ports and adapted versions must not carry them or imply endorsement. To ask for permission, open an issue in this repository.
+The name සංගතික, its romanisations (Sangathika, Saṅgatika), the Sinhala wordmark and the sunflower mark identify this project and its author. They are not covered by the content licence or the code licence. Forks, ports and adapted versions must not carry them or imply endorsement. To ask for permission, open an issue in this repository.
+
+The sunflower mark is drawn by `tools/mark.py` and published as `assets/mark.svg` (the sizes used on the pages), `assets/icon.svg` and `favicon.ico` (the browser icon) and `assets/icon-180.png` (the touch icon). The code in `tools/mark.py` is under MIT like the other tools; the drawing it makes is the reserved mark, not CC BY-SA content.
 
 ## Fonts
 
@@ -23,7 +25,7 @@ Solaris CDE Crimson, color-hex palette 40671. Colour palettes are not copyrighta
 
 ## Raster images
 
-The social-card images in `assets/cards/` and the touch icon `assets/icon-180.png` are mechanical renderings of this project's own SVG illustrations, made at build time. They carry the same licence as the illustrations (CC BY-SA 4.0) and are never placed in a page body.
+The social-card images in `assets/cards/` are mechanical renderings of this project's own SVG illustrations, made at build time. They carry the same licence as the illustrations (CC BY-SA 4.0), except for the sunflower mark in their top corner, which stays reserved. They are never placed in a page body.
 
 ## Datasets
 
@@ -42,4 +44,5 @@ Build-time tools, used only to generate committed files and never loaded by a pa
 | Tool | Use | Licence |
 | --- | --- | --- |
 | segno (https://github.com/heuer/segno) | generates the QR code on the tree page as SVG | BSD 3-Clause |
-| Playwright with Chromium (https://github.com/microsoft/playwright) | rasterises the social cards and touch icon | Apache 2.0 (Playwright); Chromium under its own licences |
+| Pillow (https://github.com/python-pillow/Pillow) | packs the three favicon sizes into `favicon.ico` | MIT-CMU (HPND) |
+| Playwright with Chromium (https://github.com/microsoft/playwright) | rasterises the social cards, the touch icon and the favicon | Apache 2.0 (Playwright); Chromium under its own licences |

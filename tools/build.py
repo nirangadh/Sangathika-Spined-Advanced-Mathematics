@@ -5,15 +5,18 @@ generated parts in step with tools/leaves.json, and its output is committed.
 
 Writes: the tree illustration and the QR code into index.html; the thirteen leaf
 pages; the head region (between <!-- sam:head --> and <!-- /sam:head -->) of every
-page; sitemap.xml; robots.txt (once); 404.html; assets/icon.svg; and, when Playwright
-is installed, the social cards and the touch icon (rendered only when their source
-changes). Run from the repository root: python3 tools/build.py
+page; the sunflower mark in the top bar and footer of every page; sitemap.xml;
+robots.txt (once); 404.html; assets/mark.svg and assets/icon.svg (from tools/mark.py);
+and, when Playwright is installed, the social cards, the touch icon and favicon.ico
+(rendered only when their source changes). Run from the repository root: python3 tools/build.py
 Build-time tools only (never loaded by a page): segno for the QR code, Playwright
 with Chromium for rasterising cards. See NOTICES.md.
 """
-import datetime, hashlib, html, json, pathlib, re, subprocess
+import datetime, hashlib, html, json, pathlib, re, subprocess, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "tools"))
+import mark
 DATA = json.loads((ROOT / "tools" / "leaves.json").read_text(encoding="utf-8"))
 SITE = DATA["site"]
 ORIGIN = SITE["origin"]
@@ -26,11 +29,22 @@ HATCHED = {"hatched", "building", "complete"}
 HEADER = """<!-- සංගතික · Sangathika · SAM. © 2026 Niranga Dharmaratna.
      Text and illustrations in this file: CC BY-SA 4.0 (see LICENSE-CONTENT).
      JavaScript and CSS in this file: MIT (see LICENSE).
-     The name සංගතික, the wordmark and the tree mark are reserved (see NOTICES.md). -->"""
+     The name සංගතික, the wordmark and the sunflower mark are reserved (see NOTICES.md). -->"""
 SVG_META = "<metadata>සංගතික · Sangathika · SAM. © 2026 Niranga Dharmaratna. CC BY-SA 4.0.</metadata>"
 ATTRIBUTION = "සංගතික · Sangathika by Niranga Dharmaratna, CC BY-SA 4.0, https://www.sangathika.com/"
 
 # ----------------------------------------------------------------- helpers
+
+def logo(prefix, seeds):
+    """The sunflower mark from the sprite: 21 seeds in the top bar, 13 in the footer, 55 in heroes."""
+    return f'<svg class="logo" aria-hidden="true" focusable="false"><use href="{prefix}assets/mark.svg#m{seeds}"></use></svg>'
+
+def stamp_marks(path, text):
+    """Put the mark into the top bar and the footer of a hand-written page, once."""
+    prefix = "../" * (len(path.relative_to(ROOT).parts) - 1)
+    text = re.sub(r'(<a class="mark" href="[^"]*">)(?!<svg)', lambda m: m.group(1) + logo(prefix, 21), text)
+    text = re.sub(r'(<footer class="site">\s*)(?!<svg)', lambda m: m.group(1) + logo(prefix, 13), text)
+    return text
 
 def esc(s):
     return html.escape(s, quote=True)
@@ -369,7 +383,7 @@ def leaf_page(leaf):
 {SYMBOLS}
 <div class="wrap">
 <header class="bar">
-  <a class="mark" href="../"><span class="si" lang="si">සංගතික</span><span class="latin">Sangathika</span></a>
+  <a class="mark" href="../">{logo("../", 21)}<span class="si" lang="si">සංගතික</span><span class="latin">Sangathika</span></a>
   <nav aria-label="Site"><a href="../#leaves">All leaves</a><a href="#lessons">Lessons</a><a href="#glossary">Glossary</a><a href="../about/">About</a><button class="theme" type="button" id="themeBtn" aria-pressed="false">Dark</button></nav>
 </header>
 
@@ -407,7 +421,7 @@ def leaf_page(leaf):
 </section>
 
 <footer class="site">
-  <p>© 2026 Niranga Dharmaratna. Text and illustrations CC BY-SA 4.0; code MIT. <span class="si" lang="si">සංගතික</span> and its marks are reserved. <a href="../about/">About Sangathika</a>.</p>
+  {logo("../", 13)}<p>© 2026 Niranga Dharmaratna. Text and illustrations CC BY-SA 4.0; code MIT. <span class="si" lang="si">සංගතික</span> and its marks are reserved. <a href="../about/">About Sangathika</a>.</p>
 </footer>
 </div>
 {THEME_JS}
@@ -432,14 +446,14 @@ def page_404():
 </head>
 <body>
 <div class="wrap">
-<header class="bar"><a class="mark" href="/"><span class="si" lang="si">සංගතික</span><span class="latin">Sangathika</span></a><nav aria-label="Site"><a href="/about/">About</a><button class="theme" type="button" id="themeBtn" aria-pressed="false">Dark</button></nav></header>
+<header class="bar"><a class="mark" href="/">{logo("/", 21)}<span class="si" lang="si">සංගතික</span><span class="latin">Sangathika</span></a><nav aria-label="Site"><a href="/about/">About</a><button class="theme" type="button" id="themeBtn" aria-pressed="false">Dark</button></nav></header>
 <section class="hero">
 <p class="eyebrow"><b>SAM</b> · page not found</p>
 <h1>This page is not on the tree</h1>
 <p class="lede">The address may be mistyped, or the lesson may not be built yet. Start again from <a href="/">the tree</a>, or choose a leaf.</p>
 <ul>{links}</ul>
 </section>
-<footer class="site"><p>© 2026 Niranga Dharmaratna. Text and illustrations CC BY-SA 4.0; code MIT.</p></footer>
+<footer class="site">{logo("/", 13)}<p>© 2026 Niranga Dharmaratna. Text and illustrations CC BY-SA 4.0; code MIT.</p></footer>
 </div>
 {THEME_JS}
 </body>
@@ -462,14 +476,10 @@ Disallow: /*.md$
 Sitemap: {ORIGIN}/sitemap.xml
 """
 
-ICON = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="ic-t"><title id="ic-t">Sangathika</title>{SVG_META}
-<rect width="64" height="64" rx="14" fill="#fff7e9"/>
-<path d="M32,58 C10,46 6,26 32,6 C58,26 54,46 32,58 Z" fill="#dfe6cf" stroke="#33363d" stroke-width="3" stroke-linejoin="round"/>
-<path d="M32,58 L32,8" stroke="#6f8f4a" stroke-width="2.5" fill="none"/>
-<path d="M32,22 L22,30 M32,22 L42,30 M32,34 L21,42 M32,34 L43,42" stroke="#6f8f4a" stroke-width="2" fill="none" stroke-linecap="round"/>
-<circle cx="32" cy="58" r="3" fill="#b24d7a"/>
-</svg>
-"""
+ICON = mark.standalone(8)
+TOUCH = ('<html><body style="margin:0"><div style="width:180px;height:180px;display:flex;align-items:center;'
+         'justify-content:center;background:#fff7e9">' + mark.inline(34).replace("<svg ", '<svg width="146" height="146" ', 1) + "</div></body></html>")
+FAVICON = mark.inline(8)
 
 # ----------------------------------------------------------------- social cards (rasterised, cached by source hash)
 
@@ -480,10 +490,11 @@ def card_html(art, heading, sub):
 .sc{{box-sizing:border-box;width:1200px;height:630px;padding:56px 64px;display:grid;grid-template-columns:1fr 470px;gap:40px;align-items:center;border-bottom:14px solid var(--crimson)}}
 .sc h1{{font-family:var(--f-display);font-size:68px;line-height:1.08;margin:0 0 22px;color:var(--ink)}}
 .sc p{{font-family:var(--f-body);font-size:28px;line-height:1.35;color:var(--muted);margin:0;max-width:none}}
-.wm{{position:absolute;z-index:2;left:64px;top:44px;font-size:26px;color:var(--crimson);font-weight:600}}
+.wm{{position:absolute;z-index:2;left:64px;top:36px;font-size:26px;color:var(--crimson);font-weight:600;display:flex;align-items:center;gap:12px}}
+.wm svg{{width:52px;height:52px;display:block}}
 .wm .latin{{font-family:var(--f-display);color:var(--ink);font-weight:500;margin-left:10px}}
 .art svg{{width:100%;height:auto;max-height:520px;display:block}}</style></head>
-<body>{SYMBOLS}<div class="wm"><span class="si" lang="si">සංගතික</span><span class="latin">Sangathika</span></div>
+<body>{SYMBOLS}<div class="wm">{mark.inline(34)}<span class="si" lang="si">සංගතික</span><span class="latin">Sangathika</span></div>
 <div class="sc"><div><h1>{esc(heading)}</h1><p>{esc(sub)}</p></div><div class="art">{art}</div></div></body></html>"""
 
 def cards(recs):
@@ -502,14 +513,15 @@ def cards(recs):
         if r.get("leaf"):
             L = LEAVES[r["leaf"]]
             jobs[L["slug"]] = card_html(leaf_svg(L), L["seo_name"], strip_tags(L["brief"]))
-    jobs["_icon180"] = ICON
+    jobs["_icon180"] = TOUCH
+    jobs["_favicon"] = FAVICON
     lessons = {r["card"]: r for r in recs if r.get("lesson")}
     for name, r in lessons.items():
         jobs[name] = ("LESSON", r["path"].read_text(encoding="utf-8"))
     def digest(v):
         return hashlib.sha256((v if isinstance(v, str) else v[0] + v[1]).encode()).hexdigest()
     todo = {k: v for k, v in jobs.items() if manifest.get(k) != digest(v)
-            or not (ROOT / ("assets/icon-180.png" if k == "_icon180" else f"assets/cards/{k}.png")).exists()}
+            or not (ROOT / {"_icon180": "assets/icon-180.png", "_favicon": "favicon.ico"}.get(k, f"assets/cards/{k}.png")).exists()}
     if not todo:
         return
     import base64, functools, http.server, threading
@@ -543,8 +555,18 @@ def cards(recs):
                 continue
             if k == "_icon180":
                 pg = b.new_page(viewport={"width": 180, "height": 180})
-                pg.set_content(f'<html><body style="margin:0">{h.replace("<svg ", "<svg width=180 height=180 ", 1)}</body></html>')
+                pg.set_content(h)
                 pg.screenshot(path=str(ROOT / "assets" / "icon-180.png"))
+            elif k == "_favicon":
+                import io
+                from PIL import Image
+                pg = b.new_page(viewport={"width": 48, "height": 48})
+                imgs = []
+                for s in (48, 32, 16):
+                    pg.set_viewport_size({"width": s, "height": s})
+                    pg.set_content(f'<html><body style="margin:0;background:transparent">{h.replace("<svg ", f"<svg width={s} height={s} ", 1)}</body></html>')
+                    imgs.append(Image.open(io.BytesIO(pg.screenshot(omit_background=True))).convert("RGBA"))
+                imgs[0].save(ROOT / "favicon.ico", sizes=[(48, 48), (32, 32), (16, 16)], append_images=imgs[1:])
             else:
                 pg = b.new_page(viewport={"width": 1200, "height": 630})
                 tmp = outdir / f".{k}.html"
@@ -579,6 +601,10 @@ def main():
     if not (ROOT / "robots.txt").exists():
         (ROOT / "robots.txt").write_text(ROBOTS, encoding="utf-8")
     (ROOT / "assets" / "icon.svg").write_text(ICON, encoding="utf-8")
+    (ROOT / "assets" / "mark.svg").write_text(mark.sprite(), encoding="utf-8")
+    for path in [ROOT / "index.html", ROOT / "about" / "index.html"] + list(expected_midribs()):
+        t = path.read_text(encoding="utf-8")
+        path.write_text(stamp_marks(path, t), encoding="utf-8")
     cards(recs)
     print("build done:", len(recs), "pages with generated heads")
 

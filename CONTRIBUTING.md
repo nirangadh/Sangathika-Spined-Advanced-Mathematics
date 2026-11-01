@@ -27,4 +27,4 @@ By contributing you agree that your contribution is licensed under the licence o
 
 ## Forks
 
-The name සංගතික, its spellings in other scripts, the wordmark and the tree mark are reserved. A fork or adapted version must use its own name and remove the marks. Everything else the licences allow, the licences allow.
+The name සංගතික, its spellings in other scripts, the wordmark and the sunflower mark are reserved. A fork or adapted version must use its own name and remove the marks. Everything else the licences allow, the licences allow.
