@@ -24,6 +24,9 @@
   --res:#5d6069;        /* result */
   --eig:#6f8f4a;        /* special direction, derived moss */
   --ok-bg:#eef2e3; --no-bg:#f6e3ea;
+  /* plate tokens: canvas grid and soft tints of the roles */
+  --grid:#ebe2d1; --fill:rgba(178,77,122,.08); --tgrid:rgba(178,77,122,.24);
+  --res-soft:rgba(93,96,105,.16); --eig-soft:rgba(111,143,74,.22);
   --crimson-tint:#ead1dc; --steel-tint:#d9e1ea; --moss-tint:#dfe6cf; --bark:#8a6f52; --bark-tint:#d8c7b3;
   --f-body:"Open Sans",system-ui,sans-serif;
   --f-display:"STIX Two Text",Georgia,serif;
@@ -38,6 +41,7 @@
     --mist:#5d6069; --rule:#4a4d55;
     --v:#d07aa0; --av:#9db4cc; --res:#c3c6d1; --eig:#a3c06e;
     --ok-bg:#3a4230; --no-bg:#4a3038;
+    --grid:#383b43; --fill:rgba(208,122,160,.10); --tgrid:rgba(208,122,160,.28); --res-soft:rgba(195,198,209,.16); --eig-soft:rgba(163,192,110,.22);
     --crimson:#d07aa0; --steel:#9db4cc;
     --crimson-tint:#4a3340; --steel-tint:#34404c; --moss-tint:#3a4230; --bark:#b09274; --bark-tint:#4a4038;
     color-scheme:dark;
@@ -48,6 +52,7 @@
   --mist:#5d6069; --rule:#4a4d55;
   --v:#d07aa0; --av:#9db4cc; --res:#c3c6d1; --eig:#a3c06e;
   --ok-bg:#3a4230; --no-bg:#4a3038;
+    --grid:#383b43; --fill:rgba(208,122,160,.10); --tgrid:rgba(208,122,160,.28); --res-soft:rgba(195,198,209,.16); --eig-soft:rgba(163,192,110,.22);
   --crimson:#d07aa0; --steel:#9db4cc;
   --crimson-tint:#4a3340; --steel-tint:#34404c; --moss-tint:#3a4230; --bark:#b09274; --bark-tint:#4a4038;
   color-scheme:dark;

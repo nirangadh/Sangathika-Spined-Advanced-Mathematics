@@ -184,6 +184,57 @@ def check_search():
     if (ROOT / "CNAME").exists() and (ROOT / "CNAME").read_text().strip() != "www.sangathika.com":
         fails.append("CNAME does not read www.sangathika.com")
 
+# ------------------------------------------------------------ lessons (page contract)
+
+LIBRARY = ("vec", "add", "sub", "scale", "len", "bearing", "apply", "det", "eigen", "dot", "inverse", "compose")
+
+def check_lessons():
+    strips = build.expected_midribs()
+    for L in build.LEAVES.values():
+        lib = ROOT / L["slug"] / "sam.js"
+        defined = set(re.findall(r"^function (\w+)\(", lib.read_text(encoding="utf-8"), flags=re.M)) if lib.exists() else set()
+        for pgd in L.get("pages", []):
+            if pgd.get("status") != "built": continue
+            path = ROOT / L["slug"] / pgd["slug"] / "index.html"
+            where = rel(path)
+            if not path.exists():
+                fails.append(f"built page missing: {where}"); continue
+            t = path.read_text(encoding="utf-8")
+            for f in ("seo_title", "description", "idea", "teaches", "demos", "levels", "card", "published"):
+                if f not in pgd: fails.append(f"leaves.json page {pgd['number']} lacks {f}")
+            h1 = re.search(r"<h1[^>]*>(.*?)</h1>", t, flags=re.S)
+            if not h1 or pgd["standard_term"].lower() not in re.sub(r"<[^>]+>", "", h1.group(1)).lower():
+                fails.append(f"h1 does not contain the standard term '{pgd['standard_term']}': {where}")
+            m = re.search(r"<!-- sam:midrib -->\n(.*?)\n<!-- /sam:midrib -->", t, flags=re.S)
+            if not m or m.group(1) != strips[path]:
+                fails.append(f"lesson strip out of date (run tools/build.py): {where}")
+            if pgd["number"] > 1 and 'id="warm-up"' not in t:
+                fails.append(f"no warm-up: {where}")
+            chk = re.search(r'<section[^>]*id="check".*?</section>', t, flags=re.S)
+            if not chk or chk.group(0).count('class="q"') != 6:
+                fails.append(f"check section must hold six questions: {where}")
+            levels = set(re.findall(r'class="challenge"[^>]*data-level="(\w+)"', t))
+            for need in ("seed", "branch"):
+                if need not in levels: fails.append(f"no {need} challenge: {where}")
+            for lv in pgd.get("levels", []):
+                if lv.lower() not in levels: fails.append(f"leaves.json lists a {lv} challenge the page lacks: {where}")
+            for ch in re.finditer(r'<article class="challenge".*?</article>', t, flags=re.S):
+                c = ch.group(0)
+                if c.count('class="hint"') != 3 or 'class="solution"' not in c or 'class="commit"' not in c:
+                    fails.append(f"challenge without three hints, a commit box and a solution: {where}")
+            for d in pgd.get("demos", []):
+                if f'id="plate-{pgd["number"]}-{d["k"]}"' not in t:
+                    fails.append(f"demo anchor plate-{pgd['number']}-{d['k']} missing: {where}")
+            for need, why in (('id="next"', "footer promise"), ('class="notes"', "teacher note"),
+                              ('../../assets/lesson.js', "lesson.js"), ('../sam.js', "the leaf library")):
+                if need not in t: fails.append(f"no {why}: {where}")
+            for fn in LIBRARY:
+                if re.search(r"(function\s+" + fn + r"\s*\(|(const|let|var)\s+" + fn + r"\s*=)", t):
+                    fails.append(f"page redefines library function {fn}: {where}")
+            for call in set(re.findall(r"\b(" + "|".join(LIBRARY) + r")\(", re.sub(r"<pre>.*?</pre>", "", t, flags=re.S))):
+                if call not in defined and not re.search(r"\.\s*" + call + r"\(", t):
+                    fails.append(f"page calls {call}() which sam.js does not define: {where}")
+
 # ------------------------------------------------------------ render
 
 def check_render():
@@ -217,7 +268,7 @@ def check_render():
     srv.shutdown()
 
 if __name__ == "__main__":
-    check_emdash(); check_headers(); check_boundary(); check_links(); check_css_urls(); check_search()
+    check_emdash(); check_headers(); check_boundary(); check_links(); check_css_urls(); check_search(); check_lessons()
     if "--render" in sys.argv: check_render()
     if fails:
         print("\n".join(fails)); print(f"{len(fails)} problem(s)"); sys.exit(1)

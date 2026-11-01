@@ -59,7 +59,7 @@
      "title": "Vectors",
      "standard_term": "vectors",
      "slug": "vectors",
-     "status": "porting",
+     "status": "built",
      "brief": "A vector is a size and a direction given together.",
      "demos": [
       {
@@ -68,18 +68,43 @@
       },
       {
        "k": 2,
-       "name": "Tip to tail"
+       "name": "Scalar or vector?"
       },
       {
        "k": 3,
-       "name": "Scale and reverse"
+       "name": "Same move, anywhere"
+      },
+      {
+       "k": 4,
+       "name": "One arrow, both descriptions"
+      },
+      {
+       "k": 5,
+       "name": "3 + 4 is not always 7"
+      },
+      {
+       "k": 6,
+       "name": "The scaling slider"
+      },
+      {
+       "k": 7,
+       "name": "Reach the ring"
       }
      ],
      "levels": [
       "Seed",
       "Branch"
      ],
-     "forward": "v = (3, 4) and the 3-4-5 triangle"
+     "forward": "v = (3, 4) and the 3-4-5 triangle",
+     "seo_title": "Vectors: size and direction, explained visually",
+     "description": "A vector is a size and a direction given together. Drag arrows, add and scale them, and predict where they land.",
+     "idea": "A vector is a size and a direction given together.",
+     "prerequisites": [],
+     "teaches": [
+      "vector"
+     ],
+     "card": "#heroCv",
+     "published": "2026-11-01"
     },
     {
      "number": 2,
@@ -410,19 +435,23 @@
      "title": "Eigenvectors",
      "standard_term": "eigenvectors and eigenvalues",
      "slug": "eigenvectors",
-     "status": "porting",
+     "status": "built",
      "brief": "An <b>eigenvector</b> keeps its direction when the machine moves it.",
      "demos": [
       {
        "k": 1,
-       "name": "Hunt the direction"
+       "name": "The blend"
       },
       {
        "k": 2,
-       "name": "Two towns"
+       "name": "Hunt the directions"
       },
       {
        "k": 3,
+       "name": "Run the years"
+      },
+      {
+       "k": 4,
        "name": "Matrix lab"
       }
      ],
@@ -431,7 +460,22 @@
       "Branch",
       "Canopy"
      ],
-     "forward": "the two towns and their 0.700"
+     "forward": "the two towns and their 0.700",
+     "seo_title": "Eigenvectors and eigenvalues, visually",
+     "description": "An eigenvector is a direction that a matrix only stretches. Drag the arrow, predict where it lands, then see why.",
+     "idea": "An eigenvector is a direction that a matrix only stretches.",
+     "prerequisites": [
+      1,
+      6,
+      9,
+      13
+     ],
+     "teaches": [
+      "eigenvector",
+      "eigenvalue"
+     ],
+     "card": "#heroCv",
+     "published": "2026-11-01"
     },
     {
      "number": 18,
@@ -527,6 +571,11 @@
    ],
    "glossary": [
     {
+     "term": "vector",
+     "page": 1,
+     "def": "A size and a direction given together; drawn as an arrow, written as a list of components."
+    },
+    {
      "term": "span",
      "page": 2,
      "def": "Every point you can reach by adding and scaling some arrows."
@@ -595,6 +644,11 @@
      "term": "eigenvector",
      "page": 17,
      "def": "An arrow that keeps its direction when the machine moves it."
+    },
+    {
+     "term": "eigenvalue",
+     "page": 17,
+     "def": "The number λ that says how much a matrix stretches its eigenvector: <span class=\"vec\">Av</span> = λ<span class=\"vec\">v</span>."
     },
     {
      "term": "symmetric",

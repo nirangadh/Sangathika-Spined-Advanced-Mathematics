@@ -1,0 +1,976 @@
+<!doctype html>
+<html lang="en-GB" data-leaf="linear-algebra">
+<!-- සංගතික · Sangathika · SAM. © 2026 Niranga Dharmaratna.
+     Text and illustrations in this file: CC BY-SA 4.0 (see LICENSE-CONTENT).
+     JavaScript and CSS in this file: MIT (see LICENSE).
+     The name සංගතික, the wordmark and the tree mark are reserved (see NOTICES.md). -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- sam:head -->
+<title>Vectors: size and direction, explained visually | Sangathika</title>
+<meta name="description" content="A vector is a size and a direction given together. Drag arrows, add and scale them, and predict where they land.">
+<link rel="canonical" href="https://www.sangathika.com/linear-algebra/vectors/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sangathika">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Vectors: size and direction, explained visually">
+<meta property="og:description" content="A vector is a size and a direction given together. Drag arrows, add and scale them, and predict where they land.">
+<meta property="og:url" content="https://www.sangathika.com/linear-algebra/vectors/">
+<meta property="og:image" content="https://www.sangathika.com/assets/cards/linear-algebra-vectors.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The opening plate of the Vectors lesson">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LearningResource","name":"Vectors","description":"A vector is a size and a direction given together. Drag arrows, add and scale them, and predict where they land.","url":"https://www.sangathika.com/linear-algebra/vectors/","inLanguage":"en-GB","learningResourceType":"interactive lesson","educationalLevel":"first-year undergraduate","teaches":[{"@type":"DefinedTerm","name":"vector","url":"https://www.sangathika.com/linear-algebra/#term-vector"}],"isPartOf":{"@type":"Course","name":"Linear algebra","url":"https://www.sangathika.com/linear-algebra/"},"position":1,"author":{"@id":"https://www.sangathika.com/about/#author"},"license":"https://creativecommons.org/licenses/by-sa/4.0/","isAccessibleForFree":true,"datePublished":"2026-11-01","dateModified":"2026-11-01","image":"https://www.sangathika.com/assets/cards/linear-algebra-vectors.png"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Sangathika","item":"https://www.sangathika.com/"},{"@type":"ListItem","position":2,"name":"Linear algebra","item":"https://www.sangathika.com/linear-algebra/"},{"@type":"ListItem","position":3,"name":"Vectors","item":"https://www.sangathika.com/linear-algebra/vectors/"}]}]}</script>
+<!-- /sam:head -->
+<link rel="preload" href="../../assets/fonts/opensans/OpenSans[wdth,wght].ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="../../assets/fonts/stixtwotext/STIXTwoText[wght].ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="../../assets/sam.css">
+<link rel="stylesheet" href="../../assets/lesson.css">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-180.png">
+<script>try{var t=localStorage.getItem('sam-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script src="../../assets/lesson.js" defer></script>
+<script src="../sam.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<header class="bar">
+  <a class="mark" href="../../"><span class="si" lang="si">සංගතික</span><span class="latin">Sangathika</span></a>
+  <nav aria-label="Site"><a href="../">Linear algebra</a><a href="#check">Check</a><a href="#challenges">Challenges</a><a href="../../about/">About</a><button class="theme" type="button" id="themeBtn" aria-pressed="false">Dark</button></nav>
+</header>
+<main class="lesson">
+<header class="lhero">
+  <div class="hero-text">
+    <p class="eyebrow"><b>SAM</b> · <span class="si" lang="si">සංගතික</span> · Linear algebra · page 1</p>
+    <h1>Vectors</h1>
+    <p class="idea">A <strong>vector</strong> is a size and a direction given together.</p>
+    <p class="lede">Tell a friend to walk 5 km from the bus stand and they could end up anywhere on a circle. Tell them to walk 5 km on a bearing of 037° and they arrive at exactly one place. The second instruction is a vector: a size and a direction, given together.</p>
+    <p style="margin:0;max-width:34rem">The word comes from the Latin <em>vehere</em>, to carry. A vector carries you from where you are to somewhere else. Keep that picture of a carrier, a move, in mind. Most of this page grows out of it.</p>
+    <p class="prereq">Before you start: you need coordinates on a grid and Pythagoras' theorem. Nothing else. This is the first lesson of the leaf.</p>
+  </div>
+  <figure class="hero-fig plate-anchor" id="plate-1-1">
+    <p class="plate-title"><b>Plate 1.1</b> · Walk 5 km</p>
+    <canvas id="heroCv" class="plane" aria-label="Twenty-four arrows of length 5 point in every direction from a starting point, tracing a circle. When a direction is added, they all swing onto one arrow ending at 3 east, 4 north."></canvas>
+    <div class="row">
+      <button class="tog" id="heroSize" type="button" aria-pressed="true">5 km</button>
+      <button class="tog" id="heroDir" type="button" aria-pressed="false">5 km on bearing 037°</button>
+      <button class="btn" id="heroPlay" type="button" style="margin-left:auto">Pause</button>
+    </div>
+    <figcaption class="small hero-cap" id="heroCap" aria-live="polite">A size alone: every point on the dashed circle is 5 km from the start, and nothing tells them apart.</figcaption>
+  </figure>
+</header>
+<!-- sam:midrib -->
+<ol class="midrib" aria-label="Lessons in this leaf"><li class="built current"><a href="../vectors/" title="Page 1: Vectors" aria-label="Page 1: Vectors" aria-current="page">01</a></li><li><span title="Page 2: Span" aria-label="Page 2: Span">02</span></li><li><span title="Page 3: Linear independence" aria-label="Page 3: Linear independence">03</span></li><li><span title="Page 4: Basis and coordinates" aria-label="Page 4: Basis and coordinates">04</span></li><li><span title="Page 5: Dot product" aria-label="Page 5: Dot product">05</span></li><li><span title="Page 6: Matrices as machines" aria-label="Page 6: Matrices as machines">06</span></li><li><span title="Page 7: Matrix times vector" aria-label="Page 7: Matrix times vector">07</span></li><li><span title="Page 8: Composition" aria-label="Page 8: Composition">08</span></li><li><span title="Page 9: Determinant" aria-label="Page 9: Determinant">09</span></li><li><span title="Page 10: Systems Ax = b" aria-label="Page 10: Systems Ax = b">10</span></li><li><span title="Page 11: Inverse" aria-label="Page 11: Inverse">11</span></li><li><span title="Page 12: Elimination" aria-label="Page 12: Elimination">12</span></li><li><span title="Page 13: Column space, null space, rank" aria-label="Page 13: Column space, null space, rank">13</span></li><li><span title="Page 14: Projection onto a subspace" aria-label="Page 14: Projection onto a subspace">14</span></li><li><span title="Page 15: Least squares" aria-label="Page 15: Least squares">15</span></li><li><span title="Page 16: Orthonormal bases and Gram–Schmidt" aria-label="Page 16: Orthonormal bases and Gram–Schmidt">16</span></li><li class="built"><a href="../eigenvectors/" title="Page 17: Eigenvectors" aria-label="Page 17: Eigenvectors">17</a></li><li><span title="Page 18: Change of basis and diagonalisation" aria-label="Page 18: Change of basis and diagonalisation">18</span></li><li><span title="Page 19: Symmetric matrices" aria-label="Page 19: Symmetric matrices">19</span></li><li><span title="Page 20: SVD" aria-label="Page 20: SVD">20</span></li></ol>
+<!-- /sam:midrib -->
+
+<nav aria-label="Page layers">
+  <ul class="route">
+    <li><a href="#l1"><span>1</span>Size and direction</a></li>
+    <li><a href="#l2"><span>2</span>Describe, add, scale</a></li>
+    <li><a href="#l3"><span>3</span>Ingredients, and beyond arrows</a></li>
+    <li><a href="#check"><span>✓</span>Check yourself</a></li>
+    <li><a href="#challenges"><span>↗</span>Challenges</a></li>
+  </ul>
+</nav>
+
+<!-- ============ LAYER 1 ============ -->
+<section class="layer" aria-labelledby="l1">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 1 · <b>Principle</b></p>
+    <h2 id="l1">Some quantities need a direction</h2>
+  </div>
+  <div class="prose">
+    <p>Some quantities are fully described by one number. The temperature in Kandy at noon is 24 °C, and there is nothing more to ask. These are <strong>scalars</strong>. The name comes from the Latin <em>scala</em>, a ladder: one number on one scale, higher or lower.</p>
+    <p>Other quantities leave a question hanging. The wind is blowing at 25 km/h. Blowing which way? A fisherman putting out from Negombo needs the answer before anything else. These quantities need a size and a direction together. They are <strong>vectors</strong>, sometimes called Euclidean vectors in physics and engineering.</p>
+  </div>
+
+  <div class="pair">
+    <div class="side">
+      <p class="tag">Scalar · a rung on a ladder</p>
+      <h3>Temperature</h3>
+      <p>24 °C. One number on one scale. Two readings compare simply: 26 °C is warmer, and that is the whole story.</p>
+    </div>
+    <div class="hinge" aria-hidden="true">vs</div>
+    <div class="side">
+      <p class="tag cv">Vector · a carrier</p>
+      <h3>Wind</h3>
+      <p>25 km/h from the south-west. Sri Lanka's south-west monsoon carries its direction in its name. Two winds at the same speed from different directions are different winds.</p>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>The test is a single question: <em>is one number enough, or do I also need to know which way?</em> Try it on eight everyday quantities. Two of them are traps that catch most people the first time.</p>
+  </div>
+
+  <div class="plate" id="plate-1-2" data-group data-labels="Right.|Not quite.">
+    <p class="plate-title"><b>Plate 1.2</b> · Scalar or vector?</p>
+    <div class="sorts">
+<div class="q"><p>The temperature in Kandy at noon: 24 °C</p><div class="opts"><button class="opt" type="button" data-correct>Scalar</button><button class="opt" type="button">Vector</button></div><p class="fb" hidden aria-live="polite">One number on one scale. There is nothing more to ask.</p></div>
+<div class="q"><p>The south-west monsoon: 25 km/h from the south-west</p><div class="opts"><button class="opt" type="button">Scalar</button><button class="opt" type="button" data-correct>Vector</button></div><p class="fb" hidden aria-live="polite">A speed plus the direction it blows from. Change the direction and it is a different wind.</p></div>
+<div class="q"><p>The mass of a jackfruit: 8 kg</p><div class="opts"><button class="opt" type="button" data-correct>Scalar</button><button class="opt" type="button">Vector</button></div><p class="fb" hidden aria-live="polite">Mass is how much stuff there is. It points nowhere.</p></div>
+<div class="q"><p>The weight of the same jackfruit: about 78 N</p><div class="opts"><button class="opt" type="button">Scalar</button><button class="opt" type="button" data-correct>Vector</button></div><p class="fb" hidden aria-live="polite">Weight is a force, the pull of gravity, and it always points down. Mass and weight are different quantities.</p></div>
+<div class="q"><p>The distance you cover in one lap of a 400 m track</p><div class="opts"><button class="opt" type="button" data-correct>Scalar</button><button class="opt" type="button">Vector</button></div><p class="fb" hidden aria-live="polite">Distance counts every metre run, whichever way you were facing.</p></div>
+<div class="q"><p>Your displacement after that same lap</p><div class="opts"><button class="opt" type="button">Scalar</button><button class="opt" type="button" data-correct>Vector</button></div><p class="fb" hidden aria-live="polite">Displacement is a vector, and here it is the zero vector: you finished where you started. Distance 400 m, displacement zero.</p></div>
+<div class="q"><p>A bus speedometer reading 60 km/h</p><div class="opts"><button class="opt" type="button" data-correct>Scalar</button><button class="opt" type="button">Vector</button></div><p class="fb" hidden aria-live="polite">A speedometer shows speed only. It cannot tell north from south.</p></div>
+<div class="q"><p>A ship sailing at 20 knots on a bearing of 090°</p><div class="opts"><button class="opt" type="button">Scalar</button><button class="opt" type="button" data-correct>Vector</button></div><p class="fb" hidden aria-live="polite">Speed plus heading is velocity, a vector. A bearing of 090° is due east.</p></div>
+    </div>
+    <div class="row">
+      <p class="score" data-score data-empty="Sort all eight. Two are traps."></p>
+      <button class="btn" type="button" data-reset style="margin-left:auto">Start again</button>
+    </div>
+  </div>
+
+  <div class="sub">
+    <h3>A vector is a move, so it can start anywhere</h3>
+    <div class="prose">
+      <p>The commonest mistake with vectors is to treat one as a place. It is a move. The difference is the difference between an address and a set of directions.</p>
+    </div>
+    <div class="pair">
+      <div class="side">
+        <p class="tag">A place</p>
+        <h3>An address</h3>
+        <p>"No. 12, Galle Road" names one fixed spot. It makes no sense to start somewhere else and follow it.</p>
+      </div>
+      <div class="hinge" aria-hidden="true">vs</div>
+      <div class="side">
+        <p class="tag cv">A move</p>
+        <h3>Directions</h3>
+        <p>"Two blocks east, one block north." You can follow these from any corner. The instruction stays the same wherever you start. Only the destination changes.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>A vector behaves like the directions. So the same arrow can be drawn anywhere on the page. What makes it that vector is how far it goes across and how far it goes up, whatever point its tail sits on.</p>
+    </div>
+
+    <div class="plate" id="plate-1-3">
+      <p class="plate-title"><b>Plate 1.3</b> · Same move, anywhere</p>
+      <div class="pgrid">
+        <div class="side-col">
+          <canvas id="bCv" class="plane drag" tabindex="0" aria-label="An arrow on a grid with a square tail and a round tip. Drag the tail to slide the whole arrow; drag the tip to change it. Arrow keys move the tail, Shift with arrow keys moves the tip."></canvas>
+          <p class="small" style="margin:0">Keyboard: arrow keys slide the tail, Shift + arrow keys move the tip.</p>
+        </div>
+        <div class="side-col">
+          <p>Drag the <strong>square tail</strong>: the whole arrow slides and the move stays the same. Then drag the <strong>round tip</strong>: now you have changed the move itself. Watch the last line of the readout.</p>
+          <dl class="ro">
+            <dt>Tail at</dt><dd id="bTail"></dd>
+            <dt>Tip at</dt><dd id="bTip"></dd>
+            <dt>Tip − tail</dt><dd id="bVec"></dd>
+          </dl>
+          <p class="status" id="bStatus" aria-live="polite"></p>
+          <div class="row">
+            <button class="tog" id="bCopies" type="button" aria-pressed="false">Draw copies of this vector</button>
+            <button class="btn" id="bReset" type="button">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p><strong>Tip minus tail is the vector.</strong> An arrow from (1, 1) to (4, 3) and an arrow from (−2, 0) to (1, 2) are the same vector, (3, 2), because both carry you 3 across and 2 up.</p>
+      <p>When the tail sits at the origin, tip minus tail is just the tip, so the vector's numbers and the tip's coordinates agree. That arrow is called a <strong>position vector</strong>. From here on, as on <a href="../eigenvectors/">page 17, eigenvectors</a>, arrows start at the origin unless we say otherwise.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LAYER 2 ============ -->
+<section class="layer" aria-labelledby="l2">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 2 · <b>Application</b></p>
+    <h2 id="l2">Describe it, add it, scale it</h2>
+  </div>
+
+  <div class="sub" style="padding-top:0">
+    <h3>Two languages for the same arrow</h3>
+    <div class="prose">
+      <p>Go back to the opening figure. "5 km on a bearing of 037°" and "3 km east, then 4 km north" land on the same spot. They are two ways of saying the same vector.</p>
+    </div>
+    <div class="pair">
+      <div class="side">
+        <p class="tag cv">Components</p>
+        <h3>A city laid out in blocks</h3>
+        <p>"3 east, then 4 north." Easy to compute with: to combine two trips you add the easts and add the norths. These two numbers are the vector's <strong>components</strong>, written (3, 4).</p>
+      </div>
+      <div class="hinge" aria-hidden="true">vs</div>
+      <div class="side">
+        <p class="tag cr">Length and direction</p>
+        <h3>A ship's officer</h3>
+        <p>"5 km on 037°." Easy to picture and steer by: one distance, one heading. This is the vector's <strong>length</strong> (also called magnitude) and its <strong>direction</strong>.</p>
+      </div>
+    </div>
+    <div class="prose">
+      <p>Pythagoras translates from components to length: the length of (<span class="m">x</span>, <span class="m">y</span>) is √(<span class="m">x</span>² + <span class="m">y</span>²). Trigonometry gives the angle. A bearing is measured clockwise from north, so 037° is 37° east of north, which is the same as 53° north of east.</p>
+    </div>
+
+    <div class="incode">
+      <p>The same two languages, written as code. This leaf keeps a small library, <a href="../sam.js">sam.js</a>, and each lesson adds the rules it introduces. These are this page's:</p>
+<pre><code>len(vec(3, 4))              // 5: Pythagoras, √(3² + 4²)
+add(vec(3, 0), vec(0, 4))   // [3, 4]: add the easts, add the norths
+scale(-3, vec(2, -1))       // [-6, 3]: same line, opposite way, three times longer
+bearing(vec(3, 4))          // 36.87: degrees clockwise from north</code></pre>
+    </div>
+
+    <div class="plate" id="plate-1-4">
+      <p class="plate-title"><b>Plate 1.4</b> · One arrow, both descriptions</p>
+      <div class="pgrid">
+        <div class="side-col">
+          <canvas id="cCv" class="plane drag" tabindex="0" aria-label="An arrow from the origin with dashed legs showing its east and north components. Drag the tip, or use arrow keys, to change it."></canvas>
+        </div>
+        <div class="side-col">
+          <p>Drag the tip anywhere. The dashed legs are the components; the arrow is the hypotenuse of their right triangle.</p>
+          <dl class="ro">
+            <dt>Components</dt><dd id="cComp"></dd>
+            <dt>Length</dt><dd id="cLen"></dd>
+            <dt>Angle from east</dt><dd id="cAng"></dd>
+            <dt>Bearing</dt><dd id="cBear"></dd>
+          </dl>
+          <div class="row" role="group" aria-label="Preset arrows">
+            <button class="tog" type="button" data-cx="3" data-cy="4">3 east, 4 north</button>
+            <button class="tog" type="button" data-cx="-2" data-cy="1">(−2, 1)</button>
+            <button class="tog" type="button" data-cx="0" data-cy="-3">(0, −3)</button>
+            <button class="tog" type="button" data-cx="-4" data-cy="-4">(−4, −4)</button>
+          </div>
+          <p class="small" style="margin:0">Notice that the components can be negative, but a length never is. A length only says how big. The signs of the components carry the direction.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <h3>Adding vectors: one move after another</h3>
+    <div class="prose">
+      <p>Adding two vectors means making one move and then the other. Draw the second arrow starting at the tip of the first. The sum is the single arrow from the very start to the very end. This is called <strong>tip to tail</strong>. In components it is simple: add the easts, add the norths.</p>
+    </div>
+    <div class="pair">
+      <div class="side">
+        <p class="tag">Scalars add one way</p>
+        <h3>Money in a wallet</h3>
+        <p>Rs 300 plus Rs 400 is always Rs 700. There is no other possible answer.</p>
+      </div>
+      <div class="hinge" aria-hidden="true">vs</div>
+      <div class="side">
+        <p class="tag cr">Vectors add many ways</p>
+        <h3>Two people pushing a stalled car</h3>
+        <p>Pushes of 300 N and 400 N. Same way: the car feels 700 N. Against each other: 100 N. One from behind, one from the side: 500 N. Direction decides the total.</p>
+      </div>
+    </div>
+
+    <details class="predict">
+      <summary>Predict first: if <span class="vec cv">a</span> has length 3 and <span class="vec ca">b</span> has length 4, how long can <span class="vec cr">a + b</span> be?</summary>
+      <p>Anywhere from 1 to 7. The sum is longest when the two point the same way (3 + 4 = 7) and shortest when they point in opposite directions (4 − 3 = 1). At a right angle you get the 3, 4, 5 triangle from the opening figure. Now check it on the plate.</p>
+    </details>
+
+    <div class="plate" id="plate-1-5">
+      <p class="plate-title"><b>Plate 1.5</b> · 3 + 4 is not always 7</p>
+      <div class="pgrid">
+        <div class="side-col">
+          <canvas id="dCv" class="plane" aria-label="Vector a of length 3 points east from the origin. Vector b of length 4 starts at the tip of a and turns with the slider. The sum a plus b runs from the origin to the tip of b."></canvas>
+        </div>
+        <div class="side-col">
+          <ul class="key">
+            <li><span class="sw v"></span><span class="vec">a</span>, length 3</li>
+            <li><span class="sw a"></span><span class="vec">b</span>, length 4</li>
+            <li><span class="sw r"></span><span class="vec">a + b</span></li>
+          </ul>
+          <div class="ctl">
+            <label for="dPhi">Angle between <span class="vec">a</span> and <span class="vec">b</span>: <output id="dPhiOut">40°</output></label>
+            <input type="range" id="dPhi" min="0" max="359" step="1" value="40">
+          </div>
+          <div class="row" role="group" aria-label="Preset angles">
+            <button class="tog" type="button" data-phi="0">Same way</button>
+            <button class="tog" type="button" data-phi="90">Right angle</button>
+            <button class="tog" type="button" data-phi="180">Opposite</button>
+            <button class="tog" id="dSwap" type="button" aria-pressed="false">Show b first, then a</button>
+          </div>
+          <canvas id="dStrip" class="strip fixed" aria-label="A number line from 0 to 8. The shaded band from 1 to 7 shows every possible length of a plus b. A marker shows the current length."></canvas>
+          <dl class="ro">
+            <dt><span class="vec">a</span></dt><dd id="dA"></dd>
+            <dt><span class="vec">b</span></dt><dd id="dB"></dd>
+            <dt><span class="vec">a + b</span></dt><dd id="dS"></dd>
+            <dt>Length</dt><dd id="dL"></dd>
+          </dl>
+          <p class="status" id="dStatus" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The same addition steers boats. A boat aims straight across the Kelani river at 4 km/h while the current carries it 3 km/h downstream. Its own effort and the river's push add as vectors: it actually moves at 5 km/h, at an angle, and lands downstream of the point it aimed at. Switch on "Show b first, then a" and you will see the order of the two moves does not change where you end up.</p>
+      <p>Subtraction follows from addition. <span class="vec">a</span> − <span class="vec">b</span> means <span class="vec">a</span> + (−<span class="vec">b</span>), and it is the move that takes you from the tip of <span class="vec">b</span> to the tip of <span class="vec">a</span>. You have already used it: tip minus tail in Plate 1.3.</p>
+    </div>
+  </div>
+
+  <div class="sub">
+    <h3>Scaling: same line, new length</h3>
+    <div class="prose">
+      <p>Multiply a vector by an ordinary number <span class="m">k</span> and the arrow stretches or shrinks along its own line. This is where the word "scalar" earns its keep: a scalar is the number that does the scaling. Each component is multiplied by <span class="m">k</span>, so <span class="m">k</span>(2, 1) = (2<span class="m">k</span>, <span class="m">k</span>).</p>
+    </div>
+    <div class="pair">
+      <div class="side">
+        <p class="tag">Positive k</p>
+        <h3>A volume knob</h3>
+        <p>Turn it up and the same song gets louder. Turn it down and it gets quieter. The size changes; the direction stays.</p>
+      </div>
+      <div class="hinge" aria-hidden="true">vs</div>
+      <div class="side">
+        <p class="tag cr">Negative k</p>
+        <h3>Reverse gear</h3>
+        <p>A volume knob cannot go below zero, so that analogy breaks here. A negative <span class="m">k</span> is reverse gear: same road, opposite way, and stretched by the size of <span class="m">k</span>.</p>
+      </div>
+    </div>
+
+    <div class="plate" id="plate-1-6">
+      <p class="plate-title"><b>Plate 1.6</b> · The scaling slider</p>
+      <div class="pgrid">
+        <div class="side-col">
+          <canvas id="eCv" class="plane" aria-label="The vector v equals 2, 1 drawn faintly with a dashed line through it. The vector k times v is drawn on top and changes with the slider, always staying on the dashed line."></canvas>
+        </div>
+        <div class="side-col">
+          <ul class="key">
+            <li><span class="sw l"></span>line through <span class="vec">v</span></li>
+            <li><span class="sw v"></span><span class="vec">v</span> = (2, 1)</li>
+            <li><span class="sw r"></span><span class="m">k</span><span class="vec">v</span></li>
+          </ul>
+          <div class="ctl">
+            <label for="eK">Scale factor <span class="m">k</span>: <output id="eKOut">1.5</output></label>
+            <input type="range" id="eK" min="-2.5" max="3" step="0.1" value="1.5">
+          </div>
+          <div class="row" role="group" aria-label="Preset scale factors">
+            <button class="tog" type="button" data-k="-1">k = −1</button>
+            <button class="tog" type="button" data-k="0">k = 0</button>
+            <button class="tog" type="button" data-k="0.5">k = 0.5</button>
+            <button class="tog" type="button" data-k="2">k = 2</button>
+          </div>
+          <dl class="ro">
+            <dt><span class="m">k</span><span class="vec">v</span></dt><dd id="eKV"></dd>
+            <dt>Length</dt><dd id="eLen"></dd>
+            <dt>Direction</dt><dd id="eDir"></dd>
+          </dl>
+          <p class="status" id="eStatus" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+
+    <p class="bridge">Hold on to what you just saw: scaling never knocks an arrow off its line. Most moves a matrix makes do knock arrows off their lines. <a href="../eigenvectors/">Page 17, eigenvectors</a>, hunts for the arrows a matrix treats exactly like this slider, and writes the idea as <span class="vec">A</span><span class="vec">v</span> = λ<span class="vec">v</span>.</p>
+  </div>
+</section>
+
+<!-- ============ LAYER 3 ============ -->
+<section class="layer" aria-labelledby="l3">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 3 · <b>Specifics</b></p>
+    <h2 id="l3">Every arrow is a recipe</h2>
+  </div>
+  <div class="prose">
+    <p>Take two fixed ingredients: <span class="vec cv">i</span>, one step east, and <span class="vec ca">j</span>, one step north. Any arrow in the plane is some amount of <span class="vec cv">i</span> plus some amount of <span class="vec ca">j</span>. The arrow (3, 4) is 3<span class="vec">i</span> + 4<span class="vec">j</span>. The components you have been reading all along are simply the amounts in this recipe. Building an arrow this way, by scaling and adding, is called a <strong>linear combination</strong>.</p>
+    <p>Now change the ingredients. A paint shop that stocks different base tints can still mix the same shade, but the recipe card changes. Vectors work the same way. With a different pair of building blocks you can still reach every point, but the amounts are different. Choosing the ingredients is called choosing a <strong>basis</strong>, and it is why eigenvectors matter: they are often the ingredients that make a matrix easiest to describe.</p>
+  </div>
+
+  <div class="plate" id="plate-1-7">
+    <p class="plate-title"><b>Plate 1.7</b> · Reach the ring with two ingredients</p>
+    <div class="pgrid">
+      <div class="side-col">
+        <canvas id="fCv" class="plane" aria-label="Two ingredient vectors drawn from the origin. The first is scaled by amount a and the second by amount b, placed tip to tail. A ring marks the target point 3, 3."></canvas>
+      </div>
+      <div class="side-col">
+        <p>Set the two amounts to reach the ring at (3, 3). Do it first with <span class="vec">i</span> and <span class="vec">j</span>. Then switch ingredients to <span class="vec">u</span> = (2, 1) and <span class="vec">w</span> = (−1, 1) and do it again. The faint grid shows how the new ingredients tile the plane.</p>
+        <div class="row" role="group" aria-label="Choose ingredients">
+          <button class="tog" id="fIJ" type="button" aria-pressed="true">Ingredients i and j</button>
+          <button class="tog" id="fUW" type="button" aria-pressed="false">Ingredients u and w</button>
+        </div>
+        <div class="ctl">
+          <label for="fA">Amount of <span class="vec cv" id="fNameA">i</span>: <output id="fAOut">1</output></label>
+          <input type="range" id="fA" min="-4" max="4" step="0.5" value="1">
+        </div>
+        <div class="ctl">
+          <label for="fB">Amount of <span class="vec ca" id="fNameB">j</span>: <output id="fBOut">1</output></label>
+          <input type="range" id="fB" min="-4" max="4" step="0.5" value="1">
+        </div>
+        <dl class="ro">
+          <dt>Recipe</dt><dd id="fExpr"></dd>
+        </dl>
+        <p class="status" id="fStatus" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <h3>Beyond arrows</h3>
+    <div class="prose">
+      <p>Arrows are the picture of a vector. The definition is about behaviour. A vector is anything you can add to another of its kind, and multiply by a number, and still get something sensible of the same kind. Arrows pass that test, and so do many things that are not arrows at all.</p>
+      <p>Test four lists of numbers against it. Decide the last column yourself before you reveal it.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="wide">
+        <thead><tr><th>The list</th><th>Add two of them?</th><th>Double one?</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>A grocery order: 2 kg rice, 1 kg dhal, 6 eggs</td><td>Two orders combine item by item</td><td>Twice the order makes sense</td><td class="verdict"><span class="hid">?</span><span class="ans" hidden><b class="yes">Vector</b>, with three components</span></td></tr>
+          <tr><td>A screen colour: red, green and blue light levels</td><td>Two lights shining together</td><td>Twice as bright</td><td class="verdict"><span class="hid">?</span><span class="ans" hidden><b class="yes">Vector</b>, until the screen reaches full brightness</span></td></tr>
+          <tr><td>A GPS position: latitude, longitude</td><td>Kandy plus Galle means nothing</td><td>Twice Kandy means nothing</td><td class="verdict"><span class="hid">?</span><span class="ans" hidden><b class="no">Not a vector.</b> It is a place. The gap between two nearby places is one: a move</span></td></tr>
+          <tr><td>A phone number</td><td>Meaningless</td><td>Meaningless</td><td class="verdict"><span class="hid">?</span><span class="ans" hidden><b class="no">Not a vector</b>, even though it is a list of digits</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row"><button class="btn" type="button" aria-pressed="false" data-reveal="td.verdict" data-on="Hide verdicts">Reveal verdicts</button></div>
+    <div class="prose">
+      <p>The GPS row closes the loop with Layer 1. A place is an address. The move between two places is a set of directions, and only the move is a vector.</p>
+    </div>
+    <p class="oneline">A vector is a quantity with a size and a direction. It is drawn as an arrow, written as a list of components, and defined by what you can do with it: add it and scale it.</p>
+  </div>
+</section>
+
+<section class="layer" id="check" aria-labelledby="check-h" data-group data-labels="Correct.|Not this one.">
+  <div class="layer-head">
+    <p class="eyebrow">Retrieval · <b>Check yourself</b></p>
+    <h2 id="check-h">Check your understanding: six questions, one per idea</h2>
+    <p class="score" data-score data-empty="Answer each one; the explanation appears after your choice."></p>
+  </div>
+  <div class="quiz">
+<div class="q"><span class="qnum">QUESTION 1 OF 6</span><p>A friend phones: "I am 2 km from the station." Why can you not walk straight to her?</p><div class="opts"><button class="opt" type="button">2 km is too short a distance to be useful</button><button class="opt" type="button" data-correct>She gave a size without a direction</button><button class="opt" type="button">Kilometres are the wrong unit</button><button class="opt" type="button">A station is not a fixed place</button></div><p class="fb" hidden aria-live="polite">"2 km from the station" describes a whole circle around it. A direction would pick out one point.</p></div>
+<div class="q"><span class="qnum">QUESTION 2 OF 6</span><p>Vector <span class="vec">a</span> has length 3 and vector <span class="vec">b</span> has length 4. Which of these can the length of <span class="vec">a + b</span> NOT be?</p><div class="opts"><button class="opt" type="button">1</button><button class="opt" type="button">5</button><button class="opt" type="button">6.5</button><button class="opt" type="button" data-correct>8</button></div><p class="fb" hidden aria-live="polite">The sum ranges from 4 − 3 = 1 (opposite directions) to 3 + 4 = 7 (same direction). 8 is out of reach.</p></div>
+<div class="q"><span class="qnum">QUESTION 3 OF 6</span><p>One arrow runs from (1, 1) to (4, 3). Another runs from (−2, 0) to (1, 2). Are they the same vector?</p><div class="opts"><button class="opt" type="button" data-correct>Yes: both are (3, 2)</button><button class="opt" type="button">No: they start in different places</button><button class="opt" type="button">No: they end in different places</button><button class="opt" type="button">Only if both start at the origin</button></div><p class="fb" hidden aria-live="polite">Tip minus tail: (4 − 1, 3 − 1) = (3, 2) and (1 + 2, 2 − 0) = (3, 2). Same move, different starting points.</p></div>
+<div class="q"><span class="qnum">QUESTION 4 OF 6</span><p><span class="vec">v</span> = (2, −1). What is −3<span class="vec">v</span>?</p><div class="opts"><button class="opt" type="button" data-correct>(−6, 3)</button><button class="opt" type="button">(6, −3)</button><button class="opt" type="button">(−6, −3)</button><button class="opt" type="button">(−1, −4)</button></div><p class="fb" hidden aria-live="polite">Multiply each component by −3. The arrow becomes three times longer and points the opposite way, on the same line.</p></div>
+<div class="q"><span class="qnum">QUESTION 5 OF 6</span><p>Which of these is not a vector?</p><div class="opts"><button class="opt" type="button">The wind over Negombo at dawn</button><button class="opt" type="button" data-correct>A bank card PIN</button><button class="opt" type="button">The force in a bridge cable</button><button class="opt" type="button">A ferry’s displacement after an hour</button></div><p class="fb" hidden aria-live="polite">A PIN is a list of digits, but adding two PINs or doubling one means nothing. Each of the others needs a direction.</p></div>
+<div class="q"><span class="qnum">QUESTION 6 OF 6</span><p>With ingredients <span class="vec">u</span> = (2, 1) and <span class="vec">w</span> = (−1, 1), which recipe makes the arrow (1, 2)?</p><div class="opts"><button class="opt" type="button">1u + 2w</button><button class="opt" type="button" data-correct>1u + 1w</button><button class="opt" type="button">2u + 1w</button><button class="opt" type="button">0.5u + 1.5w</button></div><p class="fb" hidden aria-live="polite">1·(2, 1) + 1·(−1, 1) = (1, 2). With <span class="vec">i</span> and <span class="vec">j</span> the same arrow is 1<span class="vec">i</span> + 2<span class="vec">j</span>. The amounts depend on the ingredients.</p></div>
+  </div>
+</section>
+
+<section class="layer challenges" id="challenges" aria-labelledby="ch-h">
+  <div class="layer-head">
+    <p class="eyebrow">Challenges · <b>Seed and Branch</b></p>
+    <h2 id="ch-h">Two challenges</h2>
+    <p class="small" style="margin:0">Each challenge declares its level. Commit an answer before the solution opens. Hints open one at a time.</p>
+  </div>
+<article class="challenge" id="challenge-1-1" data-level="seed" data-mode="number" data-answer="12">
+  <div class="chead"><span class="chip seed">Seed</span><h3>Every arrow of length 5</h3></div>
+  <p class="needs">Needs: this page (length from components).</p>
+  <p>The arrow (3, 4) has length 5. How many different vectors with whole-number components have length exactly 5? Count every sign and every order: (3, 4) and (4, 3) are different vectors.</p>
+  <form class="commit"><label>How many vectors?<input name="a" type="text" inputmode="decimal" autocomplete="off"></label><button class="btn primary" type="submit">Commit my answer</button></form>
+  <p class="result" hidden aria-live="polite"></p>
+  <div class="hints"><details class="hint"><summary>Hint 1</summary><p>Write the length rule as an equation: <span class="m">x</span>² + <span class="m">y</span>² = 25, where <span class="m">x</span> and <span class="m">y</span> are whole numbers, positive, negative or zero.</p></details><details class="hint"><summary>Hint 2</summary><p>Try each size of <span class="m">x</span> from 0 to 5 and ask whether 25 − <span class="m">x</span>² is a perfect square.</p></details><details class="hint"><summary>Hint 3</summary><p>Sizes 0 and 5 give arrows along the axes. Sizes 3 and 4 give slanted arrows. Each slanted solution has four sign versions.</p></details></div>
+  <p class="hint-count">Hints used: 0 of 3</p>
+  <details class="solution" hidden><summary>Solution</summary><p><span class="m">x</span>² + <span class="m">y</span>² = 25 has whole-number solutions only when |<span class="m">x</span>| is 0, 3, 4 or 5. |<span class="m">x</span>| = 0 gives <span class="m">y</span> = ±5, and |<span class="m">x</span>| = 5 gives <span class="m">y</span> = 0: four arrows along the axes. <span class="m">x</span> = ±3 with <span class="m">y</span> = ±4, and <span class="m">x</span> = ±4 with <span class="m">y</span> = ±3: eight slanted arrows. In total 4 + 8 = <strong>12</strong>.</p><p>The eight slanted arrows are the opening figure's (3, 4), turned and reflected: the same length in eight directions. Length alone could not tell them apart, which is the point of Plate 1.1.</p></details>
+</article>
+<article class="challenge" id="challenge-1-2" data-level="branch" data-mode="number" data-answer="4">
+  <div class="chead"><span class="chip branch">Branch</span><h3>Crossing the Kelani straight</h3></div>
+  <p class="needs">Needs: this page (adding vectors tip to tail, and length).</p>
+  <p>A boat moves at 5 km/h through still water. The river current runs at 3 km/h downstream. The captain wants to land directly opposite her starting point, so she aims a little upstream. How fast does the boat actually cross, measured straight across the river?</p>
+  <form class="commit"><label>Speed straight across, in km/h<input name="a" type="text" inputmode="decimal" autocomplete="off"></label><button class="btn primary" type="submit">Commit my answer</button></form>
+  <p class="result" hidden aria-live="polite"></p>
+  <div class="hints"><details class="hint"><summary>Hint 1</summary><p>The boat's own velocity and the current add as vectors, tip to tail, as in Plate 1.5.</p></details><details class="hint"><summary>Hint 2</summary><p>To land straight across, the sum must have no downstream part. So the boat's own velocity must have an upstream component of exactly 3 km/h.</p></details><details class="hint"><summary>Hint 3</summary><p>The boat's own velocity has length 5 and an upstream component of 3. Pythagoras gives its other component.</p></details></div>
+  <p class="hint-count">Hints used: 0 of 3</p>
+  <details class="solution" hidden><summary>Solution</summary><p>Put the river along the east direction, so the current is (3, 0). Let the boat's own velocity be (−3, <span class="m">y</span>): aimed upstream just enough to cancel the current. Its length is 5, so 3² + <span class="m">y</span>² = 5² and <span class="m">y</span> = 4. The sum is (−3, 4) + (3, 0) = (0, 4): straight across at <strong>4 km/h</strong>.</p><p>This is the page's Kelani example run backwards. There the boat aimed straight across at 4 km/h and drifted, so it moved at 5 km/h over the ground. Here it moves at 5 km/h through the water, and only 4 km/h of that carries it across. The aim is about 37° upstream of straight across, the angle in the 3, 4, 5 triangle.</p></details>
+</article>
+</section>
+
+<section class="next" id="next" aria-label="Next lesson">
+  <p class="eyebrow">Next · <b>page 2, span</b></p>
+  <p>You can now scale an arrow and add two arrows. The next lesson takes two arrows and asks what all their combinations can reach.</p>
+  <p class="exit">With two arrows, and any amount of each, which points of the plane can you reach?</p>
+  <p class="small">Page 2, span, is the next lesson to be written.</p>
+</section>
+
+<section aria-label="For the teacher">
+  <details class="notes" id="teacher">
+    <summary>For the teacher: how this page is sequenced</summary>
+    <p>Each step is chosen to set up the next, and the 3, 4, 5 triangle runs as a thread from the opening figure through Plates 1.4 and 1.5 and the river example.</p>
+    <ol>
+      <li><strong>Hook through uncertainty.</strong> The opening figure shows the problem a vector solves before naming it: a size alone leaves a whole circle of answers, and adding a direction collapses the circle to one point.</li>
+      <li><strong>Classify before operating.</strong> Plate 1.2 makes learners apply the size-plus-direction test, with two deliberate traps: mass against weight, and distance against displacement (where the displacement is the zero vector).</li>
+      <li><strong>Remove the commonest misconception early.</strong> Learners tend to treat a vector as a point. The address against directions contrast and Plate 1.3 establish it as a move, which is what makes tip-to-tail addition feel natural later.</li>
+      <li><strong>Two representations, one object.</strong> Components and length-with-bearing are introduced as two languages, with Pythagoras as the translator.</li>
+      <li><strong>Predict before manipulating.</strong> Plate 1.5 asks for a prediction first, because the scalar habit "3 + 4 = 7" is exactly what it needs to break.</li>
+      <li><strong>Paired analogies, with the break point named.</strong> Every analogy sits beside a contrasting one. Where an analogy fails (the volume knob at zero), the page says so and hands over to the second analogy.</li>
+      <li><strong>Abstraction last.</strong> Ingredients and the "is it a vector?" test move from arrows to behaviour, and set up basis change and the scaling idea needed for Eigenvectors.</li>
+      <li><strong>Retrieval.</strong> Six questions, one per idea, each with its reasoning shown after the answer.</li>
+      <li><strong>Challenges.</strong> Seed 1.1 is hard because the page shows one arrow of length 5 and the challenge asks for all of them: the length rule must be run backwards, and signs and order counted with care. Branch 1.2 is hard because it reverses the page's river example: the learner chooses a direction that makes one component of a sum zero, instead of reading the sum off a picture.</li>
+      <li><strong>Plate 1.1, purpose.</strong> A size alone leaves a whole circle of answers; adding a direction collapses the circle to one point. The 3, 4, 5 arrow it lands on is the first appearance of the triangle that recurs across the whole tree.</li>
+    </ol>
+  </details>
+</section>
+</main>
+<footer class="site">
+  <p>© 2026 Niranga Dharmaratna. Text and illustrations CC BY-SA 4.0; code MIT. <span class="si" lang="si">සංගතික</span> and its marks are reserved. <a href="../../about/">About Sangathika</a>.</p>
+</footer>
+</div>
+<script>
+/* Plates 1.1 and 1.3 to 1.7. Drawing code for this page only; shared behaviour is in assets/lesson.js. */
+document.addEventListener('DOMContentLoaded', function(){
+'use strict';
+var root = document.documentElement;
+function $(id){ return document.getElementById(id); }
+var C = {};
+function readColors(){
+  var s = getComputedStyle(root);
+  ['ink','muted','rule','grid','surface','paper','v','av','eig','res','res-soft','fill','tgrid'].forEach(function(k){
+    C[k] = s.getPropertyValue('--' + k).trim() || '#888';
+  });
+}
+readColors();
+var MONO = '"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace';
+var SERIF = '"STIX Two Text", "Cambria Math", Cambria, Georgia, serif';
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var MINUS = '−';
+
+function fmt(n, d){
+  if (d === undefined) d = 2;
+  if (Math.abs(n) < 0.5 * Math.pow(10, -d)) n = 0;
+  var s = n.toFixed(d);
+  if (s.indexOf('.') >= 0) s = s.replace(/0+$/, '').replace(/\.$/, '');
+  if (s === '-0') s = '0';
+  return s.replace('-', MINUS);
+}
+function pair(x, y, d){ return '(' + fmt(x, d) + ', ' + fmt(y, d) + ')'; }
+function sq(n){ return (n < 0 ? '(' + fmt(n) + ')' : fmt(n)) + '²'; }
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+/* ---------- plane helper ---------- */
+function Plane(cv, r){ this.cv = cv; this.r = r; this.ctx = cv.getContext('2d'); this.W = 1; this.H = 1; }
+Plane.prototype.fit = function(){
+  var b = this.cv.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+  this.W = Math.max(1, b.width); this.H = Math.max(1, b.height);
+  var w = Math.round(this.W * d), h = Math.round(this.H * d);
+  if (this.cv.width !== w) this.cv.width = w;
+  if (this.cv.height !== h) this.cv.height = h;
+  this.ctx.setTransform(d, 0, 0, d, 0, 0);
+  this.ctx.clearRect(0, 0, this.W, this.H);
+};
+Plane.prototype.X = function(x){ return (x - this.r.x0) / (this.r.x1 - this.r.x0) * this.W; };
+Plane.prototype.Y = function(y){ return this.H - (y - this.r.y0) / (this.r.y1 - this.r.y0) * this.H; };
+Plane.prototype.inv = function(px, py){
+  return { x: this.r.x0 + px / this.W * (this.r.x1 - this.r.x0), y: this.r.y0 + (this.H - py) / this.H * (this.r.y1 - this.r.y0) };
+};
+Plane.prototype.unit = function(){ return this.W / (this.r.x1 - this.r.x0); };
+Plane.prototype.grid = function(o){
+  o = o || {};
+  var c = this.ctx, r = this.r, x, y, every = o.every || 2;
+  c.save();
+  c.lineWidth = 1; c.strokeStyle = C.grid; c.beginPath();
+  for (x = Math.ceil(r.x0); x <= r.x1; x++){ var px = Math.round(this.X(x)) + 0.5; c.moveTo(px, 0); c.lineTo(px, this.H); }
+  for (y = Math.ceil(r.y0); y <= r.y1; y++){ var py = Math.round(this.Y(y)) + 0.5; c.moveTo(0, py); c.lineTo(this.W, py); }
+  c.stroke();
+  c.strokeStyle = C.muted; c.globalAlpha = 0.6; c.lineWidth = 1.25; c.beginPath();
+  c.moveTo(0, this.Y(0)); c.lineTo(this.W, this.Y(0));
+  c.moveTo(this.X(0), 0); c.lineTo(this.X(0), this.H);
+  c.stroke(); c.globalAlpha = 1;
+  c.fillStyle = C.muted; c.font = '10.5px ' + MONO;
+  c.textAlign = 'center'; c.textBaseline = 'top';
+  for (x = Math.ceil(r.x0 / every) * every; x < r.x1; x += every){
+    if (x === 0 || x <= r.x0) continue;
+    c.fillText(fmt(x), this.X(x), this.Y(0) + 4);
+  }
+  c.textAlign = 'right'; c.textBaseline = 'middle';
+  for (y = Math.ceil(r.y0 / every) * every; y < r.y1; y += every){
+    if (y === 0 || y <= r.y0) continue;
+    c.fillText(fmt(y), this.X(0) - 5, this.Y(y));
+  }
+  if (o.names){
+    c.font = '11px ' + MONO;
+    c.textAlign = 'right'; c.textBaseline = 'bottom'; c.fillText(o.names[0], this.W - 6, this.Y(0) - 4);
+    c.textAlign = 'left'; c.textBaseline = 'top'; c.fillText(o.names[1], this.X(0) + 6, 6);
+  }
+  c.restore();
+};
+Plane.prototype.line = function(x0, y0, x1, y1, col, o){
+  o = o || {}; var c = this.ctx; c.save();
+  c.globalAlpha = o.alpha == null ? 1 : o.alpha; c.strokeStyle = col; c.lineWidth = o.w || 1.5;
+  if (o.dash) c.setLineDash(o.dash);
+  c.beginPath(); c.moveTo(this.X(x0), this.Y(y0)); c.lineTo(this.X(x1), this.Y(y1)); c.stroke(); c.restore();
+};
+Plane.prototype.arrow = function(x0, y0, x1, y1, col, o){
+  o = o || {};
+  var c = this.ctx, a = this.X(x0), b = this.Y(y0), e = this.X(x1), f = this.Y(y1);
+  var dx = e - a, dy = f - b, L = Math.hypot(dx, dy), w = o.w || 2.75;
+  c.save(); c.globalAlpha = o.alpha == null ? 1 : o.alpha; c.strokeStyle = col; c.fillStyle = col; c.lineWidth = w; c.lineCap = 'round';
+  if (L < 2){ c.beginPath(); c.arc(a, b, w * 1.4, 0, Math.PI * 2); c.fill(); c.restore(); return; }
+  var h = Math.min(o.head || (8 + w * 2), L * 0.45), ux = dx / L, uy = dy / L, bx = e - ux * h, by = f - uy * h, hw = h * 0.5;
+  if (o.dash) c.setLineDash(o.dash);
+  c.beginPath(); c.moveTo(a, b); c.lineTo(bx + ux, by + uy); c.stroke(); c.setLineDash([]);
+  c.beginPath(); c.moveTo(e, f); c.lineTo(bx - uy * hw, by + ux * hw); c.lineTo(bx + uy * hw, by - ux * hw); c.closePath(); c.fill();
+  c.restore();
+};
+Plane.prototype.dot = function(x, y, rad, col, o){
+  o = o || {}; var c = this.ctx, px = this.X(x), py = this.Y(y); c.save();
+  if (o.square){ c.fillStyle = col; c.fillRect(px - rad, py - rad, rad * 2, rad * 2); c.strokeStyle = C.surface; c.lineWidth = 1.5; c.strokeRect(px - rad, py - rad, rad * 2, rad * 2); }
+  else if (o.ring){ c.fillStyle = o.fill || C.surface; c.strokeStyle = col; c.lineWidth = o.lw || 2.5; c.beginPath(); c.arc(px, py, rad, 0, Math.PI * 2); c.fill(); c.stroke(); }
+  else { c.fillStyle = col; c.beginPath(); c.arc(px, py, rad, 0, Math.PI * 2); c.fill(); }
+  c.restore();
+};
+Plane.prototype.text = function(s, x, y, col, o){
+  o = o || {}; var c = this.ctx; c.save();
+  c.font = o.font || ('500 12.5px ' + MONO); c.textAlign = o.align || 'center'; c.textBaseline = o.base || 'middle';
+  var px = this.X(x) + (o.dx || 0), py = this.Y(y) + (o.dy || 0);
+  c.lineJoin = 'round'; c.lineWidth = 4; c.strokeStyle = C.surface; c.strokeText(s, px, py);
+  c.fillStyle = col; c.fillText(s, px, py); c.restore();
+};
+var VFONT = 'italic 600 17px ' + SERIF;
+
+/* label beside the middle of segment P->Q, pushed off it by `off` units on the side chosen by `sign` */
+function sideLabel(p, s, P, Q, col, sign, off){
+  var dx = Q[0] - P[0], dy = Q[1] - P[1], L = Math.hypot(dx, dy) || 1;
+  var nx = -dy / L * sign, ny = dx / L * sign, mx = (P[0] + Q[0]) / 2, my = (P[1] + Q[1]) / 2;
+  p.text(s, mx + nx * (off || 0.55), my + ny * (off || 0.55), col, { font: VFONT });
+}
+
+/* drag helper */
+function draggable(plane, handles, onDrag){
+  var cv = plane.cv, active = null;
+  function pt(e){ var r = cv.getBoundingClientRect(); return { px: e.clientX - r.left, py: e.clientY - r.top }; }
+  cv.addEventListener('pointerdown', function(e){
+    var q = pt(e), best = null, bd = 30;
+    handles().forEach(function(h){ var d = Math.hypot(plane.X(h.x) - q.px, plane.Y(h.y) - q.py); if (d < bd){ bd = d; best = h.id; } });
+    if (best === null) return;
+    active = best; try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+    e.preventDefault(); move(e);
+  });
+  function move(e){ if (active === null) return; var q = pt(e), p = plane.inv(q.px, q.py); onDrag(active, p.x, p.y); }
+  cv.addEventListener('pointermove', move);
+  cv.addEventListener('pointerup', function(){ active = null; });
+  cv.addEventListener('pointercancel', function(){ active = null; });
+}
+
+var redraws = [];
+function watch(cv, fn){
+  redraws.push(fn);
+  if (window.ResizeObserver) new ResizeObserver(function(){ fn(); }).observe(cv);
+}
+function redrawAll(){ readColors(); redraws.forEach(function(f){ f(); }); }
+try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redrawAll); } catch (e) {}
+new MutationObserver(redrawAll).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
+
+/* ========== HERO ========== */
+(function(){
+  var p = new Plane($('heroCv'), { x0: -6.2, x1: 6.2, y0: -6.2, y1: 6.2 });
+  var T = Math.atan2(4, 3), t = 0, target = 0, raf = 0, playing = !reduceMotion, timer = 0, last = 0;
+  function diff(a, b){ var d = b - a; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; }
+  function draw(){
+    p.fit(); p.grid({ every: 2, names: ['east', 'north'] });
+    var c = p.ctx, e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    c.save(); c.globalAlpha = 1 - e; c.strokeStyle = C.muted; c.setLineDash([4, 5]); c.lineWidth = 1.5;
+    c.beginPath(); c.arc(p.X(0), p.Y(0), 5 * p.unit(), 0, Math.PI * 2); c.stroke(); c.restore();
+    for (var i = 0; i < 24; i++){
+      var a0 = i * Math.PI / 12, a = a0 + e * diff(a0, T);
+      p.arrow(0, 0, 5 * Math.cos(a), 5 * Math.sin(a), C.v, { w: 1.6, alpha: 0.2 + 0.3 * (1 - e) });
+    }
+    if (e > 0.02){
+      p.arrow(0, 0, 3, 4, C.v, { w: 3.4, alpha: e });
+      c.save(); c.globalAlpha = e; p.dot(3, 4, 4.5, C.v); c.restore();
+      if (e > 0.6) p.text('3 east, 4 north', 3, 4, C.ink, { dx: 10, dy: -12, align: 'left' });
+    } else {
+      p.text('5 km from here: which way?', 0, 5, C.muted, { dy: -14 });
+    }
+    p.dot(0, 0, 4.5, C.ink);
+    p.text('start', 0, 0, C.ink, { dx: -8, dy: 14, align: 'right' });
+  }
+  function caption(){
+    $('heroCap').textContent = target === 0
+      ? 'A size alone: every point on the dashed circle is 5 km from the start, and nothing tells them apart.'
+      : 'Size and direction together: only one point fits, 3 km east and 4 km north of the start.';
+    $('heroSize').setAttribute('aria-pressed', String(target === 0));
+    $('heroDir').setAttribute('aria-pressed', String(target === 1));
+  }
+  function step(ts){
+    if (!last) last = ts;
+    var dt = Math.min(64, ts - last); last = ts;
+    var dir = target > t ? 1 : -1; t = clamp(t + dir * dt / 1100, 0, 1);
+    if ((dir > 0 && t >= target) || (dir < 0 && t <= target)) t = target;
+    draw();
+    if (t !== target) raf = requestAnimationFrame(step); else { raf = 0; last = 0; }
+  }
+  function go(tg){
+    target = tg; caption();
+    if (reduceMotion){ t = tg; draw(); return; }
+    if (!raf){ last = 0; raf = requestAnimationFrame(step); }
+  }
+  function setPlaying(v){
+    playing = v; $('heroPlay').textContent = v ? 'Pause' : 'Play';
+    clearInterval(timer);
+    if (v) timer = setInterval(function(){ go(target === 0 ? 1 : 0); }, 3800);
+  }
+  $('heroSize').addEventListener('click', function(){ setPlaying(false); go(0); });
+  $('heroDir').addEventListener('click', function(){ setPlaying(false); go(1); });
+  $('heroPlay').addEventListener('click', function(){ setPlaying(!playing); });
+  if (reduceMotion){ $('heroPlay').hidden = true; }
+  caption(); setPlaying(playing);
+  watch(p.cv, draw); draw();
+})();
+
+/* ========== PLATE B: a move, not a place ========== */
+(function(){
+  var p = new Plane($('bCv'), { x0: -6.5, x1: 6.5, y0: -6.5, y1: 6.5 });
+  var tail, v, copies = false, last = null;
+  function reset(){ tail = { x: -4, y: -3 }; v = { x: 3, y: 2 }; last = null; }
+  reset();
+  var copyTails = [[-5, 2], [1, -5], [2, 2], [-2, -1], [-6, -6], [3, -2]];
+  function draw(){
+    p.fit(); p.grid({ every: 2 });
+    if (copies){
+      copyTails.forEach(function(t){
+        var tx = t[0] + v.x, ty = t[1] + v.y;
+        if (tx > 6.5 || tx < -6.5 || ty > 6.5 || ty < -6.5) return;
+        p.arrow(t[0], t[1], tx, ty, C.v, { w: 2, alpha: 0.35 });
+      });
+    }
+    var tx = tail.x + v.x, ty = tail.y + v.y;
+    p.arrow(tail.x, tail.y, tx, ty, C.v, { w: 3.2 });
+    p.dot(tail.x, tail.y, 6, C.v, { square: true });
+    p.dot(tx, ty, 8, C.v, { ring: true });
+    p.text('tail', tail.x, tail.y, C.muted, { dy: 16 });
+    p.text('tip', tx, ty, C.muted, { dy: -18 });
+    $('bTail').textContent = pair(tail.x, tail.y);
+    $('bTip').textContent = pair(tx, ty);
+    $('bVec').textContent = pair(v.x, v.y);
+    var st = $('bStatus');
+    if (v.x === 0 && v.y === 0){
+      st.className = 'status'; st.innerHTML = 'Tip on tail: this is the <strong>zero vector</strong>, a move of no size and no direction.';
+    } else if (last === 'tail'){
+      st.className = 'status on'; st.innerHTML = 'You moved the tail. The vector is still <strong>' + pair(v.x, v.y) + '</strong>: the same move from a new starting point.';
+    } else if (last === 'tip'){
+      st.className = 'status off'; st.innerHTML = 'You moved the tip. The vector is now <strong>' + pair(v.x, v.y) + '</strong>, a different move.';
+    } else {
+      st.className = 'status'; st.innerHTML = 'This arrow is the move <strong>' + pair(v.x, v.y) + '</strong>: 3 across, 2 up. Start by dragging the square tail.';
+    }
+  }
+  function moveTail(x, y){
+    tail.x = clamp(Math.round(x), Math.max(-6, -6 - v.x), Math.min(6, 6 - v.x));
+    tail.y = clamp(Math.round(y), Math.max(-6, -6 - v.y), Math.min(6, 6 - v.y));
+    last = 'tail'; draw();
+  }
+  function moveTip(x, y){
+    var tx = clamp(Math.round(x), -6, 6), ty = clamp(Math.round(y), -6, 6);
+    v = { x: tx - tail.x, y: ty - tail.y }; last = 'tip'; draw();
+  }
+  draggable(p, function(){
+    return [{ id: 'tip', x: tail.x + v.x, y: tail.y + v.y }, { id: 'tail', x: tail.x, y: tail.y }];
+  }, function(id, x, y){
+    if (id === 'tail'){ var dx = x - tail.x, dy = y - tail.y; /* keep grab offset small: move by snapped position */ moveTail(x, y); }
+    else moveTip(x, y);
+  });
+  p.cv.addEventListener('keydown', function(e){
+    var d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }[e.key];
+    if (!d) return; e.preventDefault();
+    if (e.shiftKey) moveTip(tail.x + v.x + d[0], tail.y + v.y + d[1]);
+    else moveTail(tail.x + d[0], tail.y + d[1]);
+  });
+  $('bCopies').addEventListener('click', function(){
+    copies = !copies; this.setAttribute('aria-pressed', String(copies)); draw();
+  });
+  $('bReset').addEventListener('click', function(){ reset(); draw(); });
+  watch(p.cv, draw); draw();
+})();
+
+/* ========== PLATE C: two descriptions ========== */
+(function(){
+  var p = new Plane($('cCv'), { x0: -6.5, x1: 6.5, y0: -6.5, y1: 6.5 });
+  var x = 3, y = 4;
+  function draw(){
+    p.fit(); p.grid({ every: 2, names: ['east', 'north'] });
+    var L = len(vec(x, y)), c = p.ctx;   /* the library rule from page 1 */
+    if (L > 0){
+      p.line(0, 0, x, 0, C.muted, { w: 1.6, dash: [5, 4] });
+      p.line(x, 0, x, y, C.muted, { w: 1.6, dash: [5, 4] });
+      if (x !== 0 && y !== 0){
+        var s = 0.32, sx = x > 0 ? -s : s, sy = y > 0 ? s : -s;
+        c.save(); c.strokeStyle = C.muted; c.lineWidth = 1; c.beginPath();
+        c.moveTo(p.X(x + sx), p.Y(0)); c.lineTo(p.X(x + sx), p.Y(sy)); c.lineTo(p.X(x), p.Y(sy)); c.stroke(); c.restore();
+      }
+      var th = Math.atan2(y, x), rr = 0.9 * p.unit();
+      c.save(); c.strokeStyle = C.res; c.lineWidth = 1.6; c.beginPath();
+      c.arc(p.X(0), p.Y(0), rr, 0, -th, th > 0); c.stroke(); c.restore();
+      if (x !== 0) p.text('x = ' + fmt(x), x / 2, 0, C.muted, { dy: y >= 0 ? 14 : -14 });
+      if (y !== 0) p.text('y = ' + fmt(y), x, y / 2, C.muted, { dx: x >= 0 ? 10 : -10, align: x >= 0 ? 'left' : 'right' });
+      p.arrow(0, 0, x, y, C.v, { w: 3.2 });
+    }
+    p.dot(x, y, 8, C.v, { ring: true });
+    $('cComp').textContent = pair(x, y);
+    if (L === 0){
+      $('cLen').textContent = '0'; $('cAng').textContent = 'none'; $('cBear').textContent = 'none: the zero vector has no direction';
+    } else {
+      var sumsq = x * x + y * y;
+      $('cLen').textContent = '√(' + sq(x) + ' + ' + sq(y) + ') = √' + fmt(sumsq) + ' = ' + fmt(L);
+      var deg = Math.atan2(y, x) * 180 / Math.PI;
+      $('cAng').textContent = fmt(deg, 1) + '°';
+      var b = ((90 - deg) % 360 + 360) % 360, br = Math.round(b) % 360;
+      $('cBear').textContent = ('00' + br).slice(-3) + '°';
+    }
+  }
+  function set(nx, ny){ x = clamp(Math.round(nx * 2) / 2, -6, 6); y = clamp(Math.round(ny * 2) / 2, -6, 6); draw(); }
+  draggable(p, function(){ return [{ id: 'tip', x: x, y: y }]; }, function(id, nx, ny){ set(nx, ny); });
+  p.cv.addEventListener('keydown', function(e){
+    var d = { ArrowLeft: [-0.5, 0], ArrowRight: [0.5, 0], ArrowUp: [0, 0.5], ArrowDown: [0, -0.5] }[e.key];
+    if (!d) return; e.preventDefault(); set(x + d[0], y + d[1]);
+  });
+  document.querySelectorAll('#plate-1-4 [data-cx]').forEach(function(b){
+    b.addEventListener('click', function(){ set(+b.dataset.cx, +b.dataset.cy); });
+  });
+  watch(p.cv, draw); draw();
+})();
+
+/* ========== PLATE D: addition ========== */
+(function(){
+  var p = new Plane($('dCv'), { x0: -4.6, x1: 9.4, y0: -7, y1: 7 });
+  var sc = $('dStrip'), sctx = sc.getContext('2d'), phi = 40, swap = false;
+  function vals(){
+    var r = phi * Math.PI / 180, bx = 4 * Math.cos(r), by = 4 * Math.sin(r);
+    if (Math.abs(bx) < 1e-9) bx = 0; if (Math.abs(by) < 1e-9) by = 0;
+    return { ax: 3, ay: 0, bx: bx, by: by, sx: 3 + bx, sy: by, L: Math.hypot(3 + bx, by) };
+  }
+  function draw(){
+    var V = vals();
+    p.fit(); p.grid({ every: 2 });
+    if (swap){
+      p.arrow(0, 0, V.bx, V.by, C.av, { w: 2, alpha: 0.5, dash: [6, 5] });
+      p.arrow(V.bx, V.by, V.sx, V.sy, C.v, { w: 2, alpha: 0.5, dash: [6, 5] });
+    }
+    p.arrow(0, 0, V.sx, V.sy, C.res, { w: 3.4 });
+    p.arrow(0, 0, 3, 0, C.v, { w: 3 });
+    p.arrow(3, 0, V.sx, V.sy, C.av, { w: 3 });
+    p.dot(0, 0, 4, C.ink);
+    /* labels: a on the side away from b, b away from origin, sum away from b */
+    sideLabel(p, 'a', [0, 0], [3, 0], C.v, V.by > 0.01 ? -1 : 1, 0.6);
+    var midB = [(3 + V.sx) / 2, V.sy / 2];
+    var nbx = -V.by / 4, nby = V.bx / 4, sb = (nbx * midB[0] + nby * midB[1]) >= 0 ? 1 : -1;
+    if (Math.abs(nbx * midB[0] + nby * midB[1]) < 1e-6) sb = 1;
+    sideLabel(p, 'b', [3, 0], [V.sx, V.sy], C.av, sb, 0.6);
+    if (V.L > 0.5){
+      var midS = [V.sx / 2, V.sy / 2], Ls = V.L;
+      var nsx = -V.sy / Ls, nsy = V.sx / Ls, dd = nsx * (midB[0] - midS[0]) + nsy * (midB[1] - midS[1]);
+      var ss = dd > 1e-6 ? -1 : 1; if (Math.abs(dd) <= 1e-6) ss = -1;
+      sideLabel(p, 'a + b', [0, 0], [V.sx, V.sy], C.res, ss, 0.7);
+    }
+    drawStrip(V.L);
+    $('dA').textContent = '(3, 0)';
+    $('dB').textContent = pair(V.bx, V.by);
+    $('dS').textContent = pair(V.sx, V.sy);
+    $('dL').textContent = fmt(V.L) + '   (as plain numbers, 3 + 4 = 7)';
+    $('dPhiOut').textContent = phi + '°';
+    var st = $('dStatus');
+    if (phi === 0){ st.className = 'status on'; st.innerHTML = '<strong>Same direction.</strong> Only here do the lengths simply add: 3 + 4 = 7.'; }
+    else if (phi === 180){ st.className = 'status on'; st.innerHTML = '<strong>Opposite directions.</strong> They mostly cancel: 4 − 3 = 1.'; }
+    else if (phi === 90 || phi === 270){ st.className = 'status on'; st.innerHTML = '<strong>Right angle.</strong> The 3, 4, 5 triangle from the opening figure: the sum has length 5.'; }
+    else { st.className = 'status'; st.innerHTML = 'In between: the length of the sum is ' + fmt(V.L) + ', somewhere between 1 and 7.'; }
+  }
+  function drawStrip(Lval){
+    var b = sc.getBoundingClientRect(), d = window.devicePixelRatio || 1, W = Math.max(1, b.width), H = Math.max(1, b.height);
+    sc.width = Math.round(W * d); sc.height = Math.round(H * d);
+    var c = sctx; c.setTransform(d, 0, 0, d, 0, 0); c.clearRect(0, 0, W, H);
+    var m = 22, X = function(v){ return m + v / 8 * (W - 2 * m); }, ay = 44;
+    c.fillStyle = C['res-soft']; c.fillRect(X(1), ay - 6, X(7) - X(1), 12);
+    c.strokeStyle = C.muted; c.lineWidth = 1.25; c.beginPath(); c.moveTo(X(0), ay); c.lineTo(X(8), ay); c.stroke();
+    c.font = '10.5px ' + MONO; c.fillStyle = C.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+    for (var i = 0; i <= 8; i++){ c.beginPath(); c.moveTo(X(i), ay - 4); c.lineTo(X(i), ay + 4); c.stroke(); c.fillText(String(i), X(i), ay + 8); }
+    c.font = '10px ' + MONO;
+    var tags = [[1, 'opposite'], [5, 'right angle'], [7, 'same way']];
+    tags.forEach(function(t){ c.fillText(t[1], clamp(X(t[0]), 30, W - 30), ay + 24); });
+    var px = X(Lval);
+    c.fillStyle = C.res; c.beginPath(); c.moveTo(px, ay - 7); c.lineTo(px - 6, ay - 17); c.lineTo(px + 6, ay - 17); c.closePath(); c.fill();
+    c.font = '500 11.5px ' + MONO; c.textBaseline = 'bottom'; c.textAlign = 'center';
+    c.fillText('|a + b| = ' + fmt(Lval), clamp(px, 52, W - 52), ay - 20);
+  }
+  $('dPhi').addEventListener('input', function(){ phi = +this.value; draw(); });
+  document.querySelectorAll('#plate-1-5 [data-phi]').forEach(function(b){
+    b.addEventListener('click', function(){ phi = +b.dataset.phi; $('dPhi').value = phi; draw(); });
+  });
+  $('dSwap').addEventListener('click', function(){ swap = !swap; this.setAttribute('aria-pressed', String(swap)); draw(); });
+  watch(p.cv, draw); watch(sc, draw); draw();
+})();
+
+/* ========== PLATE E: scaling ========== */
+(function(){
+  var p = new Plane($('eCv'), { x0: -7, x1: 7, y0: -7, y1: 7 }), k = 1.5;
+  function draw(){
+    p.fit(); p.grid({ every: 2 });
+    p.line(-14, -7, 14, 7, C.muted, { w: 1.4, dash: [6, 5], alpha: 0.85 });
+    p.arrow(0, 0, 2, 1, C.v, { w: 2, alpha: 0.75 });
+    sideLabel(p, 'v', [0, 0], [2, 1], C.v, 1, 0.6);
+    var kx = 2 * k, ky = k;
+    p.arrow(0, 0, kx, ky, C.res, { w: 3.4 });
+    if (Math.abs(k) > 0.3) sideLabel(p, 'kv', [0, 0], [kx, ky], C.res, -1, 0.65);
+    p.dot(0, 0, 4, C.ink);
+    $('eKOut').textContent = fmt(k, 1);
+    $('eKV').textContent = fmt(k, 1) + ' × (2, 1) = ' + pair(kx, ky);
+    var r5 = Math.sqrt(5);
+    $('eLen').textContent = '|' + fmt(k, 1) + '| × ' + fmt(r5) + ' = ' + fmt(Math.abs(k) * r5);
+    var dir, msg, cls = 'status';
+    if (k === 0){ dir = 'none'; msg = '<strong>Collapsed to the zero vector.</strong> Scaling by 0 wipes out size and direction.'; }
+    else if (k < 0){ dir = 'opposite to v'; msg = '<strong>Flipped through the origin</strong> and scaled by ' + fmt(-k, 1) + '. Still on the dashed line.'; cls = 'status on'; }
+    else if (k === 1){ dir = 'same as v'; msg = '<strong>Unchanged.</strong> Scaling by 1 does nothing.'; cls = 'status on'; }
+    else if (k < 1){ dir = 'same as v'; msg = '<strong>Shrunk</strong> to ' + fmt(k, 1) + ' of its length. Still on the dashed line.'; cls = 'status on'; }
+    else { dir = 'same as v'; msg = '<strong>Stretched</strong> to ' + fmt(k, 1) + ' times its length. Still on the dashed line.'; cls = 'status on'; }
+    $('eDir').textContent = dir; var st = $('eStatus'); st.className = cls; st.innerHTML = msg;
+  }
+  $('eK').addEventListener('input', function(){ k = Math.round(+this.value * 10) / 10; draw(); });
+  document.querySelectorAll('#plate-1-6 [data-k]').forEach(function(b){
+    b.addEventListener('click', function(){ k = +b.dataset.k; $('eK').value = k; draw(); });
+  });
+  watch(p.cv, draw); draw();
+})();
+
+/* ========== PLATE F: recipe / basis ========== */
+(function(){
+  var p = new Plane($('fCv'), { x0: -6.5, x1: 6.5, y0: -6.5, y1: 6.5 });
+  var B = {
+    ij: { e1: [1, 0], e2: [0, 1], n1: 'i', n2: 'j' },
+    uw: { e1: [2, 1], e2: [-1, 1], n1: 'u', n2: 'w' }
+  };
+  var mode = 'ij', a = 1, b = 1, T = [3, 3];
+  function draw(){
+    var S = B[mode], e1 = S.e1, e2 = S.e2;
+    p.fit();
+    if (mode === 'uw'){
+      var c = p.ctx; c.save(); c.strokeStyle = C.tgrid; c.lineWidth = 1; c.beginPath();
+      for (var m = -10; m <= 10; m++){
+        c.moveTo(p.X(m * e1[0] - 20 * e2[0]), p.Y(m * e1[1] - 20 * e2[1])); c.lineTo(p.X(m * e1[0] + 20 * e2[0]), p.Y(m * e1[1] + 20 * e2[1]));
+        c.moveTo(p.X(m * e2[0] - 20 * e1[0]), p.Y(m * e2[1] - 20 * e1[1])); c.lineTo(p.X(m * e2[0] + 20 * e1[0]), p.Y(m * e2[1] + 20 * e1[1]));
+      }
+      c.stroke(); c.restore();
+      var cx = p.ctx; cx.save(); cx.strokeStyle = C.muted; cx.globalAlpha = 0.5; cx.lineWidth = 1; cx.beginPath();
+      cx.moveTo(0, p.Y(0)); cx.lineTo(p.W, p.Y(0)); cx.moveTo(p.X(0), 0); cx.lineTo(p.X(0), p.H); cx.stroke(); cx.restore();
+    } else {
+      p.grid({ every: 2 });
+    }
+    var on = Math.abs(a * e1[0] + b * e2[0] - T[0]) < 1e-9 && Math.abs(a * e1[1] + b * e2[1] - T[1]) < 1e-9;
+    p.dot(T[0], T[1], 11, C.res, { ring: true, fill: on ? C['res-soft'] : 'rgba(0,0,0,0)', lw: 2 });
+    if (!on) p.text('target', T[0], T[1], C.res, { dx: 16, align: 'left' });
+    var Ax = a * e1[0], Ay = a * e1[1], Rx = Ax + b * e2[0], Ry = Ay + b * e2[1];
+    p.arrow(0, 0, e1[0], e1[1], C.v, { w: 4.5, alpha: 0.35, head: 14 });
+    p.arrow(0, 0, e2[0], e2[1], C.av, { w: 4.5, alpha: 0.35, head: 14 });
+    p.text(S.n1, e1[0], e1[1], C.v, { font: VFONT, dx: 4, dy: 14 });
+    p.text(S.n2, e2[0], e2[1], C.av, { font: VFONT, dx: -12, dy: -4 });
+    p.arrow(0, 0, Ax, Ay, C.v, { w: 2.6 });
+    p.arrow(Ax, Ay, Rx, Ry, C.av, { w: 2.6 });
+    p.arrow(0, 0, Rx, Ry, C.res, { w: 3.4, alpha: 0.95 });
+    p.dot(0, 0, 4, C.ink);
+    $('fAOut').textContent = fmt(a); $('fBOut').textContent = fmt(b);
+    $('fNameA').textContent = S.n1; $('fNameB').textContent = S.n2;
+    $('fExpr').textContent = fmt(a) + S.n1 + ' + ' + fmt(b) + S.n2 + ' = ' + fmt(a) + '·' + pair(e1[0], e1[1]) + ' + ' + fmt(b) + '·' + pair(e2[0], e2[1]) + ' = ' + pair(Rx, Ry);
+    var st = $('fStatus');
+    if (on){
+      st.className = 'status on';
+      st.innerHTML = mode === 'ij'
+        ? '<strong>On target.</strong> With i and j the amounts are just the components: 3i + 3j. Now switch to u and w.'
+        : '<strong>On target.</strong> With u and w the recipe is ' + fmt(a) + 'u + ' + fmt(b) + 'w. Same arrow as 3i + 3j, different amounts.';
+    } else {
+      st.className = 'status';
+      st.innerHTML = 'You are at <strong>' + pair(Rx, Ry) + '</strong>. The ring is at (3, 3).';
+    }
+  }
+  function setMode(m){
+    mode = m;
+    $('fIJ').setAttribute('aria-pressed', String(m === 'ij'));
+    $('fUW').setAttribute('aria-pressed', String(m === 'uw'));
+    draw();
+  }
+  $('fIJ').addEventListener('click', function(){ setMode('ij'); });
+  $('fUW').addEventListener('click', function(){ setMode('uw'); });
+  $('fA').addEventListener('input', function(){ a = +this.value; draw(); });
+  $('fB').addEventListener('input', function(){ b = +this.value; draw(); });
+  watch(p.cv, draw); draw();
+})();
+
+});
+</script>
+</body>
+</html>
