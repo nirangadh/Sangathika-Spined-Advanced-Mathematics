@@ -113,7 +113,44 @@ def pages():
             "noindex": not is_indexed(L), "leaf": slug,
             "jsonld": {"@context": "https://schema.org", "@graph": graph},
         })
+        for p in L.get("pages", []):
+            if p.get("status") == "built":
+                recs.append(lesson_record(L, p))
     return recs
+
+def lesson_name(p):
+    """The H1: the house title where it already is the standard term, otherwise both joined by a colon."""
+    t, st = p["title"], p["standard_term"]
+    if st.lower() in t.lower():
+        return t
+    if t.lower() in st.lower():
+        return st[0].upper() + st[1:]
+    return f"{t}: {st}"
+
+def lesson_record(L, p):
+    leaf_url = f"{ORIGIN}/{L['slug']}/"
+    url = f"{leaf_url}{p['slug']}/"
+    path = ROOT / L["slug"] / p["slug"] / "index.html"
+    card = f"{L['slug']}-{p['slug']}"
+    by_num = {q["number"]: q for q in L.get("pages", [])}
+    terms = {t["term"]: t for t in L.get("glossary", [])}
+    teaches = [{"@type": "DefinedTerm", "name": t, "url": f"{leaf_url}#term-{term_slug(t)}"} for t in p.get("teaches", [])]
+    needs = [{"@type": "DefinedTerm", "name": by_num[n]["standard_term"]} for n in p.get("prerequisites", []) if n in by_num]
+    lr = {"@type": "LearningResource", "name": lesson_name(p), "description": p["description"], "url": url,
+          "inLanguage": SITE["language"], "learningResourceType": "interactive lesson",
+          "educationalLevel": "first-year undergraduate", "teaches": teaches,
+          "isPartOf": {"@type": "Course", "name": L["seo_name"], "url": leaf_url}, "position": p["number"],
+          "author": {"@id": PERSON_ID}, "license": LICENCE_URL, "isAccessibleForFree": True,
+          "datePublished": p["published"], "dateModified": lastmod(path), "image": f"{ORIGIN}/assets/cards/{card}.png"}
+    if needs:
+        lr["competencyRequired"] = needs
+    return {
+        "path": path, "url": url, "og_type": "article", "card": card,
+        "title": f"{p['seo_title']} | Sangathika", "og_title": p["seo_title"], "description": p["description"],
+        "card_alt": f"The opening plate of the {lesson_name(p)} lesson",
+        "noindex": False, "lesson": (L["slug"], p["number"]),
+        "jsonld": {"@context": "https://schema.org", "@graph": [lr, breadcrumb([("Sangathika", ORIGIN + "/"), (L["seo_name"], leaf_url), (lesson_name(p), url)])]},
+    }
 
 def breadcrumb(items):
     return {"@type": "BreadcrumbList", "itemListElement": [
@@ -165,6 +202,15 @@ def expected_heads():
     for rec in pages():
         depth = len(rec["path"].relative_to(ROOT).parts) - 1
         out[rec["path"]] = head_region(rec, "../" * depth)
+    return out
+
+def expected_midribs():
+    """Used by tools/check.py too: lesson path -> its lesson strip, current page marked."""
+    out = {}
+    for L in LEAVES.values():
+        for p in L.get("pages", []):
+            if p.get("status") == "built":
+                out[ROOT / L["slug"] / p["slug"] / "index.html"] = midrib(L, prefix="../", current=p["number"])
     return out
 
 # ----------------------------------------------------------------- QR code and tree
@@ -219,15 +265,17 @@ def leaf_svg(leaf, size=240, title=True):
 {icons}
 </svg>"""
 
-def midrib(leaf):
+def midrib(leaf, prefix="", current=None):
     items = []
     plist = leaf.get("pages") or [{"number": i, "title": "planned lesson", "status": "planned"}
                                   for i in range(1, leaf.get("target", 16) + 1)]
     for p in plist:
         n = f'{p["number"]:02d}'
         label = esc(f'Page {p["number"]}: {p["title"]}')
+        cur = ' current' if p["number"] == current else ''
+        aria = ' aria-current="page"' if cur else ''
         if p.get("status") == "built":
-            items.append(f'<li class="built"><a href="{p["slug"]}/" title="{label}" aria-label="{label}">{n}</a></li>')
+            items.append(f'<li class="built{cur}"><a href="{prefix}{p["slug"]}/" title="{label}" aria-label="{label}"{aria}>{n}</a></li>')
         elif p.get("status") == "porting":
             items.append(f'<li class="built"><span title="{label}, coming online" aria-label="{label}, coming online">{n}</span></li>')
         else:
@@ -459,13 +507,44 @@ def cards(recs):
             L = LEAVES[r["leaf"]]
             jobs[L["slug"]] = card_html(leaf_svg(L), L["seo_name"], strip_tags(L["brief"]))
     jobs["_icon180"] = ICON
-    todo = {k: v for k, v in jobs.items() if manifest.get(k) != hashlib.sha256(v.encode()).hexdigest()
+    lessons = {r["card"]: r for r in recs if r.get("lesson")}
+    for name, r in lessons.items():
+        jobs[name] = ("LESSON", r["path"].read_text(encoding="utf-8"))
+    def digest(v):
+        return hashlib.sha256((v if isinstance(v, str) else v[0] + v[1]).encode()).hexdigest()
+    todo = {k: v for k, v in jobs.items() if manifest.get(k) != digest(v)
             or not (ROOT / ("assets/icon-180.png" if k == "_icon180" else f"assets/cards/{k}.png")).exists()}
     if not todo:
         return
+    import base64, functools, http.server, threading
+    class Quiet(http.server.SimpleHTTPRequestHandler):
+        def log_message(self, *a, **k): pass
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(Quiet, directory=str(ROOT)))
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    base = f"http://127.0.0.1:{srv.server_address[1]}/"
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         for k, h in todo.items():
+            if isinstance(h, tuple):
+                r = lessons[k]
+                L = LEAVES[r["lesson"][0]]
+                p = [q for q in L["pages"] if q["number"] == r["lesson"][1]][0]
+                pg = b.new_page(viewport={"width": 1200, "height": 900}, color_scheme="light", reduced_motion="reduce")
+                pg.goto(base + r["path"].relative_to(ROOT).parent.as_posix() + "/"); pg.wait_for_timeout(900)
+                shot = pg.locator(p["card"]).screenshot()
+                pg.close()
+                art = f'<img alt="" src="data:image/png;base64,{base64.b64encode(shot).decode()}" style="width:100%;height:auto;display:block;border-radius:8px">'
+                h = card_html(art, lesson_name(p), strip_tags(p["idea"]))
+                pg = b.new_page(viewport={"width": 1200, "height": 630})
+                tmp = outdir / f".{k}.html"
+                tmp.write_text(h, encoding="utf-8")
+                pg.goto(tmp.as_uri()); pg.wait_for_timeout(250)
+                pg.screenshot(path=str(outdir / f"{k}.png"))
+                tmp.unlink()
+                pg.close()
+                manifest[k] = digest(jobs[k])
+                print("rendered", k)
+                continue
             if k == "_icon180":
                 pg = b.new_page(viewport={"width": 180, "height": 180})
                 pg.set_content(f'<html><body style="margin:0">{h.replace("<svg ", "<svg width=180 height=180 ", 1)}</body></html>')
@@ -478,9 +557,10 @@ def cards(recs):
                 pg.screenshot(path=str(outdir / f"{k}.png"))
                 tmp.unlink()
             pg.close()
-            manifest[k] = hashlib.sha256(h.encode()).hexdigest()
+            manifest[k] = digest(h)
             print("rendered", k)
         b.close()
+    srv.shutdown()
     manifest_p.write_text(json.dumps(manifest, indent=1, sort_keys=True), encoding="utf-8")
 
 # ----------------------------------------------------------------- main
@@ -495,6 +575,9 @@ def main():
     for path, head in expected_heads().items():
         t = path.read_text(encoding="utf-8")
         path.write_text(set_region(t, "<!-- sam:head -->", "<!-- /sam:head -->", head), encoding="utf-8")
+    for path, strip in expected_midribs().items():
+        t = path.read_text(encoding="utf-8")
+        path.write_text(set_region(t, "<!-- sam:midrib -->", "<!-- /sam:midrib -->", strip), encoding="utf-8")
     (ROOT / "404.html").write_text(page_404(), encoding="utf-8")
     (ROOT / "sitemap.xml").write_text(sitemap(recs), encoding="utf-8")
     if not (ROOT / "robots.txt").exists():

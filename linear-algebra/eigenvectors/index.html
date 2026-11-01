@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en-GB" data-leaf="linear-algebra">
+<!-- සංගතික · Sangathika · SAM. © 2026 Niranga Dharmaratna.
+     Text and illustrations in this file: CC BY-SA 4.0 (see LICENSE-CONTENT).
+     JavaScript and CSS in this file: MIT (see LICENSE).
+     The name සංගතික, the wordmark and the tree mark are reserved (see NOTICES.md). -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- sam:head -->
+<title>Eigenvectors and eigenvalues, visually | Sangathika</title>
+<meta name="description" content="An eigenvector is a direction that a matrix only stretches. Drag the arrow, predict where it lands, then see why.">
+<link rel="canonical" href="https://www.sangathika.com/linear-algebra/eigenvectors/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sangathika">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Eigenvectors and eigenvalues, visually">
+<meta property="og:description" content="An eigenvector is a direction that a matrix only stretches. Drag the arrow, predict where it lands, then see why.">
+<meta property="og:url" content="https://www.sangathika.com/linear-algebra/eigenvectors/">
+<meta property="og:image" content="https://www.sangathika.com/assets/cards/linear-algebra-eigenvectors.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The opening plate of the Eigenvectors and eigenvalues lesson">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LearningResource","name":"Eigenvectors and eigenvalues","description":"An eigenvector is a direction that a matrix only stretches. Drag the arrow, predict where it lands, then see why.","url":"https://www.sangathika.com/linear-algebra/eigenvectors/","inLanguage":"en-GB","learningResourceType":"interactive lesson","educationalLevel":"first-year undergraduate","teaches":[{"@type":"DefinedTerm","name":"eigenvector","url":"https://www.sangathika.com/linear-algebra/#term-eigenvector"},{"@type":"DefinedTerm","name":"eigenvalue","url":"https://www.sangathika.com/linear-algebra/#term-eigenvalue"}],"isPartOf":{"@type":"Course","name":"Linear algebra","url":"https://www.sangathika.com/linear-algebra/"},"position":17,"author":{"@id":"https://www.sangathika.com/about/#author"},"license":"https://creativecommons.org/licenses/by-sa/4.0/","isAccessibleForFree":true,"datePublished":"2026-11-01","dateModified":"2026-11-01","image":"https://www.sangathika.com/assets/cards/linear-algebra-eigenvectors.png","competencyRequired":[{"@type":"DefinedTerm","name":"vectors"},{"@type":"DefinedTerm","name":"linear transformations"},{"@type":"DefinedTerm","name":"determinant"},{"@type":"DefinedTerm","name":"column space and null space"}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Sangathika","item":"https://www.sangathika.com/"},{"@type":"ListItem","position":2,"name":"Linear algebra","item":"https://www.sangathika.com/linear-algebra/"},{"@type":"ListItem","position":3,"name":"Eigenvectors and eigenvalues","item":"https://www.sangathika.com/linear-algebra/eigenvectors/"}]}]}</script>
+<!-- /sam:head -->
+<link rel="preload" href="../../assets/fonts/opensans/OpenSans[wdth,wght].ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="../../assets/fonts/stixtwotext/STIXTwoText[wght].ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="../../assets/sam.css">
+<link rel="stylesheet" href="../../assets/lesson.css">
+<link rel="icon" href="../../assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/icon-180.png">
+<script>try{var t=localStorage.getItem('sam-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script src="../../assets/lesson.js" defer></script>
+<script src="../sam.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<header class="bar">
+  <a class="mark" href="../../"><span class="si" lang="si">සංගතික</span><span class="latin">Sangathika</span></a>
+  <nav aria-label="Site"><a href="../">Linear algebra</a><a href="#check">Check</a><a href="#challenges">Challenges</a><a href="../../about/">About</a><button class="theme" type="button" id="themeBtn" aria-pressed="false">Dark</button></nav>
+</header>
+<main class="lesson">
+<header class="lhero">
+  <div class="hero-text">
+    <p class="eyebrow"><b>SAM</b> · <span class="si" lang="si">සංගතික</span> · Linear algebra · page 17</p>
+    <h1><span class="it">Eigen</span>vectors and <span class="it">eigen</span>values</h1>
+    <p class="idea">An <strong>eigenvector</strong> is a direction that a matrix only stretches.</p>
+    <p class="lede">A matrix moves every arrow in the plane. Almost every arrow gets knocked off its own line. A few special directions stay on their line and are only stretched, shrunk or flipped. Those directions are the eigenvectors, and the number each one is stretched by is its eigenvalue.</p>
+    <p class="prereq">Before you start: <a href="../vectors/">page 1, vectors</a>, especially scaling an arrow. This page also uses three ideas that pages 6, 9 and 13 will teach in full: a matrix as a machine, the determinant, and the null space. Until those lessons are written, the refresher below covers what you need.</p>
+  </div>
+  <figure class="hero-fig" id="plate-17-1">
+    <p class="plate-title"><b>Plate 17.1</b> · The blend</p>
+    <canvas id="heroCv" class="plane" aria-label="Twenty-four arrows on a circle being transformed by a matrix. Two pairs of arrows, drawn in green, keep their direction while the rest turn."></canvas>
+    <div class="ctl">
+      <label for="heroT">Blend from doing nothing to applying <span class="vec">A</span>: <output id="heroTOut">100%</output></label>
+      <div class="row" style="flex-wrap:nowrap">
+        <button class="btn" id="heroPlay" type="button">Pause</button>
+        <input type="range" id="heroT" min="0" max="1" step="0.01" value="1" aria-label="Blend amount">
+      </div>
+    </div>
+    <figcaption class="small" style="margin:0">Twenty-four arrows on the unit circle, moved by <span class="vec">A</span> = <span class="mat"><span>2</span><span>1</span><span>1</span><span>2</span></span>, the matrix this leaf calls <span class="vec">S</span>. The green arrows never leave their line. Every other arrow turns.</figcaption>
+  </figure>
+</header>
+<!-- sam:midrib -->
+<ol class="midrib" aria-label="Lessons in this leaf"><li class="built"><a href="../vectors/" title="Page 1: Vectors" aria-label="Page 1: Vectors">01</a></li><li><span title="Page 2: Span" aria-label="Page 2: Span">02</span></li><li><span title="Page 3: Linear independence" aria-label="Page 3: Linear independence">03</span></li><li><span title="Page 4: Basis and coordinates" aria-label="Page 4: Basis and coordinates">04</span></li><li><span title="Page 5: Dot product" aria-label="Page 5: Dot product">05</span></li><li><span title="Page 6: Matrices as machines" aria-label="Page 6: Matrices as machines">06</span></li><li><span title="Page 7: Matrix times vector" aria-label="Page 7: Matrix times vector">07</span></li><li><span title="Page 8: Composition" aria-label="Page 8: Composition">08</span></li><li><span title="Page 9: Determinant" aria-label="Page 9: Determinant">09</span></li><li><span title="Page 10: Systems Ax = b" aria-label="Page 10: Systems Ax = b">10</span></li><li><span title="Page 11: Inverse" aria-label="Page 11: Inverse">11</span></li><li><span title="Page 12: Elimination" aria-label="Page 12: Elimination">12</span></li><li><span title="Page 13: Column space, null space, rank" aria-label="Page 13: Column space, null space, rank">13</span></li><li><span title="Page 14: Projection onto a subspace" aria-label="Page 14: Projection onto a subspace">14</span></li><li><span title="Page 15: Least squares" aria-label="Page 15: Least squares">15</span></li><li><span title="Page 16: Orthonormal bases and Gram–Schmidt" aria-label="Page 16: Orthonormal bases and Gram–Schmidt">16</span></li><li class="built current"><a href="../eigenvectors/" title="Page 17: Eigenvectors" aria-label="Page 17: Eigenvectors" aria-current="page">17</a></li><li><span title="Page 18: Change of basis and diagonalisation" aria-label="Page 18: Change of basis and diagonalisation">18</span></li><li><span title="Page 19: Symmetric matrices" aria-label="Page 19: Symmetric matrices">19</span></li><li><span title="Page 20: SVD" aria-label="Page 20: SVD">20</span></li></ol>
+<!-- /sam:midrib -->
+
+<section class="warmup" id="warm-up" aria-labelledby="wu-h" data-group data-labels="Right.|Not quite." data-show-right>
+  <p class="eyebrow">Warm-up · <b>from page 1, vectors</b></p>
+  <h2 id="wu-h" style="font-size:1.4rem">Two questions before you start</h2>
+  <div class="quiz">
+<div class="q"><span class="qnum">WARM-UP 1 OF 2</span><p>The arrow (1, 1) is multiplied by −2. Where does the result point?</p><div class="opts"><button class="opt" type="button" data-correct>Along the same line, the opposite way, twice as long</button><button class="opt" type="button">At right angles to (1, 1)</button><button class="opt" type="button">Along the same line, the same way, half as long</button></div><p class="fb" hidden aria-live="polite">Scaling by a negative number reverses the arrow and stretches it by the size of the number. It never leaves its own line, as in <a href="../vectors/#plate-1-6">Plate 1.6 on page 1, vectors</a>.</p></div>
+<div class="q"><span class="qnum">WARM-UP 2 OF 2</span><p>Which of these can knock an arrow off its own line?</p><div class="opts"><button class="opt" type="button">Scaling it by 3</button><button class="opt" type="button">Scaling it by −0.5</button><button class="opt" type="button" data-correct>Adding a second arrow that points another way</button></div><p class="fb" hidden aria-live="polite">Scaling keeps an arrow on its line, whatever the number. Adding an arrow in another direction turns the result, as in <a href="../vectors/#plate-1-5">Plate 1.5 on page 1, vectors</a>. A matrix does both at once. This page asks which arrows it only scales.</p></div>
+  </div>
+  <p class="score" data-score data-empty="Answer both; each takes a few seconds."></p>
+</section>
+
+<details class="refresh">
+  <summary>Refresher: how a matrix moves a vector</summary>
+  <p>Multiplying <span class="vec">A</span> by <span class="vec">v</span> = (<span class="m">x</span>, <span class="m">y</span>) takes <span class="m">x</span> copies of the first column of <span class="vec">A</span> and adds <span class="m">y</span> copies of the second column.</p>
+  <div class="eq"><span class="mat"><span>2</span><span>1</span><span>1</span><span>2</span></span><span class="mat col"><span>1</span><span>0</span></span><span>=</span><span class="mat col"><span>2</span><span>1</span></span><span class="small">&nbsp;the first column</span></div>
+  <div class="eq"><span class="mat"><span>2</span><span>1</span><span>1</span><span>2</span></span><span class="mat col"><span>1</span><span>1</span></span><span>=</span><span class="mat col"><span>3</span><span>3</span></span><span class="small">&nbsp;both columns added</span></div>
+  <p>Look at the second line. The input (1, 1) and the output (3, 3) point the same way. The output is the input, three times longer. Hold on to that; it is the whole idea of this page.</p>
+</details>
+
+<!-- LAYER 1 -->
+<section class="layer" aria-labelledby="l1">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 1 · <b>Principle</b></p>
+    <h2 id="l1">The question a matrix answers</h2>
+  </div>
+  <div class="prose">
+    <p>Treat a matrix <span class="vec">A</span> as a machine. Feed it an arrow <span class="vec cv">v</span> and it hands back a new arrow <span class="vec ca">Av</span>. For a typical input the output points somewhere new: it has been turned as well as resized.</p>
+    <p>So ask one question. <strong>Are there directions that the machine does not turn?</strong> For those directions the output lands on the same line as the input. The machine can stretch it, shrink it, or flip it through the origin, but it stays on that line.</p>
+    <p>Those directions are the eigenvectors. <em>Eigen</em> is German for "own": an eigenvector is a direction the matrix keeps as its own. Older books call them characteristic vectors. Find them yourself before reading any algebra.</p>
+  </div>
+
+  <div class="plate" id="plate-17-2">
+    <p class="plate-title"><b>Plate 17.2</b> · Hunt the directions</p>
+    <div class="pgrid">
+      <div class="side-col">
+        <canvas id="huCv" class="plane" aria-label="Drag on the grid to set the crimson input vector. The grey-blue output vector is A times v. A dashed line runs through v."></canvas>
+        <div class="ctl">
+          <label for="huAng">Direction of <span class="vec">v</span>: <output id="huAngOut">20°</output></label>
+          <input type="range" id="huAng" min="0" max="359" step="1" value="20">
+        </div>
+      </div>
+      <div class="side-col">
+        <p style="margin:0">Drag anywhere on the grid, or use the slider, to point <span class="vec cv">v</span> in a new direction. The grey-blue arrow is <span class="vec ca">Av</span>, with <span class="vec">A</span> = <span class="mat"><span>2</span><span>1</span><span>1</span><span>2</span></span>, the matrix this leaf calls <span class="vec">S</span>. Your job: find every direction where the grey-blue arrow lands on the dashed line through <span class="vec cv">v</span>. There are two.</p>
+        <ul class="key">
+          <li><span class="sw v"></span>input <span class="vec">v</span></li>
+          <li><span class="sw a"></span>output <span class="vec">Av</span></li>
+          <li><span class="sw l"></span>line through <span class="vec">v</span></li>
+          <li><span class="sw e"></span>eigen-direction</li>
+        </ul>
+        <dl class="ro">
+          <dt><span class="vec">v</span></dt><dd id="huV"></dd>
+          <dt><span class="vec">Av</span></dt><dd id="huAv"></dd>
+          <dt>Off the line by</dt><dd id="huDev"></dd>
+          <dt>Directions found</dt><dd id="huFound">0 of 2</dd>
+        </dl>
+        <p class="status" id="huStatus" aria-live="polite"></p>
+        <div class="row"><button class="btn" id="huReveal" type="button">Show both directions</button></div>
+      </div>
+    </div>
+    <div class="side-col">
+      <canvas id="huCurve" class="strip" aria-label="Graph of how far Av sits off the line of v, for every direction from 0 to 180 degrees."></canvas>
+      <p class="small" style="margin:0">The same search, done for every direction at once. The curve shows how many degrees <span class="vec">Av</span> sits off the line of <span class="vec">v</span> as <span class="vec">v</span> sweeps from 0° to 180°. It only needs half a turn, because the directions at θ and θ + 180° lie on the same line. Wherever the curve crosses zero, you have an eigen-direction.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LAYER 2 -->
+<section class="layer" aria-labelledby="l2">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 2 · <b>Statement</b></p>
+    <h2 id="l2">Writing it down</h2>
+  </div>
+  <div class="prose">
+    <p>"The output lands on the same line as the input" means the output is the input times some number. Call that number <span class="m">λ</span> (lambda). Then the whole idea is one equation:</p>
+  </div>
+  <div class="eq big" aria-label="A v equals lambda v"><span class="vec">A</span><span class="vec cv">v</span><span>=</span><span class="m">λ</span><span class="vec cv">v</span></div>
+  <div class="prose">
+    <p>Read it left to right: applying the matrix to <span class="vec">v</span> gives the same result as multiplying <span class="vec">v</span> by a plain number. A nonzero <span class="vec">v</span> that satisfies it is an <strong>eigenvector</strong>, and its <span class="m">λ</span> is the matching <strong>eigenvalue</strong>. In Plate 17.2 you found <span class="m">λ</span> = 3 along (1, 1) and <span class="m">λ</span> = 1 along (1, −1).</p>
+    <p>The eigenvalue tells you what happens along that direction:</p>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Eigenvalue</th><th>What happens to the arrow</th></tr></thead>
+      <tbody>
+        <tr><td class="m">λ &gt; 1</td><td>stretched, same way round</td></tr>
+        <tr><td class="m">λ = 1</td><td>left exactly as it was</td></tr>
+        <tr><td class="m">0 &lt; λ &lt; 1</td><td>shrunk, same way round</td></tr>
+        <tr><td class="m">λ = 0</td><td>crushed to the origin</td></tr>
+        <tr><td class="m">λ &lt; 0</td><td>flipped through the origin, then scaled by |<span class="m">λ</span>|; still on the same line</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="prose">
+    <p><strong>An eigenvector is really a direction.</strong> If <span class="vec">v</span> works, so does 5<span class="vec">v</span> or −0.2<span class="vec">v</span>, with the same <span class="m">λ</span>, because <span class="vec">A</span>(5<span class="vec">v</span>) = 5<span class="vec">Av</span> = 5<span class="m">λ</span><span class="vec">v</span> = <span class="m">λ</span>(5<span class="vec">v</span>). That is why we draw eigenvectors as whole lines.</p>
+    <p><strong>The zero vector does not count.</strong> <span class="vec">A</span>0 = <span class="m">λ</span>0 holds for every matrix and every <span class="m">λ</span>, so it tells you nothing. The definition asks for <span class="vec">v</span> ≠ 0.</p>
+  </div>
+</section>
+
+<!-- LAYER 3 -->
+<section class="layer" aria-labelledby="l3">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 3 · <b>Application</b></p>
+    <h2 id="l3">What survives repetition</h2>
+  </div>
+  <div class="prose">
+    <p>Eigenvectors matter most when a matrix is applied over and over. A good model of that is a population moving between two places, year after year.</p>
+    <p>Two towns hold 30 000 people between them, and the total never changes. Each year 10% of Town A's people move to Town B, and 20% of Town B's people move to Town A. If <span class="m">x</span> and <span class="m">y</span> are this year's shares, next year's shares are</p>
+  </div>
+  <div class="eq"><span class="mat col"><span><span class="m">x</span>′</span><span><span class="m">y</span>′</span></span><span>=</span><span class="mat"><span>0.9</span><span>0.2</span><span>0.1</span><span>0.8</span></span><span class="mat col"><span class="m">x</span><span class="m">y</span></span></div>
+  <div class="prose">
+    <p>Each column says where one town's people go: the first column is Town A (90% stay, 10% leave), the second is Town B (20% leave, 80% stay). Now check two directions by plain multiplication, using only Layer 2:</p>
+  </div>
+  <div class="worked">
+    <p><span class="vec">M</span>(2, 1) = (1.8 + 0.2, 0.2 + 0.8) = (2, 1). <span class="check">An eigenvector with λ = 1:</span> a two-to-one split reproduces itself exactly.</p>
+    <p><span class="vec">M</span>(1, −1) = (0.9 − 0.2, 0.1 − 0.8) = (0.7, −0.7) = 0.7(1, −1). <span class="check">An eigenvector with λ = 0.7:</span> moving people from one town to the other is a "gap" that keeps 70% of its size each year.</p>
+  </div>
+
+  <div class="plate" id="plate-17-3">
+    <p class="plate-title"><b>Plate 17.3</b> · Run the years</p>
+    <div class="pgrid">
+      <div class="side-col">
+        <canvas id="itCv" class="plane" aria-label="Plane with Town A share on the horizontal axis and Town B share on the vertical axis. Each year's split is a dot on the line x plus y equals 1, drifting toward the green eigen-line."></canvas>
+        <ul class="key">
+          <li><span class="sw v"></span>starting split</li>
+          <li><span class="sw a"></span>split after each year</li>
+          <li><span class="sw e"></span>λ = 1 direction (2, 1)</li>
+        </ul>
+      </div>
+      <div class="side-col">
+        <div class="ctl">
+          <label for="itStart">Starting share living in Town A: <output id="itStartOut">10%</output></label>
+          <input type="range" id="itStart" min="0" max="100" step="1" value="10">
+        </div>
+        <div class="row">
+          <button class="btn primary" id="itStep" type="button">Next year</button>
+          <button class="btn" id="itRun" type="button">Run 25 years</button>
+          <button class="btn" id="itReset" type="button">Reset</button>
+        </div>
+        <p class="status on" id="itNow" aria-live="polite" style="margin:0"></p>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Year</th><th class="num">Town A</th><th class="num">Gap from 66.7%</th><th class="num">Gap ÷ last year's</th></tr></thead>
+            <tbody id="itRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <canvas id="itChart" class="strip" aria-label="Line chart of Town A's share by year, levelling off at 66.7 percent."></canvas>
+    <p class="small" style="margin:0">Whatever start you choose, Town A's share heads for 66.7%, and the last column settles on 0.700. That number is the second eigenvalue, showing up in the data.</p>
+  </div>
+
+  <div class="prose">
+    <h3>Why every start ends at two-thirds</h3>
+    <p>Write the starting split as a mix of the two eigenvectors. For a start of (<span class="m">s</span>, 1 − <span class="m">s</span>) the mix is always</p>
+  </div>
+  <div class="eq"><span>(<span class="m">s</span>, 1 − <span class="m">s</span>)</span><span>=</span><span>⅓ (2, 1)</span><span>+</span><span><span class="m">c</span> (1, −1),</span><span class="small">&nbsp; with <span class="m">c</span> = <span class="m">s</span> − ⅔</span></div>
+  <div class="prose">
+    <p>Each year multiplies each part by its own eigenvalue, so after <span class="m">k</span> years the split is ⅓(2, 1) + <span class="m">c</span> · 0.7<sup><span class="m">k</span></sup> (1, −1). The first part is multiplied by 1 forever and never changes. The second part shrinks by 30% every year and fades away. For your current start, <span id="itMix" class="mono"></span>.</p>
+    <p>This is the general lesson. Apply a matrix many times and the direction with the largest |<span class="m">λ</span>| takes over, because its eigenvalue raised to a high power swamps all the others. Google's original PageRank used exactly this to rank web pages as a long-run share of visits, and numerical software uses it to find the largest eigenvalue of matrices far too big to solve by hand: start anywhere and keep multiplying.</p>
+  </div>
+</section>
+
+<!-- LAYER 4 -->
+<section class="layer" aria-labelledby="l4">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 4 · <b>Specifics</b></p>
+    <h2 id="l4">Finding them by hand</h2>
+  </div>
+  <div class="prose">
+    <p>Hunting with a slider works for one matrix. To find eigenvectors for any 2 × 2 matrix <span class="vec">A</span> = <span class="mat"><span class="m">a</span><span class="m">b</span><span class="m">c</span><span class="m">d</span></span>, turn the equation into something you can solve.</p>
+  </div>
+  <ol class="steps">
+    <li><div>
+      <p><strong>Gather everything on one side.</strong> <span class="vec">Av</span> = <span class="m">λ</span><span class="vec">v</span> is the same as <span class="vec">Av</span> − <span class="m">λ</span><span class="vec">v</span> = 0. To factor out <span class="vec">v</span> both terms need a matrix in front, so write <span class="m">λ</span><span class="vec">v</span> as <span class="m">λ</span><span class="vec">Iv</span>, where <span class="vec">I</span> is the identity matrix:</p>
+      <div class="eq">(<span class="vec">A</span> − <span class="m">λ</span><span class="vec">I</span>)<span class="vec">v</span> = 0</div>
+    </div></li>
+    <li><div>
+      <p><strong>Ask when a nonzero v can solve it.</strong> <span class="vec">A</span> − <span class="m">λ</span><span class="vec">I</span> is just another matrix. If it sends a nonzero <span class="vec">v</span> to 0, it crushes that whole line to a point, which flattens the plane onto a line. A flattened plane has zero area, and the determinant is exactly the factor by which a matrix scales area. So the condition is</p>
+      <div class="eq">det(<span class="vec">A</span> − <span class="m">λ</span><span class="vec">I</span>) = 0</div>
+    </div></li>
+    <li><div>
+      <p><strong>Expand the determinant.</strong> Subtracting <span class="m">λ</span> from the diagonal and using det = (top-left)(bottom-right) − (top-right)(bottom-left):</p>
+      <div class="eq">(<span class="m">a</span> − <span class="m">λ</span>)(<span class="m">d</span> − <span class="m">λ</span>) − <span class="m">bc</span> = <span class="m">λ</span>² − (<span class="m">a</span> + <span class="m">d</span>)<span class="m">λ</span> + (<span class="m">ad</span> − <span class="m">bc</span>) = 0</div>
+      <p>This is the <strong>characteristic equation</strong>. Its middle coefficient is the trace <span class="m">a</span> + <span class="m">d</span> and its last term is det <span class="vec">A</span>, so it reads <span class="m">λ</span>² − (trace)<span class="m">λ</span> + det = 0. Solve it like any quadratic. A useful check: the two eigenvalues add up to the trace and multiply to the determinant.</p>
+    </div></li>
+    <li><div>
+      <p><strong>Go back for each direction.</strong> For each <span class="m">λ</span>, solve (<span class="vec">A</span> − <span class="m">λ</span><span class="vec">I</span>)<span class="vec">v</span> = 0. The two rows of that system say the same thing, so one row is enough to fix the direction.</p>
+    </div></li>
+  </ol>
+  <div class="worked">
+    <p class="plate-title"><b>Worked example</b> · the matrix from Plate 17.2</p>
+    <p><span class="vec">A</span> = <span class="mat"><span>2</span><span>1</span><span>1</span><span>2</span></span>: trace 4, determinant 2·2 − 1·1 = 3.</p>
+    <p>Characteristic equation: <span class="m">λ</span>² − 4<span class="m">λ</span> + 3 = 0, which factors as (<span class="m">λ</span> − 3)(<span class="m">λ</span> − 1) = 0. So <span class="m">λ</span> = 3 or <span class="m">λ</span> = 1. Check: 3 + 1 = 4 is the trace and 3 × 1 = 3 is the determinant.</p>
+    <p>For <span class="m">λ</span> = 3: <span class="vec">A</span> − 3<span class="vec">I</span> = <span class="mat"><span>−1</span><span>1</span><span>1</span><span>−1</span></span>. The first row says −<span class="m">x</span> + <span class="m">y</span> = 0, so <span class="m">y</span> = <span class="m">x</span> and <span class="vec">v</span> = (1, 1). <span class="check">Check: A(1, 1) = (3, 3) = 3(1, 1).</span></p>
+    <p>For <span class="m">λ</span> = 1: <span class="vec">A</span> − <span class="vec">I</span> = <span class="mat"><span>1</span><span>1</span><span>1</span><span>1</span></span>. The first row says <span class="m">x</span> + <span class="m">y</span> = 0, so <span class="vec">v</span> = (1, −1). <span class="check">Check: A(1, −1) = (1, −1).</span></p>
+    <p>The discriminant (trace)² − 4·det decides how many directions to expect. Positive: two real eigenvalues and two directions. Zero: one repeated eigenvalue, which can give one direction or every direction. Negative: no real eigenvalues, so no direction survives. The lab below has an example of each.</p>
+  </div>
+  <div class="incode">
+    <p>The four steps, as code. This leaf's library, <a href="../sam.js">sam.js</a>, gains one function on this page, <code>eigen</code>, built on <code>det</code> and <code>apply</code>:</p>
+<pre><code>const S = [2, 1, 1, 2];        // rows (2, 1) and (1, 2)
+eigen(S).pairs                 // λ = 3 along (0.71, 0.71), λ = 1 along (0.71, −0.71)
+apply(S, vec(1, 1))            // [3, 3]: the same line, three times longer
+eigen([1, 1, 0, 1]).kind       // 'one': the shear H keeps a single direction</code></pre>
+  </div>
+</section>
+
+<!-- LAYER 5 -->
+<section class="layer" aria-labelledby="l5">
+  <div class="layer-head">
+    <p class="eyebrow">Layer 5 · <b>Exploration</b></p>
+    <h2 id="l5">Every kind of 2 × 2 matrix</h2>
+  </div>
+  <div class="prose">
+    <p>Pick a preset or type your own entries. <span class="vec">S</span>, <span class="vec">H</span> and <span class="vec">P</span> are the matrices this leaf returns to again and again. The tinted grid is the plane after the matrix has moved it, and the shaded shape is where the unit square lands. Green lines are eigen-directions; the solid green arrow is where the unit eigenvector ends up. Drag the blend slider and watch the plane bend around the green lines while they stay put.</p>
+  </div>
+  <div class="plate" id="plate-17-4">
+    <p class="plate-title"><b>Plate 17.4</b> · Matrix lab</p>
+    <div class="row" id="lbPresets" role="group" aria-label="Preset matrices"><button class="tog" type="button" data-a="2,1,1,2">S: symmetric stretch</button><button class="tog" type="button" data-a="3,0,0,0.5">Stretch along axes</button><button class="tog" type="button" data-a="1,1,2,0">Stretch and flip</button><button class="tog" type="button" data-a="0,1,1,0">Mirror in y = x</button><button class="tog" type="button" data-a="1,1,0,1">H: shear</button><button class="tog" type="button" data-a="1,0,0,0">P: squash onto the x-axis</button><button class="tog" type="button" data-a="0.866,-0.5,0.5,0.866">Rotate 30°</button><button class="tog" type="button" data-a="2,0,0,2">Scale by 2</button></div>
+    <div class="pgrid">
+      <div class="side-col">
+        <canvas id="lbCv" class="plane" aria-label="Transformed grid of the chosen matrix with its eigen-directions drawn in green."></canvas>
+        <div class="ctl">
+          <label for="lbT">Blend from doing nothing to applying <span class="vec">A</span>: <output id="lbTOut">100%</output></label>
+          <input type="range" id="lbT" min="0" max="1" step="0.01" value="1">
+        </div>
+      </div>
+      <div class="side-col">
+        <div class="row" style="gap:.8rem"><span class="vec" style="font-size:1.4rem">A</span><span style="font-family:var(--f-display);font-size:1.4rem">=</span>
+          <div class="matin" role="group" aria-label="Matrix entries">
+            <input id="a11" type="number" step="0.1" aria-label="Row 1, column 1" value="2">
+            <input id="a12" type="number" step="0.1" aria-label="Row 1, column 2" value="1">
+            <input id="a21" type="number" step="0.1" aria-label="Row 2, column 1" value="1">
+            <input id="a22" type="number" step="0.1" aria-label="Row 2, column 2" value="2">
+          </div>
+        </div>
+        <dl class="ro">
+          <dt>Trace</dt><dd id="lbTr"></dd>
+          <dt>Determinant</dt><dd id="lbDet"></dd>
+          <dt>Equation</dt><dd id="lbChar"></dd>
+          <dt>Discriminant</dt><dd id="lbDisc"></dd>
+          <dt>Eigenvalues</dt><dd id="lbVals"></dd>
+          <dt>Directions</dt><dd id="lbVecs"></dd>
+        </dl>
+        <p class="verdict" id="lbVerdict" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="layer" id="check" aria-labelledby="check-h" data-group data-labels="Right.|Not this one." data-show-right>
+  <div class="layer-head">
+    <p class="eyebrow">Layer 6 · <b>Check</b></p>
+    <h2 id="check-h">Check your understanding</h2>
+    <p class="score" data-score data-empty="Answer each one; the explanation appears after your choice."></p>
+  </div>
+  <div class="quiz">
+<div class="q"><span class="qnum">QUESTION 1 OF 6</span><p><span class="vec">R</span> turns every vector 90° anticlockwise. How many real eigen-directions does <span class="vec">R</span> have?</p><div class="opts"><button class="opt" type="button">Two</button><button class="opt" type="button">One</button><button class="opt" type="button" data-correct>None</button><button class="opt" type="button">Every direction</button></div><p class="fb" hidden aria-live="polite">Every arrow ends up at right angles to where it started, so no arrow lands on its own line. The algebra agrees: <span class="vec">R</span> has trace 0 and determinant 1, so λ² + 1 = 0, which has no real solution.</p></div>
+<div class="q"><span class="qnum">QUESTION 2 OF 6</span><p>You find that <span class="vec">Av</span> = −2<span class="vec">v</span>. Is <span class="vec">v</span> an eigenvector?</p><div class="opts"><button class="opt" type="button">No, because Av points the other way</button><button class="opt" type="button" data-correct>Yes, with λ = −2</button><button class="opt" type="button">Only if v has length 2</button></div><p class="fb" hidden aria-live="polite">Pointing backwards is still pointing along the same line. The arrow is flipped through the origin and doubled, which is exactly λ = −2.</p></div>
+<div class="q"><span class="qnum">QUESTION 3 OF 6</span><p>(1, 1) is an eigenvector of <span class="vec">A</span> with λ = 3. What about (5, 5)?</p><div class="opts"><button class="opt" type="button" data-correct>An eigenvector with λ = 3</button><button class="opt" type="button">An eigenvector with λ = 15</button><button class="opt" type="button">Not an eigenvector</button></div><p class="fb" hidden aria-live="polite"><span class="vec">A</span>(5<span class="vec">v</span>) = 5<span class="vec">Av</span> = 5·3<span class="vec">v</span> = 3(5<span class="vec">v</span>). Same line, same λ. An eigenvalue belongs to a direction, so the length of the arrow makes no difference.</p></div>
+<div class="q"><span class="qnum">QUESTION 4 OF 6</span><p>The shear <span class="vec">H</span>, with rows (1, 1) and (0, 1), slides each point sideways by its height. How many separate eigen-directions does it have?</p><div class="opts"><button class="opt" type="button" data-correct>One, the horizontal axis</button><button class="opt" type="button">Two</button><button class="opt" type="button">None</button></div><p class="fb" hidden aria-live="polite">The characteristic equation is (λ − 1)² = 0, so λ = 1 twice. But (<span class="vec">H</span> − <span class="vec">I</span>)<span class="vec">v</span> = 0 reduces to <span class="m">y</span> = 0, which allows only the horizontal line. A repeated eigenvalue does not promise two directions.</p></div>
+<div class="q"><span class="qnum">QUESTION 5 OF 6</span><p><span class="vec">A</span> has eigenvalues 0.5 and 2. You apply <span class="vec">A</span> twenty times to a typical vector. Which way does the result point?</p><div class="opts"><button class="opt" type="button" data-correct>Along the λ = 2 direction</button><button class="opt" type="button">Along the λ = 0.5 direction</button><button class="opt" type="button">Back where it started</button></div><p class="fb" hidden aria-live="polite">2²⁰ is about a million and 0.5²⁰ is about one in a million. The λ = 2 part swamps the other one, so the vector swings onto the λ = 2 line. This is the Plate 17.3 effect.</p></div>
+<div class="q"><span class="qnum">QUESTION 6 OF 6</span><p>det(<span class="vec">A</span>) = 0. What does that guarantee about the eigenvalues of <span class="vec">A</span>?</p><div class="opts"><button class="opt" type="button" data-correct>λ = 0 is one of them</button><button class="opt" type="button">A has no eigenvalues</button><button class="opt" type="button">Both eigenvalues are 1</button></div><p class="fb" hidden aria-live="polite">Put λ = 0 into the characteristic equation: det(<span class="vec">A</span> − 0·<span class="vec">I</span>) = det(<span class="vec">A</span>) = 0. So λ = 0 is a solution, and some direction is crushed to the origin. The eigenvalues also multiply to det(<span class="vec">A</span>), which must then be 0.</p></div>
+  </div>
+</section>
+
+<section class="layer challenges" id="challenges" aria-labelledby="ch-h">
+  <div class="layer-head">
+    <p class="eyebrow">Challenges · <b>Seed, Branch and Canopy</b></p>
+    <h2 id="ch-h">Three challenges</h2>
+    <p class="small" style="margin:0">Each challenge declares its level. Commit an answer before the solution opens. Hints open one at a time.</p>
+  </div>
+<article class="challenge" id="challenge-17-1" data-level="seed" data-mode="set" data-answer="5, 3">
+  <div class="chead"><span class="chip seed">Seed</span><h3>Shift the matrix</h3></div>
+  <p class="needs">Needs: this page (the equation <span class="vec">Av</span> = λ<span class="vec">v</span>).</p>
+  <p><span class="vec">S</span> has eigenvalues 3 and 1, along (1, 1) and (1, −1). Without solving any new equation, what are the two eigenvalues of <span class="vec">S</span> + 2<span class="vec">I</span>, where <span class="vec">I</span> is the identity matrix?</p>
+  <form class="commit"><label>Both eigenvalues<input name="a" type="text" inputmode="decimal" autocomplete="off"></label><button class="btn primary" type="submit">Commit my answer</button></form>
+  <p class="result" hidden aria-live="polite"></p>
+  <div class="hints"><details class="hint"><summary>Hint 1</summary><p>Use the definition, not the characteristic equation: what does <span class="vec">S</span> + 2<span class="vec">I</span> do to the arrow (1, 1)?</p></details><details class="hint"><summary>Hint 2</summary><p>(<span class="vec">S</span> + 2<span class="vec">I</span>)<span class="vec">v</span> = <span class="vec">Sv</span> + 2<span class="vec">v</span>. If <span class="vec">Sv</span> = λ<span class="vec">v</span>, what is <span class="vec">Sv</span> + 2<span class="vec">v</span>?</p></details><details class="hint"><summary>Hint 3</summary><p>Each eigenvalue moves by the same amount, and the directions do not change at all.</p></details></div>
+  <p class="hint-count">Hints used: 0 of 3</p>
+  <details class="solution" hidden><summary>Solution</summary><p>If <span class="vec">Sv</span> = λ<span class="vec">v</span>, then (<span class="vec">S</span> + 2<span class="vec">I</span>)<span class="vec">v</span> = <span class="vec">Sv</span> + 2<span class="vec">v</span> = λ<span class="vec">v</span> + 2<span class="vec">v</span> = (λ + 2)<span class="vec">v</span>. So <span class="vec">v</span> is still an eigenvector, and its eigenvalue rises by 2. The eigenvalues of <span class="vec">S</span> + 2<span class="vec">I</span> are <strong>5 and 3</strong>, along the same directions (1, 1) and (1, −1).</p><p>Check with the characteristic equation: <span class="vec">S</span> + 2<span class="vec">I</span> has rows (4, 1) and (1, 4), so its trace is 8 and its determinant is 16 − 1 = 15. And indeed 5 + 3 = 8 and 5 × 3 = 15.</p></details>
+</article>
+<article class="challenge" id="challenge-17-2" data-level="branch" data-mode="set" data-answer="9, 1">
+  <div class="chead"><span class="chip branch">Branch</span><h3>Apply it twice</h3></div>
+  <p class="needs">Needs: this page, and scaling from page 1.</p>
+  <p>Without multiplying any matrices, find both eigenvalues of <span class="vec">S</span>², which means applying <span class="vec">S</span> twice. Then say what <span class="vec">S</span>¹⁰ does to the arrow (1, −1).</p>
+  <form class="commit"><label>The two eigenvalues of S²<input name="a" type="text" inputmode="decimal" autocomplete="off"></label><button class="btn primary" type="submit">Commit my answer</button></form>
+  <p class="result" hidden aria-live="polite"></p>
+  <div class="hints"><details class="hint"><summary>Hint 1</summary><p>Apply <span class="vec">S</span> to (1, 1), then apply <span class="vec">S</span> again to the result.</p></details><details class="hint"><summary>Hint 2</summary><p><span class="vec">S</span>(<span class="vec">Sv</span>) = <span class="vec">S</span>(λ<span class="vec">v</span>) = λ(<span class="vec">Sv</span>). Keep going one more step.</p></details><details class="hint"><summary>Hint 3</summary><p>Along (1, −1), λ = 1. What is 1 raised to any power?</p></details></div>
+  <p class="hint-count">Hints used: 0 of 3</p>
+  <details class="solution" hidden><summary>Solution</summary><p><span class="vec">S</span>(<span class="vec">Sv</span>) = <span class="vec">S</span>(λ<span class="vec">v</span>) = λ<span class="vec">Sv</span> = λ²<span class="vec">v</span>. So <span class="vec">S</span>² has the same eigenvectors as <span class="vec">S</span>, with each eigenvalue squared: <strong>9 along (1, 1) and 1 along (1, −1)</strong>.</p><p>In the same way <span class="vec">S</span>¹⁰ multiplies (1, 1) by 3¹⁰ = 59 049 and leaves (1, −1) exactly where it is, because 1¹⁰ = 1. Powers of a matrix are easy once you know its eigenvectors. Page 18 builds on exactly this.</p></details>
+</article>
+<article class="challenge" id="challenge-17-3" data-level="canopy" data-mode="text">
+  <div class="chead"><span class="chip canopy">Canopy</span><h3>Any two towns</h3></div>
+  <p class="needs">Needs: this page, Plate 17.3; it meets the Probability leaf, where the two towns return as a Markov chain.</p>
+  <p>Change the rules of Plate 17.3. Each year a share <span class="m">p</span> of Town A's people move to Town B, and a share <span class="m">q</span> of Town B's people move to Town A, with <span class="m">p</span> and <span class="m">q</span> between 0 and 1. In terms of <span class="m">p</span> and <span class="m">q</span>, find the long-run share of people in Town A, and the number the gap shrinks by each year. Check your answer against <span class="m">p</span> = 0.1 and <span class="m">q</span> = 0.2.</p>
+  <form class="commit"><label>Your answer: two formulas and a sentence of reasoning<textarea name="a" rows="3"></textarea></label><button class="btn primary" type="submit">Commit my answer</button></form>
+  <p class="result" hidden aria-live="polite"></p>
+  <div class="hints"><details class="hint"><summary>Hint 1</summary><p>Write the matrix first. The first column is where Town A's people go: (1 − <span class="m">p</span>, <span class="m">p</span>). The second is where Town B's people go: (<span class="m">q</span>, 1 − <span class="m">q</span>).</p></details><details class="hint"><summary>Hint 2</summary><p>A long-run split does not change from year to year, so it is an eigenvector with λ = 1. Solve (1 − <span class="m">p</span>)<span class="m">x</span> + <span class="m">qy</span> = <span class="m">x</span>.</p></details><details class="hint"><summary>Hint 3</summary><p>The two eigenvalues add up to the trace, 2 − <span class="m">p</span> − <span class="m">q</span>. One of them is 1.</p></details></div>
+  <p class="hint-count">Hints used: 0 of 3</p>
+  <details class="solution" hidden><summary>Solution</summary><p>The matrix has rows (1 − <span class="m">p</span>, <span class="m">q</span>) and (<span class="m">p</span>, 1 − <span class="m">q</span>). A steady split satisfies (1 − <span class="m">p</span>)<span class="m">x</span> + <span class="m">qy</span> = <span class="m">x</span>, so <span class="m">px</span> = <span class="m">qy</span>, and the split points along (<span class="m">q</span>, <span class="m">p</span>). As a share of everyone, Town A holds <strong><span class="m">q</span> / (<span class="m">p</span> + <span class="m">q</span>)</strong>.</p><p>The eigenvalues add up to the trace, 2 − <span class="m">p</span> − <span class="m">q</span>, and one of them is 1, so the other is <strong>1 − <span class="m">p</span> − <span class="m">q</span></strong>: the gap shrinks by that factor every year. With <span class="m">p</span> = 0.1 and <span class="m">q</span> = 0.2, Town A holds 0.2 / 0.3, which is two-thirds, and the gap shrinks by 0.7, exactly as Plate 17.3 showed.</p><p>Each column adds up to 1, because nobody leaves the two towns. A matrix like this describes a Markov chain, the object the Probability leaf studies, and λ = 1 is always one of its eigenvalues.</p></details>
+</article>
+</section>
+
+<section class="layer" aria-labelledby="l7">
+  <div class="layer-head">
+    <p class="eyebrow">Recap</p>
+    <h2 id="l7">The page in four sentences</h2>
+  </div>
+  <div class="prose">
+    <p>A matrix turns most directions, and the directions it does not turn are its eigenvectors, each with an eigenvalue <span class="m">λ</span> that says how much it is stretched, shrunk or flipped. The equation <span class="vec">Av</span> = <span class="m">λ</span><span class="vec">v</span> says exactly this, for nonzero <span class="vec">v</span>. You find the eigenvalues from det(<span class="vec">A</span> − <span class="m">λ</span><span class="vec">I</span>) = 0 and then the directions from (<span class="vec">A</span> − <span class="m">λ</span><span class="vec">I</span>)<span class="vec">v</span> = 0. When a matrix is applied again and again, the direction with the largest |<span class="m">λ</span>| wins.</p>
+  </div>
+</section>
+
+<section class="next" id="next" aria-label="Next lesson">
+  <p class="eyebrow">Next · <b>page 18, change of basis and diagonalisation</b></p>
+  <p>Plate 17.3 left a number unexplained: the gap between the towns shrinks by exactly 0.7 every year. The next lesson reads a matrix in the language of its own eigenvectors, where that number explains itself.</p>
+  <p class="exit">Why does the gap shrink by exactly 0.7 every year, and what does that make easy about applying the matrix many times?</p>
+  <p class="small">Page 18 is still being written.</p>
+</section>
+
+<section aria-label="For the teacher">
+<details class="notes" id="teacher">
+  <summary>For the teacher: how this page is sequenced</summary>
+  <p>The page finds eigenvectors by eye before it names them, and keeps the same matrix, <span class="vec">S</span>, from the opening figure to the worked example, so that each layer re-reads one familiar object.</p>
+  <ol>
+    <li><strong>Need before name.</strong> Plate 17.1 shows almost every arrow turning and two lines that do not. The question "which directions survive?" exists before the word eigenvector does.</li>
+    <li><strong>Act before read.</strong> Plate 17.2 asks the learner to hunt the two directions by dragging, with a curve that turns the hunt into a picture of every direction at once.</li>
+    <li><strong>Misconceptions cleared.</strong> An eigenvector is a direction, not one arrow; the zero vector does not count; a negative λ flips but stays on the line; a repeated eigenvalue does not promise two directions (the shear <span class="vec">H</span>, quiz question 4).</li>
+    <li><strong>Application before procedure.</strong> Plate 17.3 shows an eigenvalue in data, the 0.700 ratio, before Layer 4 shows how to compute one. Page 18 explains the ratio.</li>
+    <li><strong>Exploration last.</strong> Plate 17.4 covers every case of a 2 × 2 matrix, including the house matrices <span class="vec">S</span>, <span class="vec">H</span> and <span class="vec">P</span>.</li>
+    <li><strong>Interim links.</strong> Until pages 9, 13 and 16 are written, the warm-up draws on page 1 and Layer 4 gives its own short argument for the determinant. When those pages exist, the warm-up moves to pages 13 and 16, and Layer 4 points back to the determinant and the null space.</li>
+    <li><strong>Challenges.</strong> Seed 17.1 is hard because it must be done from <span class="vec">Av</span> = λ<span class="vec">v</span> alone, without the characteristic equation the page has just taught. Branch 17.2 is hard because it extends the definition to repeated application: the learner must see that the directions survive and only the numbers change. Canopy 17.3 is a meeting point with the Probability leaf: the learner builds the matrix from words, recognises the steady state as the λ = 1 eigenvector, and uses the trace to find the other eigenvalue without solving.</li>
+    <li><strong>Plate 17.1, purpose.</strong> A matrix turns most directions; the green lines are the ones it only stretches. The rest of the page is the study of those lines.</li>
+  </ol>
+</details>
+</section>
+</main>
+<footer class="site">
+  <p>© 2026 Niranga Dharmaratna. Text and illustrations CC BY-SA 4.0; code MIT. <span class="si" lang="si">සංගතික</span> and its marks are reserved. <a href="../../about/">About Sangathika</a>.</p>
+</footer>
+</div>
+<script>
+/* Plates 17.1 to 17.4. Drawing code for this page only; shared behaviour is in assets/lesson.js. */
+document.addEventListener('DOMContentLoaded', () => {
+const $ = s => document.querySelector(s);
+const root = document.documentElement;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- shared maths ---------- */
+const ap = (A, x, y) => apply(A, [x, y]);   /* the library rule; page 6 introduces it */
+const unit = v => { const L = Math.hypot(v[0], v[1]); return [v[0]/L, v[1]/L]; };
+function fmt(x, dp = 3){ if (!isFinite(x)) return 'n/a'; if (Math.abs(x) < 1e-9) x = 0; return String(+x.toFixed(dp)).replace('-', '−'); }
+function niceDir(v){
+  let [x, y] = v;
+  const ax = Math.abs(x), ay = Math.abs(y);
+  const mn = Math.min(ax > 1e-9 ? ax : Infinity, ay > 1e-9 ? ay : Infinity);
+  let s = [x/mn, y/mn];
+  const isInt = s.every(t => Math.abs(t - Math.round(t)) < 1e-6) && Math.max(Math.abs(s[0]), Math.abs(s[1])) <= 12;
+  if (!isInt){ const mx = Math.max(ax, ay); s = [x/mx, y/mx]; }
+  if (s[0] < -1e-9 || (Math.abs(s[0]) < 1e-9 && s[1] < 0)) s = [-s[0], -s[1]];
+  return '(' + fmt(s[0]) + ', ' + fmt(s[1]) + ')';
+}
+/* eigen() comes from this leaf's library, sam.js (page 17) */
+
+/* ---------- canvas helpers ---------- */
+function colors(){
+  const s = getComputedStyle(root), g = n => s.getPropertyValue(n).trim();
+  return {ink:g('--ink'), muted:g('--muted'), rule:g('--rule'), grid:g('--grid'), v:g('--v'), av:g('--av'), eig:g('--eig'),
+    eigSoft:g('--eig-soft'), fill:g('--fill'), tgrid:g('--tgrid'), surface:g('--surface'), paper:g('--paper'),
+    mono:g('--f-mono'), disp:g('--f-display')};
+}
+function prep(cv){
+  const r = cv.getBoundingClientRect(); const w = r.width, h = r.height;
+  if (w < 2 || h < 2) return null;
+  const dpr = window.devicePixelRatio || 1;
+  const W = Math.round(w*dpr), H = Math.round(h*dpr);
+  if (cv.width !== W || cv.height !== H){ cv.width = W; cv.height = H; }
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+  return {ctx, w, h};
+}
+function view(w, h, xmin, xmax, ymin, ymax, pad = {l:0, r:0, t:0, b:0}){
+  const iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+  const sx = iw/(xmax - xmin), sy = ih/(ymax - ymin);
+  return {xmin, xmax, ymin, ymax, w, h, sx, sy,
+    toX: x => pad.l + (x - xmin)*sx, toY: y => pad.t + ih - (y - ymin)*sy,
+    fromX: X => (X - pad.l)/sx + xmin, fromY: Y => (pad.t + ih - Y)/sy + ymin};
+}
+function drawGrid(ctx, V, c, step = 1){
+  ctx.lineWidth = 1; ctx.strokeStyle = c.grid; ctx.beginPath();
+  for (let x = Math.ceil(V.xmin/step)*step; x <= V.xmax + 1e-9; x += step){ const X = Math.round(V.toX(x)) + .5; ctx.moveTo(X, 0); ctx.lineTo(X, V.h); }
+  for (let y = Math.ceil(V.ymin/step)*step; y <= V.ymax + 1e-9; y += step){ const Y = Math.round(V.toY(y)) + .5; ctx.moveTo(0, Y); ctx.lineTo(V.w, Y); }
+  ctx.stroke();
+  ctx.strokeStyle = c.rule; ctx.lineWidth = 1.4; ctx.beginPath();
+  ctx.moveTo(V.toX(0), 0); ctx.lineTo(V.toX(0), V.h); ctx.moveTo(0, V.toY(0)); ctx.lineTo(V.w, V.toY(0)); ctx.stroke();
+}
+function arrow(ctx, V, x0, y0, x1, y1, color, w = 2.6, head = 11){
+  const X0 = V.toX(x0), Y0 = V.toY(y0), X1 = V.toX(x1), Y1 = V.toY(y1);
+  const dx = X1 - X0, dy = Y1 - Y0, L = Math.hypot(dx, dy); if (L < 1.5) return;
+  const ux = dx/L, uy = dy/L, hd = Math.min(head, L*.45);
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = w; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(X0, Y0); ctx.lineTo(X1 - ux*hd*.7, Y1 - uy*hd*.7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(X1, Y1);
+  ctx.lineTo(X1 - ux*hd - uy*hd*.42, Y1 - uy*hd + ux*hd*.42);
+  ctx.lineTo(X1 - ux*hd + uy*hd*.42, Y1 - uy*hd - ux*hd*.42);
+  ctx.closePath(); ctx.fill();
+}
+function fullLine(ctx, V, dx, dy, color, w, dash, ox = 0, oy = 0){
+  const k = 60; ctx.save(); ctx.setLineDash(dash || []); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.lineCap = 'butt';
+  ctx.beginPath(); ctx.moveTo(V.toX(ox - k*dx), V.toY(oy - k*dy)); ctx.lineTo(V.toX(ox + k*dx), V.toY(oy + k*dy)); ctx.stroke(); ctx.restore();
+}
+function text(ctx, s, X, Y, color, font, align = 'left', base = 'middle'){
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.textBaseline = base; ctx.fillText(s, X, Y);
+}
+/* place a label just beyond a point, pushed away from the origin, kept inside the canvas */
+function labelAt(ctx, V, s, x, y, color, font, push = 14){
+  let X = V.toX(x), Y = V.toY(y);
+  const ox = V.toX(0), oy = V.toY(0); let dx = X - ox, dy = Y - oy; const L = Math.hypot(dx, dy) || 1;
+  X += dx/L*push; Y += dy/L*push;
+  ctx.font = font; const tw = ctx.measureText(s).width;
+  X = Math.max(4 + tw/2, Math.min(V.w - 4 - tw/2, X)); Y = Math.max(10, Math.min(V.h - 10, Y));
+  text(ctx, s, X, Y, color, font, 'center');
+}
+
+/* ---------- HERO ---------- */
+const HA = [2, 1, 1, 2];
+const hero = {t:1, playing:!reduceMotion, phase:.36, last:0};
+function heroT(p){ // hold at 1, fall, hold at 0, rise
+  p = ((p % 1) + 1) % 1; const e = u => .5 - .5*Math.cos(Math.PI*u);
+  if (p < .35) return e(p/.35);
+  if (p < .5) return 1;
+  if (p < .85) return 1 - e((p - .5)/.35);
+  return 0;
+}
+function drawHero(){
+  const P = prep($('#heroCv')); if (!P) return; const {ctx, w, h} = P; const c = colors();
+  const V = view(w, h, -3.5, 3.5, -3.5, 3.5);
+  drawGrid(ctx, V, c);
+  const t = hero.t, M = [1 + t*(HA[0] - 1), t*HA[1], t*HA[2], 1 + t*(HA[3] - 1)];
+  fullLine(ctx, V, 1, 1, c.eigSoft, 10); fullLine(ctx, V, 1, -1, c.eigSoft, 10);
+  ctx.save(); ctx.setLineDash([3, 4]); ctx.strokeStyle = c.muted; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(V.toX(0), V.toY(0), V.sx, 0, 2*Math.PI); ctx.stroke(); ctx.restore();
+  ctx.strokeStyle = c.ink; ctx.lineWidth = 1.2; ctx.beginPath();
+  for (let i = 0; i <= 144; i++){ const a = i/144*2*Math.PI; const [x, y] = ap(M, Math.cos(a), Math.sin(a)); const X = V.toX(x), Y = V.toY(y); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); }
+  ctx.stroke();
+  const eigs = [];
+  for (let k = 0; k < 24; k++){
+    const a = k*15*Math.PI/180, [x, y] = ap(M, Math.cos(a), Math.sin(a));
+    if ((k*15) % 90 === 45){ eigs.push([x, y]); continue; }
+    arrow(ctx, V, 0, 0, x, y, c.muted, 1.4, 7);
+  }
+  eigs.forEach(([x, y]) => arrow(ctx, V, 0, 0, x, y, c.eig, 3.2, 12));
+  const f = `500 12px ${c.mono}`;
+  labelAt(ctx, V, 'λ = ' + fmt(1 + t*2, 2), 1 + t*2 > 1.5 ? (1 + 2*t)*.7071 : .7071, (1 + t*2 > 1.5 ? (1 + 2*t) : 1)*.7071, c.eig, f, 16);
+  labelAt(ctx, V, 'λ = 1', -.7071, .7071, c.eig, f, 16);
+  $('#heroTOut').textContent = Math.round(t*100) + '%';
+}
+function heroTick(ts){
+  if (!hero.playing){ hero.last = 0; return; }
+  if (!hero.last) hero.last = ts;
+  const dt = Math.min(60, ts - hero.last); hero.last = ts;
+  hero.phase += dt/6500; hero.t = heroT(hero.phase); $('#heroT').value = hero.t; drawHero();
+  requestAnimationFrame(heroTick);
+}
+$('#heroPlay').addEventListener('click', () => {
+  hero.playing = !hero.playing; $('#heroPlay').textContent = hero.playing ? 'Pause' : 'Play';
+  if (hero.playing){ hero.phase = hero.t >= .999 ? .36 : (hero.t <= .001 ? .86 : .5 + .35*(1 - hero.t)); requestAnimationFrame(heroTick); }
+});
+$('#heroT').addEventListener('input', e => {
+  hero.playing = false; $('#heroPlay').textContent = 'Play'; hero.t = +e.target.value; drawHero();
+});
+if (reduceMotion){ $('#heroPlay').textContent = 'Play'; }
+
+/* ---------- PLATE A: hunt ---------- */
+const HU = {A:[2, 1, 1, 2], ang:20, len:1.15, reveal:false, found:new Set(), V:null};
+const EH = eigen(HU.A);
+const eTargets = EH.pairs.map(p => ({l:p.l, phi:((Math.atan2(p.v[1], p.v[0])*180/Math.PI) % 180 + 180) % 180, v:p.v}));
+function dev(A, th){
+  const t = th*Math.PI/180, x = Math.cos(t), y = Math.sin(t), [X, Y] = ap(A, x, y);
+  let d = Math.atan2(x*Y - y*X, x*X + y*Y)*180/Math.PI;
+  if (d > 90) d -= 180; if (d <= -90) d += 180; return d;
+}
+const mod = (a, m) => ((a % m) + m) % m;
+function lineDist(a, phi){ const d = mod(a - phi, 180); return Math.min(d, 180 - d); }
+function setAngle(a, snap){
+  a = mod(a, 360);
+  if (snap){
+    for (const T of eTargets){
+      if (lineDist(a, T.phi) < 3){
+        const c1 = T.phi, c2 = T.phi + 180;
+        const d1 = Math.min(mod(a - c1, 360), 360 - mod(a - c1, 360)), d2 = Math.min(mod(a - c2, 360), 360 - mod(a - c2, 360));
+        a = d1 <= d2 ? c1 : c2; break;
+      }
+    }
+  }
+  HU.ang = a; $('#huAng').value = Math.round(a) % 360; updateHunt();
+}
+function updateHunt(){
+  const t = HU.ang*Math.PI/180, v = [HU.len*Math.cos(t), HU.len*Math.sin(t)], Av = ap(HU.A, v[0], v[1]);
+  const d = dev(HU.A, HU.ang), on = Math.abs(d) < .5;
+  $('#huAngOut').textContent = fmt(HU.ang, 1) + '°';
+  $('#huV').textContent = '(' + fmt(v[0], 2) + ', ' + fmt(v[1], 2) + ')';
+  $('#huAv').textContent = '(' + fmt(Av[0], 2) + ', ' + fmt(Av[1], 2) + ')';
+  $('#huDev').textContent = on ? '0°' : fmt(Math.abs(d), 1) + '°';
+  const st = $('#huStatus');
+  if (on){
+    const lam = (Av[0]*v[0] + Av[1]*v[1])/(v[0]*v[0] + v[1]*v[1]);
+    eTargets.forEach((T, i) => { if (lineDist(HU.ang, T.phi) < .6) HU.found.add(i); });
+    st.className = 'status on';
+    st.innerHTML = '<strong>On the line.</strong> Av = ' + fmt(lam, 2) + 'v, so this direction is an eigenvector with λ = ' + fmt(lam, 2) + '.' +
+      (Math.abs(lam - 1) < 1e-6 ? ' Here A leaves the arrow exactly as it was.' : ' Here A stretches the arrow to ' + fmt(lam, 2) + ' times its length.');
+  } else {
+    st.className = 'status';
+    st.innerHTML = 'Av has been turned <strong>' + fmt(Math.abs(d), 1) + '°</strong> ' + (d > 0 ? 'anticlockwise' : 'clockwise') + ' off the line of v. Keep turning v.';
+  }
+  $('#huFound').textContent = HU.found.size + ' of ' + eTargets.length + (HU.found.size === eTargets.length ? ', all found' : '');
+  if (HU.found.size === eTargets.length && !HU.reveal){ HU.reveal = true; $('#huReveal').textContent = 'Hide the directions'; }
+  drawHunt(); drawHuntCurve();
+}
+function drawHunt(){
+  const cv = $('#huCv'), P = prep(cv); if (!P) return; const {ctx, w, h} = P; const c = colors();
+  const V = view(w, h, -4, 4, -4, 4); HU.V = V; drawGrid(ctx, V, c);
+  const t = HU.ang*Math.PI/180, dx = Math.cos(t), dy = Math.sin(t);
+  const v = [HU.len*dx, HU.len*dy], Av = ap(HU.A, v[0], v[1]), on = Math.abs(dev(HU.A, HU.ang)) < .5;
+  const f = `500 12px ${c.mono}`;
+  if (HU.reveal){
+    eTargets.forEach(T => { fullLine(ctx, V, T.v[0], T.v[1], c.eigSoft, 12); });
+  }
+  fullLine(ctx, V, dx, dy, on ? c.eig : c.muted, on ? 2 : 1.2, on ? [] : [5, 5]);
+  if (HU.reveal){
+    eTargets.forEach(T => { const s = T.l > 2 ? 3.55 : 3.1; labelAt(ctx, V, 'λ = ' + fmt(T.l), T.v[0]*s, T.v[1]*s, c.eig, f, 0); });
+  }
+  arrow(ctx, V, 0, 0, Av[0], Av[1], on ? c.eig : c.av, 3.2, 13);
+  arrow(ctx, V, 0, 0, v[0], v[1], c.v, 3.2, 13);
+  ctx.beginPath(); ctx.arc(V.toX(v[0]), V.toY(v[1]), 8, 0, 2*Math.PI); ctx.fillStyle = c.surface; ctx.fill(); ctx.lineWidth = 2.4; ctx.strokeStyle = c.v; ctx.stroke();
+  const fi = `italic 600 17px ${c.disp}`;
+  labelAt(ctx, V, 'Av', Av[0], Av[1], on ? c.eig : c.av, fi, 16);
+  if (Math.hypot(Av[0] - v[0], Av[1] - v[1]) > .5 || !on) labelAt(ctx, V, 'v', v[0]*.55 - dy*.28, v[1]*.55 + dx*.28, c.v, fi, 0);
+}
+function drawHuntCurve(){
+  const cv = $('#huCurve'), P = prep(cv); if (!P) return; const {ctx, w, h} = P; const c = colors();
+  let maxD = 0; for (let a = 0; a < 180; a += 1) maxD = Math.max(maxD, Math.abs(dev(HU.A, a)));
+  const Y = Math.max(15, Math.ceil(maxD/10)*10);
+  const V = view(w, h, 0, 180, -Y, Y, {l:46, r:12, t:12, b:24});
+  const f = `400 11px ${c.mono}`;
+  ctx.strokeStyle = c.grid; ctx.lineWidth = 1; ctx.beginPath();
+  [0, 45, 90, 135, 180].forEach(a => { const X = Math.round(V.toX(a)) + .5; ctx.moveTo(X, V.toY(Y)); ctx.lineTo(X, V.toY(-Y)); });
+  [-Y, Y].forEach(y => { const yy = Math.round(V.toY(y)) + .5; ctx.moveTo(V.toX(0), yy); ctx.lineTo(V.toX(180), yy); });
+  ctx.stroke();
+  ctx.strokeStyle = c.rule; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(V.toX(0), V.toY(0)); ctx.lineTo(V.toX(180), V.toY(0)); ctx.stroke();
+  [0, 45, 90, 135, 180].forEach(a => text(ctx, a + '°', V.toX(a), h - 10, c.muted, f, 'center'));
+  text(ctx, '+' + Y + '°', V.toX(0) - 8, V.toY(Y), c.muted, f, 'right');
+  text(ctx, '0°', V.toX(0) - 8, V.toY(0), c.muted, f, 'right');
+  text(ctx, '−' + Y + '°', V.toX(0) - 8, V.toY(-Y), c.muted, f, 'right');
+  ctx.strokeStyle = c.ink; ctx.lineWidth = 2; ctx.beginPath();
+  let prev = null;
+  for (let a = 0; a <= 180.001; a += .5){
+    const d = dev(HU.A, a), X = V.toX(a), Yp = V.toY(d);
+    if (prev === null || Math.abs(d - prev) > 60) ctx.moveTo(X, Yp); else ctx.lineTo(X, Yp);
+    prev = d;
+  }
+  ctx.stroke();
+  eTargets.forEach((T, i) => {
+    if (!(HU.reveal || HU.found.has(i))) return;
+    const X = V.toX(T.phi), Y0 = V.toY(0);
+    ctx.beginPath(); ctx.arc(X, Y0, 6, 0, 2*Math.PI); ctx.fillStyle = c.eig; ctx.fill();
+    text(ctx, 'λ = ' + fmt(T.l), X + 9, Y0 - 12, c.eig, `500 12px ${c.mono}`, 'left');
+  });
+  const th = mod(HU.ang, 180), d = dev(HU.A, th);
+  ctx.strokeStyle = c.v; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(V.toX(th), V.toY(Y)); ctx.lineTo(V.toX(th), V.toY(-Y)); ctx.stroke(); ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(V.toX(th), V.toY(d), 5.5, 0, 2*Math.PI); ctx.fillStyle = c.v; ctx.fill();
+}
+(() => {
+  const cv = $('#huCv'); let drag = false;
+  const move = e => {
+    const V = HU.V; if (!V) return; const r = cv.getBoundingClientRect();
+    const x = V.fromX(e.clientX - r.left), y = V.fromY(e.clientY - r.top), L = Math.hypot(x, y);
+    if (L < .12) return;
+    HU.len = Math.max(.4, Math.min(1.3, L)); setAngle(Math.atan2(y, x)*180/Math.PI, true);
+  };
+  cv.addEventListener('pointerdown', e => { drag = true; try { cv.setPointerCapture(e.pointerId); } catch(_){} move(e); });
+  cv.addEventListener('pointermove', e => { if (drag) move(e); });
+  ['pointerup', 'pointercancel'].forEach(t => cv.addEventListener(t, () => { drag = false; }));
+  $('#huAng').addEventListener('input', e => setAngle(+e.target.value, false));
+  $('#huReveal').addEventListener('click', () => {
+    HU.reveal = !HU.reveal; $('#huReveal').textContent = HU.reveal ? 'Hide the directions' : 'Show both directions'; drawHunt(); drawHuntCurve();
+  });
+})();
+
+/* ---------- PLATE B: iteration ---------- */
+const IT = {xs:[.10], timer:null};
+const TOTAL = 30000, STEADY = 2/3, MAXY = 40;
+const nextYear = x => .9*x + .2*(1 - x);
+function itStop(){ if (IT.timer){ clearInterval(IT.timer); IT.timer = null; } $('#itRun').disabled = false; }
+function itReset(){ itStop(); IT.xs = [+$('#itStart').value/100]; updateIter(); }
+function itAdd(n){
+  for (let i = 0; i < n && IT.xs.length - 1 < MAXY; i++) IT.xs.push(nextYear(IT.xs[IT.xs.length - 1]));
+}
+function updateIter(){
+  const k = IT.xs.length - 1, x = IT.xs[k];
+  $('#itStartOut').textContent = Math.round(IT.xs[0]*100) + '%';
+  const people = Math.round(x*TOTAL);
+  $('#itNow').innerHTML = '<strong>Year ' + k + ':</strong> ' + people.toLocaleString('en-GB').replace(/,/g, ' ') + ' people in Town A (' + fmt(x*100, 1) + '%), ' +
+    (TOTAL - people).toLocaleString('en-GB').replace(/,/g, ' ') + ' in Town B.';
+  const rows = [], start = Math.max(0, k - 5);
+  for (let i = start; i <= k; i++){
+    const g = (IT.xs[i] - STEADY)*100, gp = i > 0 ? (IT.xs[i - 1] - STEADY)*100 : null;
+    const ratio = (i > 0 && Math.abs(gp) > 1e-9) ? fmt(g/gp, 3) : 'n/a';
+    rows.push('<tr><td>' + i + '</td><td class="num">' + fmt(IT.xs[i]*100, 2) + '%</td><td class="num">' + (g >= 0 ? '+' : '') + fmt(g, 2) + ' pts</td><td class="num">' + ratio + '</td></tr>');
+  }
+  $('#itRows').innerHTML = rows.join('');
+  const cc = IT.xs[0] - STEADY;
+  $('#itMix').textContent = 'c = ' + fmt(IT.xs[0], 2) + ' − 0.667 = ' + fmt(cc, 3) + ', so after ' + k + ' year' + (k === 1 ? '' : 's') + ' the gap part is ' + fmt(cc, 3) + ' × 0.7^' + k + ' = ' + fmt(cc*Math.pow(.7, k), 4);
+  $('#itStep').disabled = k >= MAXY; if (k >= MAXY) itStop();
+  drawIter(); drawIterChart();
+}
+function drawIter(){
+  const P = prep($('#itCv')); if (!P) return; const {ctx, w, h} = P; const c = colors();
+  const V = view(w, h, -.1, 1.12, -.1, 1.12);
+  drawGrid(ctx, V, c, .1);
+  const f = `400 11px ${c.mono}`;
+  [0, .5, 1].forEach(t => { if (t) { text(ctx, Math.round(t*100) + '%', V.toX(t), V.toY(0) + 12, c.muted, f, 'center'); text(ctx, Math.round(t*100) + '%', V.toX(0) - 5, V.toY(t), c.muted, f, 'right'); } });
+  text(ctx, 'Town A share →', V.toX(1.1), V.toY(-.06), c.muted, f, 'right');
+  ctx.save(); ctx.translate(V.toX(-.065), V.toY(1.1)); ctx.rotate(-Math.PI/2); text(ctx, 'Town B share →', 0, 0, c.muted, f, 'right'); ctx.restore();
+  // all possible splits
+  ctx.strokeStyle = c.muted; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(V.toX(0), V.toY(1)); ctx.lineTo(V.toX(1), V.toY(0)); ctx.stroke();
+  text(ctx, 'every possible split', V.toX(.2) + 8, V.toY(.8) - 4, c.muted, f, 'left', 'bottom');
+  // eigen line lambda = 1
+  ctx.strokeStyle = c.eigSoft; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(V.toX(0), V.toY(0)); ctx.lineTo(V.toX(1.12), V.toY(.56)); ctx.stroke();
+  // gap direction arrows along (1,-1) around the steady point
+  ctx.save(); ctx.setLineDash([4, 4]);
+  arrow(ctx, V, STEADY, 1/3, STEADY + .2, 1/3 - .2, c.eig, 1.5, 8); arrow(ctx, V, STEADY, 1/3, STEADY - .2, 1/3 + .2, c.eig, 1.5, 8);
+  ctx.restore();
+  text(ctx, 'λ = 0.7 along (1, −1)', V.toX(STEADY + .2) + 6, V.toY(1/3 - .2) + 4, c.eig, `500 11px ${c.mono}`, 'left', 'top');
+  text(ctx, 'λ = 1 along (2, 1)', V.toX(1.1), V.toY(.55) - 10, c.eig, `500 11px ${c.mono}`, 'right', 'bottom');
+  // vectors
+  const x0 = IT.xs[0], xk = IT.xs[IT.xs.length - 1];
+  arrow(ctx, V, 0, 0, x0, 1 - x0, c.v, 2.4, 11);
+  if (IT.xs.length > 1) arrow(ctx, V, 0, 0, xk, 1 - xk, c.av, 2.6, 11);
+  IT.xs.forEach((x, i) => {
+    if (i === 0) return;
+    ctx.beginPath(); ctx.arc(V.toX(x), V.toY(1 - x), i === IT.xs.length - 1 ? 5.5 : 3.2, 0, 2*Math.PI); ctx.fillStyle = c.av; ctx.fill();
+  });
+  ctx.beginPath(); ctx.arc(V.toX(x0), V.toY(1 - x0), 5.5, 0, 2*Math.PI); ctx.fillStyle = c.v; ctx.fill();
+  ctx.beginPath(); ctx.arc(V.toX(STEADY), V.toY(1/3), 8, 0, 2*Math.PI); ctx.strokeStyle = c.eig; ctx.lineWidth = 2.2; ctx.stroke();
+}
+function drawIterChart(){
+  const P = prep($('#itChart')); if (!P) return; const {ctx, w, h} = P; const c = colors();
+  const N = Math.max(25, IT.xs.length - 1);
+  const V = view(w, h, 0, N, 0, 100, {l:44, r:12, t:12, b:24});
+  const f = `400 11px ${c.mono}`;
+  ctx.strokeStyle = c.grid; ctx.lineWidth = 1; ctx.beginPath();
+  [0, 25, 50, 75, 100].forEach(y => { const Y = Math.round(V.toY(y)) + .5; ctx.moveTo(V.toX(0), Y); ctx.lineTo(V.toX(N), Y); });
+  ctx.stroke();
+  [0, 50, 100].forEach(y => text(ctx, y + '%', V.toX(0) - 8, V.toY(y), c.muted, f, 'right'));
+  for (let yr = 0; yr <= N; yr += 5) text(ctx, String(yr), V.toX(yr), h - 10, c.muted, f, 'center');
+  text(ctx, 'year', V.toX(N), h - 10, c.muted, f, 'right');
+  ctx.save(); ctx.setLineDash([6, 4]); ctx.strokeStyle = c.eig; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(V.toX(0), V.toY(STEADY*100)); ctx.lineTo(V.toX(N), V.toY(STEADY*100)); ctx.stroke(); ctx.restore();
+  text(ctx, '66.7%', V.toX(N) - 2, V.toY(STEADY*100) - 9, c.eig, `500 11px ${c.mono}`, 'right');
+  ctx.strokeStyle = c.av; ctx.lineWidth = 2.2; ctx.beginPath();
+  IT.xs.forEach((x, i) => { const X = V.toX(i), Y = V.toY(x*100); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); }); ctx.stroke();
+  IT.xs.forEach((x, i) => { ctx.beginPath(); ctx.arc(V.toX(i), V.toY(x*100), i ? 2.8 : 4.5, 0, 2*Math.PI); ctx.fillStyle = i ? c.av : c.v; ctx.fill(); });
+}
+$('#itStart').addEventListener('input', itReset);
+$('#itReset').addEventListener('click', itReset);
+$('#itStep').addEventListener('click', () => { itStop(); itAdd(1); updateIter(); });
+$('#itRun').addEventListener('click', () => {
+  itStop();
+  if (reduceMotion){ itAdd(25); updateIter(); return; }
+  let left = 25; $('#itRun').disabled = true;
+  IT.timer = setInterval(() => { itAdd(1); left--; updateIter(); if (left <= 0 || IT.xs.length - 1 >= MAXY) itStop(); }, 140);
+});
+
+/* ---------- PLATE C: lab ---------- */
+const LB = {A:[2, 1, 1, 2], t:1};
+const ids = ['a11', 'a12', 'a21', 'a22'];
+const pbox = $('#lbPresets');
+const presets = [...pbox.querySelectorAll('button')].map(b => ({name: b.textContent, A: b.dataset.a.split(',').map(Number)}));
+pbox.querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => { LB.A = presets[i].A.slice(); ids.forEach((id, j) => { $('#' + id).value = presets[i].A[j]; }); updateLab(); }));
+ids.forEach((id, j) => $('#' + id).addEventListener('input', e => { const v = parseFloat(e.target.value); if (isFinite(v)){ LB.A[j] = v; updateLab(); } }));
+$('#lbT').addEventListener('input', e => { LB.t = +e.target.value; $('#lbTOut').textContent = Math.round(LB.t*100) + '%'; drawLab(); });
+
+function charEq(tr, det){
+  let s = 'λ²';
+  if (Math.abs(tr) > 1e-9) s += (tr > 0 ? ' − ' : ' + ') + (Math.abs(Math.abs(tr) - 1) < 1e-9 ? '' : fmt(Math.abs(tr))) + 'λ';
+  if (Math.abs(det) > 1e-9) s += (det > 0 ? ' + ' : ' − ') + fmt(Math.abs(det));
+  return s + ' = 0';
+}
+function updateLab(){
+  const A = LB.A, E = eigen(A);
+  pbox.querySelectorAll('.tog').forEach((b, i) => b.setAttribute('aria-pressed', presets[i].A.every((v, j) => Math.abs(v - A[j]) < 1e-9) ? 'true' : 'false'));
+  $('#lbTr').textContent = fmt(A[0]) + ' + ' + fmt(A[3]).replace(/^−/, '(−') + (A[3] < 0 ? ')' : '') + ' = ' + fmt(E.tr);
+  $('#lbDet').textContent = fmt(A[0]*A[3]) + ' − ' + (A[1]*A[2] < 0 ? '(' + fmt(A[1]*A[2]) + ')' : fmt(A[1]*A[2])) + ' = ' + fmt(E.det);
+  $('#lbChar').textContent = charEq(E.tr, E.det);
+  $('#lbDisc').textContent = fmt(E.disc) + (E.disc > 1e-9 ? ', positive' : E.disc < -1e-9 ? ', negative' : ', zero');
+  let vals = '', vecs = '', verdict = '';
+  if (E.kind === 'complex'){
+    vals = fmt(E.re) + ' ± ' + fmt(E.im) + 'i (complex)'; vecs = 'none in the real plane';
+    verdict = 'The discriminant is negative, so there are no real eigenvalues. Every direction gets turned, and no line stays put. Rotations behave like this.';
+  } else if (E.kind === 'scalar'){
+    vals = fmt(E.pairs[0].l) + ' (repeated)'; vecs = 'every direction';
+    verdict = 'A only scales the whole plane by ' + fmt(E.pairs[0].l) + '. Every nonzero vector is an eigenvector with the same λ.';
+  } else if (E.kind === 'one'){
+    vals = fmt(E.pairs[0].l) + ' (repeated)'; vecs = niceDir(E.pairs[0].v);
+    verdict = 'One repeated eigenvalue, and only one direction survives. A shear behaves like this: it cannot be split into two pure stretches.';
+  } else {
+    vals = E.pairs.map(p => fmt(p.l)).join(' and '); vecs = E.pairs.map(p => niceDir(p.v)).join(' and ');
+    const notes = ['Two real eigenvalues, so two directions stay on their lines.'];
+    if (Math.abs(A[1] - A[2]) < 1e-9) notes.push('The matrix is symmetric, so the two directions are perpendicular.');
+    if (E.pairs.some(p => p.l < -1e-9)) notes.push('A negative λ flips that direction through the origin.');
+    if (E.pairs.some(p => Math.abs(p.l) < 1e-9)) notes.push('λ = 0 crushes that direction to the origin, which is why det = 0.');
+    if (E.pairs.some(p => Math.abs(p.l - 1) < 1e-9)) notes.push('λ = 1 means that direction is left exactly as it was.');
+    verdict = notes.join(' ');
+  }
+  $('#lbVals').textContent = vals; $('#lbVecs').textContent = vecs; $('#lbVerdict').textContent = verdict;
+  drawLab();
+}
+function drawLab(){
+  const P = prep($('#lbCv')); if (!P) return; const {ctx, w, h} = P; const c = colors();
+  const V = view(w, h, -4, 4, -4, 4); drawGrid(ctx, V, c);
+  const t = LB.t, A = LB.A, M = [1 + t*(A[0] - 1), t*A[1], t*A[2], 1 + t*(A[3] - 1)], E = eigen(A);
+  // transformed grid
+  ctx.strokeStyle = c.tgrid; ctx.lineWidth = 1.1; ctx.beginPath();
+  for (let i = -8; i <= 8; i++){
+    let p = ap(M, i, -8), q = ap(M, i, 8); ctx.moveTo(V.toX(p[0]), V.toY(p[1])); ctx.lineTo(V.toX(q[0]), V.toY(q[1]));
+    p = ap(M, -8, i); q = ap(M, 8, i); ctx.moveTo(V.toX(p[0]), V.toY(p[1])); ctx.lineTo(V.toX(q[0]), V.toY(q[1]));
+  }
+  ctx.stroke();
+  // unit square image
+  const sq = [[0, 0], [1, 0], [1, 1], [0, 1]].map(([x, y]) => ap(M, x, y));
+  ctx.beginPath(); sq.forEach(([x, y], i) => i ? ctx.lineTo(V.toX(x), V.toY(y)) : ctx.moveTo(V.toX(x), V.toY(y))); ctx.closePath();
+  ctx.fillStyle = c.fill; ctx.fill(); ctx.strokeStyle = c.v; ctx.lineWidth = 1.6; ctx.stroke();
+  const f = `500 12px ${c.mono}`;
+  if (E.kind === 'complex'){
+    text(ctx, 'no real eigen-directions', 10, 16, c.av, f, 'left');
+    return;
+  }
+  if (E.kind === 'scalar'){
+    const lt = 1 + t*(E.pairs[0].l - 1);
+    for (let k = 0; k < 8; k++){ const a = k*Math.PI/4, ux = Math.cos(a), uy = Math.sin(a); arrow(ctx, V, 0, 0, lt*ux, lt*uy, c.eig, 2.4, 10); }
+    text(ctx, 'every direction: λ = ' + fmt(E.pairs[0].l), 10, 16, c.eig, f, 'left');
+    return;
+  }
+  E.pairs.forEach(p => fullLine(ctx, V, p.v[0], p.v[1], c.eigSoft, 12));
+  E.pairs.forEach(p => {
+    const lt = 1 + t*(p.l - 1), [ux, uy] = p.v;
+    ctx.save(); ctx.setLineDash([4, 4]); ctx.strokeStyle = c.eig; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(V.toX(0), V.toY(0)); ctx.lineTo(V.toX(ux), V.toY(uy)); ctx.stroke(); ctx.restore();
+    if (Math.abs(lt) > .04) arrow(ctx, V, 0, 0, lt*ux, lt*uy, c.eig, 3.2, 12);
+    else { ctx.beginPath(); ctx.arc(V.toX(0), V.toY(0), 5, 0, 2*Math.PI); ctx.fillStyle = c.eig; ctx.fill(); }
+    const s = Math.max(Math.abs(lt), 1) * Math.sign(lt || 1);
+    const L = Math.min(3.4, Math.abs(s) + .55) * Math.sign(s);
+    labelAt(ctx, V, 'λ = ' + fmt(lt, 2), ux*L, uy*L, c.eig, f, 0);
+  });
+}
+
+/* ---------- redraw plumbing ---------- */
+function drawAll(){ drawHero(); drawHunt(); drawHuntCurve(); drawIter(); drawIterChart(); drawLab(); }
+const ro = new ResizeObserver(() => drawAll());
+['#heroCv', '#huCv', '#huCurve', '#itCv', '#itChart', '#lbCv'].forEach(s => ro.observe($(s)));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawAll);
+new MutationObserver(drawAll).observe(root, {attributes:true, attributeFilter:['data-theme']});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawAll);
+
+updateHunt(); itReset(); updateLab(); drawHero();
+if (hero.playing) requestAnimationFrame(heroTick);
+});
+</script>
+</body>
+</html>
