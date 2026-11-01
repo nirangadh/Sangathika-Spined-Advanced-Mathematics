@@ -111,7 +111,7 @@
      "title": "Span",
      "standard_term": "span",
      "slug": "span",
-     "status": "planned",
+     "status": "built",
      "brief": "The <b>span</b> is every point you can reach by adding and scaling some arrows.",
      "demos": [
       {
@@ -120,18 +120,33 @@
       },
       {
        "k": 2,
-       "name": "Reach (−2, 5)?"
+       "name": "Reach (−2, −5)?"
       },
       {
        "k": 3,
        "name": "Parallel partner"
+      },
+      {
+       "k": 4,
+       "name": "Point, line or plane"
       }
      ],
      "levels": [
       "Seed",
       "Branch"
      ],
-     "forward": "a second arrow w, and a trail that refused to leave the line"
+     "forward": "w = (−1, 1), the partner p on v's line, and a trail that refused to leave the line",
+     "seo_title": "Span: what two arrows can reach, visually",
+     "description": "The span of some arrows is every point you can reach by adding and scaling them. Paint it with two sliders, then predict what it covers.",
+     "idea": "The span of some arrows is every point you can reach by adding and scaling them.",
+     "prerequisites": [
+      1
+     ],
+     "teaches": [
+      "span"
+     ],
+     "card": "#heroCv",
+     "published": "2026-11-01"
     },
     {
      "number": 3,
